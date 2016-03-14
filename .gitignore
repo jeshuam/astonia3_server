@@ -29,3 +29,12 @@
 
 # Sublime files.
 *.sublime-workspace
+
+# Ignore binary files.
+server/chatserver
+server/create_account
+server/create_armor
+server/create_character
+server/create_weapons
+server/server
+server/update_server
