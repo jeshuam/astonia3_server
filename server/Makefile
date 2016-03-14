@@ -26,13 +26,13 @@ runtime/32/missions.dll runtime/generic/clubmaster.dll \
 runtime/33/tunnel.dll runtime/34/teufel.dll \
 runtime/37/arkhata.dll create_account create_character
 
-CC=gcc
+CC=clang
 DEBUG=-g
-CFLAGS=-Wall -Wshadow -Wno-pointer-sign -O3 $(DEBUG) -fno-strict-aliasing -m32 -DSTAFF
-LDFLAGS=-O $(DEBUG) -m32 -L/usr/lib/mysql
-LDRFLAGS=-O $(DEBUG) -m32 -rdynamic -L/usr/lib/mysql
-DDFLAGS=-O $(DEBUG) -m32 -fPIC -shared
-DFLAGS=$(CFLAGS) -m32 -fPIC
+CFLAGS=-Wall -Wshadow -Wno-pointer-sign $(DEBUG) -fno-strict-aliasing -DSTAFF
+LDFLAGS=-O $(DEBUG) -L/usr/lib/mysql
+LDRFLAGS=-O $(DEBUG) -rdynamic -L/usr/lib/mysql
+DDFLAGS=-O $(DEBUG) -fPIC -shared
+DFLAGS=$(CFLAGS) -fPIC
 DATE=`date +%y%m%d%H`
 
 OBJS=.obj/server.o .obj/io.o .obj/libload.o .obj/tool.o .obj/sleep.o \
