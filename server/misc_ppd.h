@@ -17,17 +17,17 @@ Added RCS tags
 
 struct misc_ppd
 {
-	int lfreduct_usage_count;
-	
-        int complaint_date;
+  int lfreduct_usage_count;
 
-	int last_lq_death;
+  int complaint_date;
 
-	int supermax_state;
-	int supermax_gold;
+  int last_lq_death;
 
-	int swapped;
+  int supermax_state;
+  int supermax_gold;
 
-	unsigned char treedone[8];
+  int swapped;
+
+  unsigned char treedone[8];
 };
 
