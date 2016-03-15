@@ -17,7 +17,7 @@ Added RCS tags
 
 #include "log.h"
 
-void btrace(char *msg)
+void btrace(const char *msg)
 {
   int i, n;
   void *ba[128];

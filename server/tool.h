@@ -23,7 +23,7 @@
 #if __GNUC_MINOR__==8
 unsigned long long atoll(char *string);
 #endif
-int endcmp(char *a, char *b);
+int endcmp(const char *a, const char *b);
 int speed(int speedy, int mode, int ticks);
 int dx2offset(int dir, int *x, int *y, int *diag);
 int offset2dx(int frx, int fry, int tox, int toy);

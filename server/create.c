@@ -70,7 +70,7 @@ void protect(void *mem, unsigned int size)
   void *ptr;
   unsigned int len, off;
 
-  ptr = (void*)((unsigned int)(((unsigned char*)(mem) + PAGESIZE - 1)) & (~(PAGESIZE - 1)));
+  ptr = (void*)((unsigned long)(((unsigned char*)(mem) + PAGESIZE - 1)) & (~(PAGESIZE - 1)));
   off = (char*)(ptr) - (char*)(mem);
   len = (size - off) & (~(PAGESIZE - 1));
 
@@ -96,7 +96,7 @@ static char *load_zone(char *name)
 
   if (lseek(handle, 0, SEEK_SET) == -1) { close(handle); elog("ERROR: Could not seek to start of zone \"%s\".", name); return NULL; }
 
-  text = xmalloc(len + 1, IM_TEMP);
+  text = (char*)xmalloc(len + 1, IM_TEMP);
   if (!text) { close(handle); elog("ERROR: Could not malloc memory for zone \"%s\".", name); return NULL; }
 
   if (read(handle, text, len) != len) { xfree(text); close(handle); elog("ERROR: Could not read zone \"%s\".", name); return NULL; }
@@ -108,7 +108,7 @@ static char *load_zone(char *name)
 }
 
 // load all zones ending in mask and call process on their content
-static int load_zones(char *dirname, char *mask, int (*process)(char*))
+static int load_zones(const char *dirname, const char *mask, int (*process)(char*))
 {
   DIR *dir;
   struct dirent *de;
@@ -186,7 +186,7 @@ static char *get_text(char *name, char *value, char *ptr)
   return ptr;
 }
 
-static char *V_tab[V_MAX] = {
+static const char *V_tab[V_MAX] = {
   "V_HP",
   "V_ENDURANCE",
   "V_MANA",
@@ -250,7 +250,7 @@ static int lookup_V(char *name)
   return -1;
 }
 
-static char *P_tab[P_MAX] = {
+static const char *P_tab[P_MAX] = {
   "P_ATHLETE",    //0
   "P_ALCHEMIST",    //1
   "P_MINER",    //2
@@ -284,7 +284,7 @@ static int lookup_P(char *name)
   return -1;
 }
 
-static char *WN_tab[] = {
+static const char *WN_tab[] = {
   "WN_NECK",
   "WN_HEAD",
   "WN_CLOAK",
@@ -310,7 +310,7 @@ static int lookup_WN(char *name)
   return -1;
 }
 
-static char *IF_tab[] =
+static const char *IF_tab[] =
 {
   "IF_USED",
   "IF_MOVEBLOCK",
@@ -369,7 +369,7 @@ static int lookup_IF(char *name)
   return -1;
 }
 
-static char *CF_tab[] = {
+static const char *CF_tab[] = {
   "CF_USED",      //0
   "CF_IMMORTAL",      //1
   "CF_GOD",     //2
@@ -439,7 +439,7 @@ static int lookup_CF(char *name)
   return -1;
 }
 
-static char *MF_tab[] = {
+static const char *MF_tab[] = {
   "MF_MOVEBLOCK",     //0
   "MF_SIGHTBLOCK",    //1
   "MF_TMOVEBLOCK",    //2
@@ -736,14 +736,14 @@ static int process_char(char *ptr)
         else if (!strcasecmp(name, "gold_random")) cht.gold_random = atoi(value);
         else if (!strcasecmp(name, "arg")) {
           if (cht.ch.arg) {
-            cht.ch.arg = xrealloc(cht.ch.arg, strlen(cht.ch.arg) + strlen(value) + 1, IM_CHARARGS);
+            cht.ch.arg = (char*)xrealloc(cht.ch.arg, strlen(cht.ch.arg) + strlen(value) + 1, IM_CHARARGS);
             if (!cht.ch.arg) {
               elog("Error in line %d: Memory low! (%100.100s)", line, ptr);
               return 0;
             }
             strcat(cht.ch.arg, value);
           } else {
-            cht.ch.arg = xstrdup(value, IM_CHARARGS);
+            cht.ch.arg = (char*)xstrdup(value, IM_CHARARGS);
           }
         } else if (!strcasecmp(name, "item")) {
           tmp = lookup_item(value);
@@ -1405,29 +1405,29 @@ int init_create(void)
 {
   int n;
 
-  map = xcalloc(sizeof(struct map) * MAXMAP * MAXMAP, IM_BASE);
+  map = (struct map*)xcalloc(sizeof(struct map) * MAXMAP * MAXMAP, IM_BASE);
   if (!map) return 0;
-  xlog("Allocated map: %.2fM (%d*%d)", sizeof(struct map)*MAXMAP * MAXMAP / 1024.0 / 1024.0, sizeof(struct map), MAXMAP * MAXMAP);
+  xlog("Allocated map: %.2fM (%lu*%d)", sizeof(struct map)*MAXMAP * MAXMAP / 1024.0 / 1024.0, sizeof(struct map), MAXMAP * MAXMAP);
   mem_usage += sizeof(struct map) * MAXMAP * MAXMAP;
 
-  it = xcalloc(sizeof(struct item) * MAXITEM, IM_BASE);
+  it = (struct item*)xcalloc(sizeof(struct item) * MAXITEM, IM_BASE);
   if (!it) return 0;
-  xlog("Allocated items: %.2fM (%d*%d)", sizeof(struct item)*MAXITEM / 1024.0 / 1024.0, sizeof(struct item), MAXITEM);
+  xlog("Allocated items: %.2fM (%lu*%d)", sizeof(struct item)*MAXITEM / 1024.0 / 1024.0, sizeof(struct item), MAXITEM);
   mem_usage += sizeof(struct item) * MAXITEM;
 
-  ch = xcalloc(sizeof(struct character) * MAXCHARS, IM_BASE);
+  ch = (struct character*)xcalloc(sizeof(struct character) * MAXCHARS, IM_BASE);
   if (!ch) return 0;
-  xlog("Allocated characters: %.2fM (%d*%d)", sizeof(struct item)*MAXCHARS / 1024.0 / 1024.0, sizeof(struct character), MAXCHARS);
+  xlog("Allocated characters: %.2fM (%lu*%d)", sizeof(struct item)*MAXCHARS / 1024.0 / 1024.0, sizeof(struct character), MAXCHARS);
   mem_usage += sizeof(struct item) * MAXCHARS;
 
-  it_temp = xcalloc(sizeof(struct it_temp) * MAXTITEM, IM_BASE);
+  it_temp = (struct it_temp*)xcalloc(sizeof(struct it_temp) * MAXTITEM, IM_BASE);
   if (!it_temp) return 0;
-  xlog("Allocated item templates: %.2fM (%d*%d)", sizeof(struct it_temp)*MAXTITEM / 1024.0 / 1024.0, sizeof(struct it_temp), MAXTITEM);
+  xlog("Allocated item templates: %.2fM (%lu*%d)", sizeof(struct it_temp)*MAXTITEM / 1024.0 / 1024.0, sizeof(struct it_temp), MAXTITEM);
   mem_usage += sizeof(struct it_temp) * MAXTITEM;
 
-  ch_temp = xcalloc(sizeof(struct ch_temp) * MAXTCHARS, IM_BASE);
+  ch_temp = (struct ch_temp*)xcalloc(sizeof(struct ch_temp) * MAXTCHARS, IM_BASE);
   if (!ch_temp) return 0;
-  xlog("Allocated character templates: %.2fM (%d*%d)", sizeof(struct ch_temp)*MAXTCHARS / 1024.0 / 1024.0, sizeof(struct ch_temp), MAXTCHARS);
+  xlog("Allocated character templates: %.2fM (%lu*%d)", sizeof(struct ch_temp)*MAXTCHARS / 1024.0 / 1024.0, sizeof(struct ch_temp), MAXTCHARS);
   mem_usage += sizeof(struct ch_temp) * MAXTCHARS;
 
   // add characters to free list

@@ -97,7 +97,7 @@ unsigned long long atoll(char *string)
 #endif
 
 // compare the ending of two strings
-int endcmp(char *a, char *b)
+int endcmp(const char *a, const char *b)
 {
   char *starta = a, *startb = b;
   int lena, lenb;
