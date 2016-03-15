@@ -53,20 +53,20 @@
 #include "questlog.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);			// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret, int lastact);      // character driver (decides next action)
+int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);       // called when a character dies
+int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
 int driver(int type, int nr, int obj, int ret, int lastact)
 {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 	return 0;
+  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
+  case CDT_ITEM:    return it_driver(nr, obj, ret);
+  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
+  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
+  default:  return 0;
   }
 }
 
@@ -138,7 +138,7 @@ int analyse_text_driver(int cn, int type, char *text, int co)
       }
       n = 0; text++;
       break;
-    default: 	word[n++] = *text++;
+    default:  word[n++] = *text++;
       if (n > 250) return 0;
       break;
     }
@@ -201,9 +201,9 @@ void swamparm(int in, int cn)
   call_item(it[in].driver, in, 0, ticker + 1);
 }
 
-#define DXX_CIRCLE_LEFT		10
-#define DXX_CIRCLE_RIGHT	11
-#define DXX_DARK		12
+#define DXX_CIRCLE_LEFT   10
+#define DXX_CIRCLE_RIGHT  11
+#define DXX_DARK    12
 
 void swampwhisp(int in, int cn)
 {
@@ -225,7 +225,7 @@ void swampwhisp(int in, int cn)
   if (dlight > 50) it[in].drdata[3] = DXX_DARK;
 
   switch (it[in].drdata[3]) {
-  case DX_DOWN:	it[in].drdata[0]++;
+  case DX_DOWN: it[in].drdata[0]++;
     if (it[in].drdata[0] > 15) it[in].drdata[0] = 0;
     if (it[in].drdata[0] == 12) {
       remove_item_map(in);
@@ -239,7 +239,7 @@ void swampwhisp(int in, int cn)
     }
     break;
 
-  case DX_UP:	it[in].drdata[0]--;
+  case DX_UP: it[in].drdata[0]--;
     if (it[in].drdata[0] > 15) it[in].drdata[0] = 15;
     if (it[in].drdata[0] == 2) {
       remove_item_map(in);
@@ -254,7 +254,7 @@ void swampwhisp(int in, int cn)
     break;
 
 
-  case DX_LEFT:	it[in].drdata[0]++;
+  case DX_LEFT: it[in].drdata[0]++;
     if (it[in].drdata[0] > 15) it[in].drdata[0] = 0;
     if (it[in].drdata[0] == 0) {
       remove_item_map(in);
@@ -268,7 +268,7 @@ void swampwhisp(int in, int cn)
     }
     break;
 
-  case DX_RIGHT:	it[in].drdata[0]--;
+  case DX_RIGHT:  it[in].drdata[0]--;
     if (it[in].drdata[0] > 15) it[in].drdata[0] = 15;
     if (it[in].drdata[0] == 6) {
       remove_item_map(in);
@@ -294,7 +294,7 @@ void swampwhisp(int in, int cn)
     if (dy > -2 && !RANDOM(10)) it[in].drdata[3] = DX_UP;
     break;
 
-  case DXX_DARK:	if (dlight < 50) {
+  case DXX_DARK:  if (dlight < 50) {
       it[in].drdata[3] = DXX_CIRCLE_LEFT;
       it[in].mod_value[0] = 100;
       add_item_light(in);
@@ -345,7 +345,7 @@ void swampspawn(int in, int cn)
 
   if (cn) return;
 
-  if (!it[in].drdata[1]) {	// replace editor sprite with game sprite
+  if (!it[in].drdata[1]) {  // replace editor sprite with game sprite
     it[in].drdata[1] = 1;
     *(unsigned int*)(it[in].drdata + 16) = it[in].sprite - 8;
     it[in].sprite = 0;
@@ -413,7 +413,7 @@ void clara_driver(int cn, int ret, int lastact)
   struct msg *msg, *next;
 
   dat = (struct clara_driver_data*)set_data(cn, DRD_CLARADRIVER, sizeof(struct clara_driver_data));
-  if (!dat) return;	// oops...
+  if (!dat) return; // oops...
 
   // loop through our messages
   for (msg = ch[cn].msg; msg; msg = next) {
@@ -446,53 +446,53 @@ void clara_driver(int cn, int ret, int lastact)
 
       if (ppd) {
         switch (ppd->clara_state) {
-        case 0:		say(cn, "Greetings, %s! I am %s, First Sergeant of the Seyan'Du and commander of this outpost.", ch[co].name, ch[cn].name);
+        case 0:   say(cn, "Greetings, %s! I am %s, First Sergeant of the Seyan'Du and commander of this outpost.", ch[co].name, ch[cn].name);
           ppd->clara_state++; didsay = 1;
           break;
-        case 1:		if (ppd->kelly_state >= 15) ppd->clara_state++;	// fall through...
+        case 1:   if (ppd->kelly_state >= 15) ppd->clara_state++; // fall through...
           else break;
-        case 2:		say(cn, "I assume thou hast been sent from Aston, %s, to report on our status. The road through the swamp is no longer secure and we have been under attack from beasts emerging from the swamp.", get_army_rank_string(co));
+        case 2:   say(cn, "I assume thou hast been sent from Aston, %s, to report on our status. The road through the swamp is no longer secure and we have been under attack from beasts emerging from the swamp.", get_army_rank_string(co));
           ppd->clara_state++; didsay = 1;
           break;
-        case 3:		say(cn, "Under the current circumstances, I do not recommend sending reinforcements to secure the road. We cannot afford to bind our forces here. Now go back to Aston and deliver this report.");
+        case 3:   say(cn, "Under the current circumstances, I do not recommend sending reinforcements to secure the road. We cannot afford to bind our forces here. Now go back to Aston and deliver this report.");
           ppd->clara_state++; didsay = 1;
           break;
-        case 4:		say(cn, "Afterwards come back here, I have more work for thee. That will be all, %s. Dismissed!", get_army_rank_string(co));
+        case 4:   say(cn, "Afterwards come back here, I have more work for thee. That will be all, %s. Dismissed!", get_army_rank_string(co));
           ppd->clara_state++; didsay = 1;
           break;
-        case 5:		if (ppd->kelly_state >= 18) ppd->clara_state++;	// fall through...
-          else break;	// waiting for player to reach kelly and come back
-        case 6:		say(cn, "I have a difficult mission for thee, %s. The main reason we had to retreat to this camp was one huge swamp beast. It seemed to be immune to our attacks.", ch[co].name);
+        case 5:   if (ppd->kelly_state >= 18) ppd->clara_state++; // fall through...
+          else break; // waiting for player to reach kelly and come back
+        case 6:   say(cn, "I have a difficult mission for thee, %s. The main reason we had to retreat to this camp was one huge swamp beast. It seemed to be immune to our attacks.", ch[co].name);
           questlog_open(co, 21);
           ppd->clara_state++; didsay = 1;
           break;
-        case 7:		say(cn, "I want thee to find a way to slay it. I have heard rumors about a man who used to live with the swamp beasts north-east of this camp. Mayhap he knows a way to injure this beast.");
+        case 7:   say(cn, "I want thee to find a way to slay it. I have heard rumors about a man who used to live with the swamp beasts north-east of this camp. Mayhap he knows a way to injure this beast.");
           ppd->clara_state++; didsay = 1;
           break;
-        case 8:		say(cn, "Dismissed, %s. And good luck. Thou wilt need it.", get_army_rank_string(co));
+        case 8:   say(cn, "Dismissed, %s. And good luck. Thou wilt need it.", get_army_rank_string(co));
           ppd->clara_state++; didsay = 1;
           break;
-        case 9:		if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL) {
+        case 9:   if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL) {
             if (questlog_count(co, 21) == 0) give_military_pts(cn, co, 4, EXP_AREA15_HARDKILL);
             ppd->clara_state++;
           } else break;
-        case 10:	if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL && it[in].drdata[37] < 36)
+        case 10:  if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL && it[in].drdata[37] < 36)
             say(cn, "So that is how one can kill them. Thou wilt need to find all three stone circles and perform the ritual in each one, then, %s.", ch[co].name);
           else say(cn, "So that is how one can kill them.");
           ppd->clara_state++; didsay = 1;
           break;
-        case 11:	if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL && it[in].drdata[37] >= 36) ppd->clara_state++;
+        case 11:  if ((in = ch[co].item[WN_RHAND]) && it[in].ID == IID_HARDKILL && it[in].drdata[37] >= 36) ppd->clara_state++;
           else break;
-        case 12:	say(cn, "Now that thou knowest how to kill that beast, please go and do it.");
+        case 12:  say(cn, "Now that thou knowest how to kill that beast, please go and do it.");
           ppd->clara_state++; didsay = 1;
           break;
-        case 13:        break;	// waiting for kill
+        case 13:        break;  // waiting for kill
         case 14:        say(cn, "Well done indeed, %s!", ch[co].name);
           questlog_done(co, 21);
           if (questlog_count(co, 21) == 1) give_military_pts(cn, co, 8, 1);
           ppd->clara_state++; didsay = 1;
           break;
-        case 15:	say(cn, "The swamp will be safer now, but more dangers await thee on thy travels. May Ishtar be with thee, %s.", ch[co].name);
+        case 15:  say(cn, "The swamp will be safer now, but more dangers await thee on thy travels. May Ishtar be with thee, %s.", ch[co].name);
           ppd->clara_state++; didsay = 1;
           break;
         }
@@ -513,7 +513,7 @@ void clara_driver(int cn, int ret, int lastact)
       if (dat->current_victim && dat->current_victim != co) { remove_message(cn, msg); continue; }
 
       switch ((didsay = analyse_text_driver(cn, msg->dat1, (char*)msg->dat2, co))) {
-      case 2:		ppd = (struct area3_ppd*)set_data(co, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+      case 2:   ppd = (struct area3_ppd*)set_data(co, DRD_AREA3_PPD, sizeof(struct area3_ppd));
         if (ppd && ppd->clara_state <= 5) { dat->last_talk = 0; ppd->clara_state = 0; }
         if (ppd && ppd->clara_state >= 6 && ppd->clara_state <= 9) { dat->last_talk = 0; ppd->clara_state = 6; }
         if (ppd && ppd->clara_state >= 10 && ppd->clara_state <= 11) { dat->last_talk = 0; ppd->clara_state = 10; }
@@ -531,7 +531,7 @@ void clara_driver(int cn, int ret, int lastact)
     if (msg->type == NT_GIVE) {
       co = msg->dat1;
 
-      if (ch[cn].citem) {	// we still have it
+      if (ch[cn].citem) { // we still have it
         quiet_say(cn, "Thou hast better use for this than I do. Well, if there is use for it at all.");
         if (!give_char_item(co, ch[cn].citem)) destroy_item(ch[cn].citem);
         ch[cn].citem = 0;
@@ -582,39 +582,39 @@ void monster_dead(int cn, int co)
 int ch_driver(int nr, int cn, int ret, int lastact)
 {
   switch (nr) {
-  case CDR_SWAMPCLARA:	clara_driver(cn, ret, lastact); return 1;
-  case CDR_SWAMPMONSTER:	char_driver(CDR_SIMPLEBADDY, CDT_DRIVER, cn, ret, lastact); return 1;
-  default:		return 0;
+  case CDR_SWAMPCLARA:  clara_driver(cn, ret, lastact); return 1;
+  case CDR_SWAMPMONSTER:  char_driver(CDR_SIMPLEBADDY, CDT_DRIVER, cn, ret, lastact); return 1;
+  default:    return 0;
   }
 }
 
 int it_driver(int nr, int in, int cn)
 {
   switch (nr) {
-  case IDR_SWAMPARM:	swamparm(in, cn); return 1;
-  case IDR_SWAMPWHISP:	swampwhisp(in, cn); return 1;
-  case IDR_SWAMPSPAWN:	swampspawn(in, cn); return 1;
+  case IDR_SWAMPARM:  swamparm(in, cn); return 1;
+  case IDR_SWAMPWHISP:  swampwhisp(in, cn); return 1;
+  case IDR_SWAMPSPAWN:  swampspawn(in, cn); return 1;
 
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_died_driver(int nr, int cn, int co)
 {
   switch (nr) {
-  case CDR_SWAMPCLARA:	return 1;
-  case CDR_SWAMPMONSTER:	monster_dead(cn, co); return 1;
-  default:		return 0;
+  case CDR_SWAMPCLARA:  return 1;
+  case CDR_SWAMPMONSTER:  monster_dead(cn, co); return 1;
+  default:    return 0;
   }
 }
 
 int ch_respawn_driver(int nr, int cn)
 {
   switch (nr) {
-  case CDR_SWAMPCLARA:	return 1;
-  case CDR_SWAMPMONSTER:	return 1;
-  default:		return 0;
+  case CDR_SWAMPCLARA:  return 1;
+  case CDR_SWAMPMONSTER:  return 1;
+  default:    return 0;
   }
 }
 

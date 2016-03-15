@@ -37,7 +37,7 @@ Added RCS tags
 int log_char(int cn, int type, int dat1, const char *format, ...)
 {
   va_list args;
-  unsigned char buf[1024];
+  char buf[1024];
   int len, nr, n;
 
   if (cn < 1 || cn >= MAXCHARS) { elog("log_char(): got illegal character %d", cn); btrace("illegal cn"); return 0; }
@@ -52,13 +52,13 @@ int log_char(int cn, int type, int dat1, const char *format, ...)
 
   // make sure the text is legal - we don't want any control characters in it!
   for (n = 0; n < len; n++)
-    if (!isprint(buf[n]) && buf[n] != 176 && buf[n] > 31) buf[n] = ' ';
+    if (!isprint(buf[n]) && (unsigned char)buf[n] != 176 && buf[n] > 31) buf[n] = ' ';
 
   if (ch[cn].flags & CF_PLAYER) {
     nr = ch[cn].player;
     if (!log_player(nr, type, "%s", buf)) return 0;
   } else {
-    notify_char(cn, NT_TEXT, type, (int)xstrdup(buf, IM_TALK), dat1);
+    notify_char(cn, NT_TEXT, type, (long)xstrdup(buf, IM_TALK), dat1);
   }
 
   return len;
@@ -67,7 +67,7 @@ int log_char(int cn, int type, int dat1, const char *format, ...)
 int log_area(int xc, int yc, int type, int dat1, int maxdist, const char *format, ...)
 {
   int x, y, xs, xe, ys, ye, cn, len;
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
 
   va_start(args, format);
@@ -126,19 +126,19 @@ int sound_area(int xc, int yc, int type)
   return 1;
 }
 
-#define HOLLERDIST	(DIST*3)
-#define SHOUTDIST 	(DIST*2)
-#define SAYDIST 	(DIST)
-#define EMOTEDIST 	(DIST/2)
-#define QUIETSAYDIST 	(DIST/3)
-#define WHISPERDIST 	(DIST/4)
+#define HOLLERDIST  (DIST*3)
+#define SHOUTDIST   (DIST*2)
+#define SAYDIST   (DIST)
+#define EMOTEDIST   (DIST/2)
+#define QUIETSAYDIST  (DIST/3)
+#define WHISPERDIST   (DIST/4)
 
-#define HOLLERCOST	(12*POWERSCALE)
-#define SHOUTCOST	(6*POWERSCALE)
+#define HOLLERCOST  (12*POWERSCALE)
+#define SHOUTCOST (6*POWERSCALE)
 
 int holler(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -166,7 +166,7 @@ int holler(int cn, const char*format, ...)
 
 int shout(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -194,7 +194,7 @@ int shout(int cn, const char*format, ...)
 
 int say(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -214,7 +214,7 @@ int say(int cn, const char*format, ...)
 
 int emote(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -233,7 +233,7 @@ int emote(int cn, const char*format, ...)
 
 int quiet_say(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -250,7 +250,7 @@ int quiet_say(int cn, const char*format, ...)
 
 int whisper(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 
@@ -269,7 +269,7 @@ int whisper(int cn, const char*format, ...)
 
 int murmur(int cn, const char*format, ...)
 {
-  unsigned char buf[1024];
+  char buf[1024];
   va_list args;
   int len;
 

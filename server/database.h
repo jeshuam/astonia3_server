@@ -55,7 +55,7 @@ int db_create_club(int cnr);
 void schedule_clubs(void);
 void db_update_club(int cnr);
 void db_new_pvp(void);
-void db_add_pvp(char *killer, char *victim, char *what, int damage);
+void db_add_pvp(const char *killer, const char *victim, const char *what, int damage);
 int karmalog(int rID);
 
 

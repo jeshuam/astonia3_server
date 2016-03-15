@@ -99,7 +99,7 @@ unsigned long long atoll(char *string)
 // compare the ending of two strings
 int endcmp(const char *a, const char *b)
 {
-  char *starta = a, *startb = b;
+  const char *starta = a, *startb = b;
   int lena, lenb;
 
   while (*a) a++;
@@ -333,7 +333,7 @@ int can_attack(int cn, int co)
       return 0;
     }
 
-    if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+    if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
     for (n = 0; n < MAXHATE; n++)
       if (ppd->hate[n] == ch[co].ID)
@@ -374,7 +374,7 @@ int is_hate_empty(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return 1;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 1;
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 1;
   for (n = 0; n < MAXHATE; n++)
     if (ppd->hate[n]) return 0;
 
@@ -388,7 +388,7 @@ int on_hate_list(int cn, int co)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++)
     if (ppd->hate[n] == ch[co].ID) return 1;
 
@@ -422,7 +422,7 @@ void add_hate(int cn, int co)
 
   if (!check_hate(cn, co)) return;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
 
   for (n = 0; n < MAXHATE - 1; n++)
     if (ppd->hate[n] == ch[co].ID) break;
@@ -447,7 +447,7 @@ int del_hate(int cn, int co)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n] == ch[co].ID) {
       ppd->hate[n] = 0;
@@ -469,7 +469,7 @@ int del_hate_ID(int cn, int uID)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n] == uID) {
       ppd->hate[n] = 0;
@@ -489,7 +489,7 @@ int del_all_hate(int cn)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     ppd->hate[n] = 0;
   }
@@ -504,7 +504,7 @@ void list_hate(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
 
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n]) {
@@ -524,7 +524,7 @@ int leave_pk(int cn)
     return 0;
   }
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) {
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) {
     log_char(cn, LOG_SYSTEM, 0, "Could not attach data block, please contact game admin and tell them you found bug #1774");
     return 0; // OOPS
   }
@@ -570,7 +570,7 @@ int add_pk_kill(int cn, int co)
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK) ||
       !(ch[co].flags & CF_PLAYER) || !(ch[co].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->kills++;
   ppd->last_kill = realtime;
@@ -584,7 +584,7 @@ int add_pk_steal(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->last_kill = realtime;
 
@@ -597,7 +597,7 @@ int add_pk_death(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->deaths++;
   ppd->last_death = realtime;
@@ -611,7 +611,7 @@ int show_pk_info(int cn, int co, char *buf)
 
   if (!(ch[co].flags & CF_PLAYER) || !(ch[co].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(co, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct pk_ppd*)set_data(co, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   return sprintf(buf, "%s is a player killer. %s killed %d players and died %d times through the hands of other players. ",
                  ch[co].name, Hename(co),
@@ -882,7 +882,7 @@ int level_value(int level)
   return pow(level + 1, 4) - pow(level, 4);
 }
 
-char *save_number(int nr)
+const char *save_number(int nr)
 {
   static char buf[80];
 
@@ -1214,7 +1214,7 @@ int look_item(int cn, struct item *in)
   return 1;
 }
 
-static char *rankname[] = {
+static const char *rankname[] = {
   "nobody",   //0
   "Private",    //1
   "Private First Class",  //2
@@ -1247,7 +1247,7 @@ struct rank_ppd
   int army_rank;
 };
 
-char *get_title(int co)
+const char *get_title(int co)
 {
   if (!(ch[co].flags & CF_WON)) return "";
 
@@ -1297,7 +1297,7 @@ int look_char(int cn, int co)
     len += show_prof_info(cn, co, buf + len);
 
     if (ch[co].flags & (CF_PLAYER | CF_PLAYERLIKE)) {
-      if (!(ppd = set_data(co, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
+      if (!(ppd = (struct rank_ppd*)set_data(co, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
       if (ppd->army_rank) {
         len += sprintf(buf + len, "%s is a %s in the Imperial Army. ", ch[co].name, rankname[ppd->army_rank]);
@@ -1333,7 +1333,7 @@ int set_army_rank(int cn, int rank)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct rank_ppd*)set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   ppd->army_rank = min(24, rank);
 
@@ -1344,18 +1344,18 @@ int get_army_rank_int(int cn)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct rank_ppd*)set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   if (ppd->army_rank > 24) ppd->army_rank = 24;
 
   return ppd->army_rank;
 }
 
-char *get_army_rank_string(int cn)
+const char *get_army_rank_string(int cn)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct rank_ppd*)set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   return rankname[min(24, ppd->army_rank)];
 }
@@ -1546,7 +1546,7 @@ int destroy_money_item(int in)
 
 struct special_item
 {
-  char *name;
+  const char *name;
   int mod_index[3];
   int chance;
   unsigned long long needflag;
@@ -1734,7 +1734,7 @@ int create_special_item(int strength, int base, int potionprob, int maxchance)
   char buf[256];
 
   int type, len, priceadd = 0;
-  char *str_desc;
+  const char *str_desc;
 
   if (RANDOM(potionprob)) {
     strength += RANDOM(4);
@@ -2152,7 +2152,7 @@ void give_military_pts(int cn, int co, int pts, int exps)
   int rank;
   char buf[256];
 
-  if (!(ppd = set_data(co, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
+  if (!(ppd = (struct military_ppd*)set_data(co, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
 
   give_exp(co, exps); ppd->normal_exp += exps;
 
@@ -2176,7 +2176,7 @@ void give_military_pts_no_npc(int co, int pts, int exps)
   int rank;
   char buf[256];
 
-  if (!(ppd = set_data(co, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
+  if (!(ppd = (struct military_ppd*)set_data(co, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
 
   give_exp(co, exps); ppd->normal_exp += exps;
 
@@ -2193,7 +2193,7 @@ void give_military_pts_no_npc(int co, int pts, int exps)
   dlog(co, 0, "got %d military pts, %d exp", pts, exps);
 }
 
-int create_drop_char(char *name, int x, int y)
+int create_drop_char(const char *name, int x, int y)
 {
   int cn;
 

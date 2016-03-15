@@ -305,7 +305,7 @@ int set_task(struct task_data *set, int (*proc)(void*, struct character*, int *,
 
     xlog("set task: lock=%d, kick=%d for ID=%d, task=%d", lock, kick, set->uID, set->tasknr);
 
-    mysql_real_escape_string(&mysql, data, (void*)&tmp, sizeof(struct character));
+    mysql_real_escape_string(&mysql, data, (char*)&tmp, sizeof(struct character));
 
     if (lock > 0) sprintf(buf, "update chars set chr='%s', locked='Y',karma=%d,clan=%d,clan_rank=%d,experience=%d where ID=%d",
                             data,
@@ -373,11 +373,11 @@ int process_task(char *taskdata)
 
   switch (task) {
   case 0:   xlog("task test"); del = 1; break;
-  case 1:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_clan_rank); break;
-  case 2:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))fire_from_clan); break;
-  case 3:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))punish_player); break;
-  case 4:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))unpunish_player); break;
-  case 5:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_flags); break;
+  case 1:   del = set_task((struct task_data*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_clan_rank); break;
+  case 2:   del = set_task((struct task_data*)(taskdata), (int (*)(void*, struct character *, int*, int*))fire_from_clan); break;
+  case 3:   del = set_task((struct task_data*)(taskdata), (int (*)(void*, struct character *, int*, int*))punish_player); break;
+  case 4:   del = set_task((struct task_data*)(taskdata), (int (*)(void*, struct character *, int*, int*))unpunish_player); break;
+  case 5:   del = set_task((struct task_data*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_flags); break;
 
   default:  elog("deleting unknown task %d", task); del = 1; break;
   }
