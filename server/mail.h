@@ -12,5 +12,5 @@ Added RCS tags
 
 */
 
-int sendmail(char *to,char *subject,char *body,char *from,int do_copy);
+int sendmail(const char *to, const char *subject, const char *body, const char *from, int do_copy);
 

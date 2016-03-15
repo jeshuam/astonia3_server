@@ -84,7 +84,7 @@ struct set_flags
   int tasknr;
   int target_ID;
   int master_ID;
-  unsigned long long flags;	// will use xor
+  unsigned long long flags; // will use xor
 };
 
 
@@ -214,7 +214,7 @@ int set_task(struct task_data *set, int (*proc)(void*, struct character*, int *,
   for (cn = getfirst_char(); cn; cn = getnext_char(cn)) {
     if (ch[cn].ID == set->uID) break;
   }
-  if (cn) {	// yes: set data and delete task
+  if (cn) { // yes: set data and delete task
     xlog("set task: found online");
 
     proc(set, ch + cn, &lock, &kick);
@@ -287,7 +287,7 @@ int set_task(struct task_data *set, int (*proc)(void*, struct character*, int *,
     return 0;
   }
 
-  if (atoi(row[1])) {	// player is online somewhere, leave
+  if (atoi(row[1])) { // player is online somewhere, leave
     mysql_free_result_cnt(result);
     xlog("set task: is online somewhere else");
     return 0;
@@ -365,21 +365,21 @@ int set_task(struct task_data *set, int (*proc)(void*, struct character*, int *,
   return 1;
 }
 
-int process_task(unsigned char *taskdata)
+int process_task(char *taskdata)
 {
   int task, del;
 
   task = *(unsigned int*)(taskdata);
 
   switch (task) {
-  case 0:		xlog("task test"); del = 1; break;
-  case 1:		del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_clan_rank); break;
-  case 2:		del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))fire_from_clan); break;
-  case 3:		del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))punish_player); break;
-  case 4:		del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))unpunish_player); break;
-  case 5:		del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_flags); break;
+  case 0:   xlog("task test"); del = 1; break;
+  case 1:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_clan_rank); break;
+  case 2:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))fire_from_clan); break;
+  case 3:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))punish_player); break;
+  case 4:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))unpunish_player); break;
+  case 5:   del = set_task((void*)(taskdata), (int (*)(void*, struct character *, int*, int*))set_flags); break;
 
-  default:	elog("deleting unknown task %d", task); del = 1; break;
+  default:  elog("deleting unknown task %d", task); del = 1; break;
   }
 
   return del;

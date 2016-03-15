@@ -139,7 +139,7 @@
 MYSQL mysql;
 
 static void *db_thread(void *);
-static int add_query(int type, char *opt1, char *opt2, int nolock);
+static int add_query(int type, const char *opt1, const char *opt2, int nolock);
 static void load_char(char *name, char *password);
 static void update_arealist(void);
 static void db_create_storage(void);
@@ -385,9 +385,9 @@ int save_char(int cn, int area)
 {
   int size, expandto, add;
 
-  unsigned char cdata[sizeof(struct character)], idata[sizeof(struct item) * (INVENTORYSIZE + 1)], ddata[MAXDRDATA];
-  unsigned char cbuf[sizeof(cdata) * 2], ibuf[sizeof(idata) * 2], dbuf[sizeof(ddata) * 2];
-  unsigned char buf[sizeof(cbuf) + sizeof(ibuf) + sizeof(dbuf) + 80];
+  char cdata[sizeof(struct character)], idata[sizeof(struct item) * (INVENTORYSIZE + 1)], ddata[MAXDRDATA];
+  char cbuf[sizeof(cdata) * 2], ibuf[sizeof(idata) * 2], dbuf[sizeof(ddata) * 2];
+  char buf[sizeof(cbuf) + sizeof(ibuf) + sizeof(dbuf) + 80];
   int n, in, ilen = 0, dlen = 0;
   struct item *itmp;
   struct data *dat;
@@ -404,7 +404,7 @@ int save_char(int cn, int area)
   memcpy(cdata, ch + cn, sizeof(struct character));
 
   // items
-  itmp = (void*)(idata);
+  itmp = (struct item*)(idata);
 
   for (n = 0; n < INVENTORYSIZE; n++) {
     if ((in = ch[cn].item[n])) {
@@ -525,11 +525,11 @@ int save_char(int cn, int area)
 
 #define COMPRESS_MAGIC  0x84736251
 
-int compress_escape_string(MYSQL *my, unsigned char *dst, unsigned char *src, int ilen)
+int compress_escape_string(MYSQL *my, char *dst, char *src, int ilen)
 {
   struct z_stream_s zs;
   int ret, olen;
-  unsigned char buf[ilen * 2];
+  char buf[ilen * 2];
   void *my_zlib_malloc(void *dummy, unsigned int cnt, unsigned int size);
   void my_zlib_free(void *dummy, void *ptr);
 
@@ -538,10 +538,10 @@ int compress_escape_string(MYSQL *my, unsigned char *dst, unsigned char *src, in
   zs.zfree = my_zlib_free;
 
   deflateInit(&zs, 1);
-  zs.next_in = src;
+  zs.next_in = (unsigned char*)src;
   zs.avail_in = ilen;
 
-  zs.next_out = buf + 12;
+  zs.next_out = (unsigned char*)(buf) + 12;
   zs.avail_out = ilen * 2 - 12;
 
   ret = deflate(&zs, Z_SYNC_FLUSH);
@@ -569,7 +569,7 @@ int compress_escape_string(MYSQL *my, unsigned char *dst, unsigned char *src, in
   return olen + 12;
 }
 
-int uncompress_string(unsigned char *dst, unsigned char *src, int maxout)
+int uncompress_string(char *dst, char *src, int maxout)
 {
   struct z_stream_s zs;
   int ret, size;
@@ -582,10 +582,10 @@ int uncompress_string(unsigned char *dst, unsigned char *src, int maxout)
 
   inflateInit(&zs);
 
-  zs.next_in = src + 12;
+  zs.next_in = (unsigned char*)(src) + 12;
   zs.avail_in = *(unsigned int*)(src + 8);
 
-  zs.next_out = dst;
+  zs.next_out = (unsigned char*)(dst);
   zs.avail_out = maxout;
 
   ret = inflate(&zs, Z_SYNC_FLUSH);
@@ -610,9 +610,9 @@ int save_char_new(int cn, int area)
 {
   int size, expandto, add;
 
-  unsigned char cdata[sizeof(struct character)], idata[sizeof(struct item) * (INVENTORYSIZE + 1)], ddata[MAXDRDATA];
-  unsigned char cbuf[sizeof(cdata) * 2], ibuf[sizeof(idata) * 2], dbuf[sizeof(ddata) * 2];
-  unsigned char buf[sizeof(cbuf) + sizeof(ibuf) + sizeof(dbuf) + 80];
+  char cdata[sizeof(struct character)], idata[sizeof(struct item) * (INVENTORYSIZE + 1)], ddata[MAXDRDATA];
+  char cbuf[sizeof(cdata) * 2], ibuf[sizeof(idata) * 2], dbuf[sizeof(ddata) * 2];
+  char buf[sizeof(cbuf) + sizeof(ibuf) + sizeof(dbuf) + 80];
   int n, in, ilen = 0, dlen = 0, clen = 0;
   struct item *itmp;
   struct data *dat;
@@ -623,7 +623,7 @@ int save_char_new(int cn, int area)
   memcpy(cdata, ch + cn, sizeof(struct character));
 
   // items
-  itmp = (void*)(idata);
+  itmp = (struct item*)(idata);
 
   for (n = 0; n < INVENTORYSIZE; n++) {
     if ((in = ch[cn].item[n])) {
@@ -859,7 +859,7 @@ int add_task(void *task, int len)
   char buf[len * 4 + 256];
   char data[len * 4];
 
-  mysql_real_escape_string(&mysql, data, task, len);
+  mysql_real_escape_string(&mysql, data, (const char*)task, len);
 
   sprintf(buf, "insert into task values(0,'%s')", data);
 
@@ -1051,7 +1051,7 @@ struct create_storage
   int state;
   int ID;
 
-  char *desc;
+  const char *desc;
   void *content;
   int size;
 };
@@ -1266,21 +1266,21 @@ static struct query
    *wquery = NULL,  // top of used queries
     *equery = NULL; // end of used queries
 
-static int add_query(int type, char *opt1, char *opt2, int nolock)
+static int add_query(int type, const char *opt1, const char *opt2, int nolock)
 {
   struct query *q;
 
   if (!nolock) pthread_mutex_lock(&data_mutex);
 
   q = fquery;
-  if (!q) q = xmalloc(sizeof(struct query), IM_QUERY);
+  if (!q) q = (struct query*)xmalloc(sizeof(struct query), IM_QUERY);
   else fquery = q->next;
 
   if (!q) { elog("memory low in add_query!"); exit(1); } // memory low!!! handle me !!!
 
   q->type = type;
-  if (opt1) q->opt1 = xstrdup(opt1, IM_QUERY); else q->opt1 = NULL;
-  if (opt2) q->opt2 = xstrdup(opt2, IM_QUERY); else q->opt2 = NULL;
+  if (opt1) q->opt1 = (char*)xstrdup((char*)opt1, IM_QUERY); else q->opt1 = NULL;
+  if (opt2) q->opt2 = (char*)xstrdup((char*)opt2, IM_QUERY); else q->opt2 = NULL;
 
   if ((opt1 && !q->opt1) || (opt2 && !q->opt2)) { elog("memory low in add_query!"); exit(1); } // memory low!!! handle me !!!
 
@@ -1501,11 +1501,11 @@ struct login {
   // working data
   int ID;
   int current;    // DB: current area of char
-  unsigned char *chr; // DB: character data
+  char *chr; // DB: character data
   int chr_len;
-  unsigned char *itm; // DB: item data
+  char *itm; // DB: item data
   int itm_len;
-  unsigned char *ppd; // DB: persistent player data
+  char *ppd; // DB: persistent player data
   int ppd_len;
   int paid_till;
   int paid;
@@ -1847,12 +1847,12 @@ void tick_login(void)
     }
 
     // character data
-    copy_char(ch + cn, (void*)login.chr);
+    copy_char(ch + cn, (struct character*)login.chr);
     ch[cn].serial = sercn++;
     ch[cn].ef[0] = ch[cn].ef[1] = ch[cn].ef[2] = ch[cn].ef[3] = 0;
 
     // items
-    itmp = (void*)(login.itm);
+    itmp = (struct item*)(login.itm);
 
     for (n = 0; n < INVENTORYSIZE; n++) {
       if (ch[cn].item[n]) {
@@ -1948,7 +1948,7 @@ void tick_login(void)
       ppd_size = *(unsigned int*)(login.ppd + pos); pos += 4;
 
       if (ppd_id != DRD_JUNK_PPD) {
-        ppd = set_data(cn, ppd_id, ppd_size);
+        ppd = (unsigned char*)set_data(cn, ppd_id, ppd_size);
         memcpy(ppd, login.ppd + pos, ppd_size);
       }
       pos += ppd_size;
@@ -2380,9 +2380,9 @@ static void load_char(char *name, char *password)
 
     //xlog("chr.len=%ld, itm.len=%ld, ppd.len=%ld, total=%d",len[1],len[2],len[8],len[1]+len[2]+len[8]);
 
-    login.chr = xcalloc(max(sizeof(struct character), len[1]), IM_DATABASE);
-    login.itm = xmalloc(len[2], IM_DATABASE);
-    login.ppd = xmalloc(len[8], IM_DATABASE);
+    login.chr = (char*)xcalloc(max(sizeof(struct character), len[1]), IM_DATABASE);
+    login.itm = (char*)xmalloc(len[2], IM_DATABASE);
+    login.ppd = (char*)xmalloc(len[8], IM_DATABASE);
 
     if (!login.chr || !login.itm || !login.ppd) {
       elog("memory low in load_char");  // !!! handle gracefully !!!
@@ -2407,9 +2407,9 @@ static void load_char(char *name, char *password)
     memcpy(login.itm, row[2], len[2]);
     memcpy(login.ppd, row[8], len[8]);
   } else {
-    login.chr = xcalloc(max(sizeof(struct character), *(unsigned int*)(row[1] + 4)), IM_DATABASE);
-    login.itm = xmalloc(*(unsigned int*)(row[2] + 4), IM_DATABASE);
-    login.ppd = xmalloc(*(unsigned int*)(row[8] + 4), IM_DATABASE);
+    login.chr = (char*)xcalloc(max(sizeof(struct character), *(unsigned int*)(row[1] + 4)), IM_DATABASE);
+    login.itm = (char*)xmalloc(*(unsigned int*)(row[2] + 4), IM_DATABASE);
+    login.ppd = (char*)xmalloc(*(unsigned int*)(row[8] + 4), IM_DATABASE);
 
     login.chr_len = uncompress_string(login.chr, row[1], *(unsigned int*)(row[1] + 4));
     login.itm_len = uncompress_string(login.itm, row[2], *(unsigned int*)(row[2] + 4));
@@ -2935,7 +2935,7 @@ void db_read_notes(char *suID, char *srID)
     if (row[3]) date = atoi(row[3]); else date = 0;
 
     switch (kind) {
-    case 1:   list_punishment(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4])); break;
+    case 1:   list_punishment(rID, (struct punishment *)row[1], atoi(row[2]), date, atoi(row[4])); break;
     }
 
   }
@@ -2952,7 +2952,7 @@ void karmalog_s(int rID, struct punishment *pun, int cID, int date, int ID, int 
   lookup_ID(name, cID);
   lookup_ID(offender, uID);
 
-  tm = localtime((void*)&date);
+  tm = localtime((time_t*)&date);
 
   tell_chat(0, rID, 1, "%s, %d Karma from %s for %s at %02d:%02d:%02d.",
             offender,
@@ -2993,7 +2993,7 @@ void db_karmalog(char *xrID)
     if (row[3]) date = atoi(row[3]); else date = 0;
 
     switch (kind) {
-    case 1:   karmalog_s(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4]), atoi(row[5])); break;
+    case 1:   karmalog_s(rID, (struct punishment *)row[1], atoi(row[2]), date, atoi(row[4]), atoi(row[5])); break;
     }
 
   }
@@ -3243,7 +3243,7 @@ void db_rescue_char(char *IDstring)
   int ID;
   MYSQL_RES *result;
   MYSQL_ROW row;
-  unsigned char cbuf[sizeof(struct character) * 2];
+  char cbuf[sizeof(struct character) * 2];
   char buf[256 + sizeof(cbuf)];
   int current_area, allowed_area, mirror, current_mirror;
   struct character *tmp;
@@ -3303,7 +3303,7 @@ void db_rescue_char(char *IDstring)
   allowed_area = atoi(row[2]);
   mirror = atoi(row[3]);
   current_mirror = atoi(row[4]);
-  tmp = (void*)(row[0]);
+  tmp = (struct character*)(row[0]);
 
   if (get_area(3, mirror, NULL, NULL)) {
     current_area = 0;
@@ -3337,7 +3337,7 @@ void db_rescue_char(char *IDstring)
 
   mysql_free_result_cnt(result);
 
-  mysql_real_escape_string(&mysql, cbuf, (void*)tmp, sizeof(struct character));
+  mysql_real_escape_string(&mysql, cbuf, (char*)tmp, sizeof(struct character));
   sprintf(buf, "update chars set current_area=%d,allowed_area=%d,current_mirror=%d,chr='%s',spacer=44 where ID=%d",
           current_area,
           allowed_area,
@@ -3366,7 +3366,7 @@ int db_set_stat(char *name, int mod, int value)
   return 1;
 }
 
-int db_add_stat(char *name, int mod, int value)
+int db_add_stat(const char *name, int mod, int value)
 {
   char query[256];
 
@@ -3416,7 +3416,7 @@ int db_max_stat(char *name, int mod, int value)
   return 1;
 }
 
-int db_reset_stat(char *name, int mod)
+int db_reset_stat(const char *name, int mod)
 {
   char query[256];
 
@@ -3539,7 +3539,7 @@ int db_create_club(int cnr)
   char buf[256];
 
   sprintf(buf, "insert clubs values(%d,'%s',%d,%d,%d)", cnr, club[cnr].name, club[cnr].paid, club[cnr].money, club[cnr].serial);
-  add_query(DT_QUERY, buf, "create club", 0);
+  add_query(DT_QUERY, (const char*)buf, "create club", 0);
 
   return 0;
 }
@@ -3595,7 +3595,7 @@ void db_update_club(int cnr)
   char buf[256];
 
   sprintf(buf, "update clubs set name='%s', paid=%d, money=%d, serial=%d where ID=%d", club[cnr].name, club[cnr].paid, club[cnr].money, club[cnr].serial, cnr);
-  add_query(DT_QUERY, buf, "update club", 0);
+  add_query(DT_QUERY, (const char*)buf, "update club", 0);
 }
 
 void schedule_clubs(void)
@@ -3619,7 +3619,7 @@ void db_add_pvp(char *killer, char *victim, char *what, int damage)
 
   sprintf(buf, "insert pvp values(%lld,\"%s\",\"%s\",\"%s\",%d,%d)", ID, killer, victim, what, damage, realtime);
 
-  add_query(DT_QUERY, buf, "insert pvp", 0);
+  add_query(DT_QUERY, (const char*)buf, "insert pvp", 0);
   if (!strcmp(what, "kill")) add_query(DT_PVPLIST, killer, victim, 0);
 }
 
