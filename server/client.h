@@ -22,244 +22,244 @@
 
 struct cmap
 {
-        unsigned int gsprite;          	// background image
-        unsigned int fsprite;         	// foreground sprite
-	unsigned int isprite;		// item sprite
-	unsigned short ef[4];
-	
-        unsigned int csprite;		// character base sprite
-	unsigned int cn;		// character number (for commands)
+  unsigned int gsprite;          	// background image
+  unsigned int fsprite;         	// foreground sprite
+  unsigned int isprite;		// item sprite
+  unsigned short ef[4];
 
-	unsigned int flags;             // see CMF_
+  unsigned int csprite;		// character base sprite
+  unsigned int cn;		// character number (for commands)
 
-	unsigned char action;		// character action, duration and step
-	unsigned char duration;
+  unsigned int flags;             // see CMF_
 
-	unsigned char step;	
-	unsigned char dir;		// direction the character is facing
-	unsigned char health;		// character health (in percent)
-	unsigned char mana;		// character mana (in percent)
-        unsigned char shield;		// character shield (in percent)
+  unsigned char action;		// character action, duration and step
+  unsigned char duration;
+
+  unsigned char step;
+  unsigned char dir;		// direction the character is facing
+  unsigned char health;		// character health (in percent)
+  unsigned char mana;		// character mana (in percent)
+  unsigned char shield;		// character shield (in percent)
 };
 
 struct cef_generic
 {
-	int nr;
-	int type;
+  int nr;
+  int type;
 };
 
 struct cef_shield
 {
-	int nr;
-	int type;
-	int cn;
-        int start;
+  int nr;
+  int type;
+  int cn;
+  int start;
 };
 
 struct cef_strike
 {
-	int nr;
-	int type;
-	int cn;
-        int x,y;	// target
+  int nr;
+  int type;
+  int cn;
+  int x, y;	// target
 };
 
 struct cef_pulseback
 {
-	int nr;
-	int type;
-	int cn;
-        int x,y;	// target
+  int nr;
+  int type;
+  int cn;
+  int x, y;	// target
 };
 
 struct cef_ball
 {
-	int nr;
-	int type;
-	int start;
-        int frx,fry;	// high precision coords
-	int tox,toy;	// high precision coords
+  int nr;
+  int type;
+  int start;
+  int frx, fry;	// high precision coords
+  int tox, toy;	// high precision coords
 };
 
 struct cef_fireball
 {
-	int nr;
-	int type;
-	int start;
-	int frx,fry;	// high precision coords
-	int tox,toy;	// high precision coords
+  int nr;
+  int type;
+  int start;
+  int frx, fry;	// high precision coords
+  int tox, toy;	// high precision coords
 };
 
 struct cef_flash
 {
-	int nr;
-	int type;
-	int cn;
+  int nr;
+  int type;
+  int cn;
 };
 
 struct cef_explode
 {
-	int nr;
-	int type;
-	int start;
-	int base;
+  int nr;
+  int type;
+  int start;
+  int base;
 };
 
 struct cef_warcry
 {
-	int nr;
-	int type;
-	int cn;
-	int stop;
+  int nr;
+  int type;
+  int cn;
+  int stop;
 };
 
 struct cef_bless
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
-	int stop;
-	int strength;
+  int nr;
+  int type;
+  int cn;
+  int start;
+  int stop;
+  int strength;
 };
 
 struct cef_heal
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
+  int nr;
+  int type;
+  int cn;
+  int start;
 };
 
 struct cef_freeze
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
-	int stop;
+  int nr;
+  int type;
+  int cn;
+  int start;
+  int stop;
 };
 
 struct cef_burn
 {
-	int nr;
-	int type;
-	int cn;
-	int stop;
+  int nr;
+  int type;
+  int cn;
+  int stop;
 };
 
 struct cef_mist
 {
-	int nr;
-	int type;
-	int start;
+  int nr;
+  int type;
+  int start;
 };
 
 struct cef_pulse
 {
-	int nr;
-	int type;
-	int start;
+  int nr;
+  int type;
+  int start;
 };
 
 struct cef_potion
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
-	int stop;
-	int strength;
+  int nr;
+  int type;
+  int cn;
+  int start;
+  int stop;
+  int strength;
 };
 
 struct cef_earthrain
 {
-	int nr;
-	int type;
-	int strength;
+  int nr;
+  int type;
+  int strength;
 };
 
 struct cef_earthmud
 {
-	int nr;
-	int type;	
+  int nr;
+  int type;
 };
 
 struct cef_edemonball
 {
-	int nr;
-	int type;
-	int start;
-	int base;
-	int frx,fry;	// high precision coords
-	int tox,toy;	// high precision coords
+  int nr;
+  int type;
+  int start;
+  int base;
+  int frx, fry;	// high precision coords
+  int tox, toy;	// high precision coords
 };
 
 struct cef_curse
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
-	int stop;
-	int strength;
+  int nr;
+  int type;
+  int cn;
+  int start;
+  int stop;
+  int strength;
 };
 
 struct cef_cap
 {
-	int nr;
-	int type;
-	int cn;
+  int nr;
+  int type;
+  int cn;
 };
 
 struct cef_lag
 {
-	int nr;
-	int type;
-	int cn;
+  int nr;
+  int type;
+  int cn;
 };
 
 struct cef_firering
 {
-	int nr;
-	int type;
-	int cn;
-	int start;
+  int nr;
+  int type;
+  int cn;
+  int start;
 };
 
 struct cef_bubble
 {
-	int nr;
-	int type;
-	int yoff;
+  int nr;
+  int type;
+  int yoff;
 };
 
 union ceffect
 {
-	struct cef_generic generic;
-	struct cef_shield shield;
-	struct cef_strike strike;
-	struct cef_ball ball;
-	struct cef_fireball fireball;
-	struct cef_flash flash;
-        struct cef_explode explode;
-	struct cef_warcry warcry;
-	struct cef_bless bless;
-	struct cef_heal heal;
-	struct cef_freeze freeze;
-	struct cef_burn burn;
-	struct cef_mist mist;
-	struct cef_potion potion;
-	struct cef_earthrain earthrain;
-	struct cef_earthmud earthmud;
-	struct cef_edemonball edemonball;
-	struct cef_curse curse;
-	struct cef_cap cap;
-	struct cef_lag lag;
-	struct cef_pulse pulse;
-	struct cef_pulseback pulseback;
-	struct cef_firering firering;
-	struct cef_bubble bubble;
+  struct cef_generic generic;
+  struct cef_shield shield;
+  struct cef_strike strike;
+  struct cef_ball ball;
+  struct cef_fireball fireball;
+  struct cef_flash flash;
+  struct cef_explode explode;
+  struct cef_warcry warcry;
+  struct cef_bless bless;
+  struct cef_heal heal;
+  struct cef_freeze freeze;
+  struct cef_burn burn;
+  struct cef_mist mist;
+  struct cef_potion potion;
+  struct cef_earthrain earthrain;
+  struct cef_earthmud earthmud;
+  struct cef_edemonball edemonball;
+  struct cef_curse curse;
+  struct cef_cap cap;
+  struct cef_lag lag;
+  struct cef_pulse pulse;
+  struct cef_pulseback pulseback;
+  struct cef_firering firering;
+  struct cef_bubble bubble;
 };
 
 #define SV_SCROLL_UP		1
@@ -340,8 +340,8 @@ union ceffect
 #define CL_HEAL			12
 #define CL_MAGICSHIELD		13
 #define CL_FREEZE		14
-#define CL_RAISE		15	
-#define CL_USE_INV		16	
+#define CL_RAISE		15
+#define CL_USE_INV		16
 #define CL_FLASH		17
 #define CL_BALL			18
 #define CL_WARCRY		19
@@ -372,20 +372,20 @@ union ceffect
 
 struct client_surface
 {
-	unsigned int xres:14;
-	unsigned int yres:14;
-	unsigned int type:4;
+  unsigned int xres: 14;
+  unsigned int yres: 14;
+  unsigned int type: 4;
 };
 
 struct client_info
 {
-	unsigned int skip;
-	unsigned int idle;
-	unsigned int vidmemtotal;
-	unsigned int vidmemfree;
-	unsigned int systemtotal;
-	unsigned int systemfree;
-	struct client_surface surface[CL_MAX_SURFACE];
+  unsigned int skip;
+  unsigned int idle;
+  unsigned int vidmemtotal;
+  unsigned int vidmemfree;
+  unsigned int systemtotal;
+  unsigned int systemfree;
+  struct client_surface surface[CL_MAX_SURFACE];
 };
 
 
