@@ -12,5 +12,5 @@ Added RCS tags
 
 */
 
-int cmd_clanlog(int cn,char *ptr);
+int cmd_clanlog(int cn, char *ptr);
 
