@@ -143,7 +143,7 @@ extern struct player **player;
 #endif
 
 void tick_player(void);
-int log_player(int nr, int color, char *format, ...);
+int log_player(int nr, int color, const char *format, ...);
 void set_player_knows_name(int nr, int cn, int flag);
 void kick_player(int nr, const char *reason);
 void exit_char(int cn);

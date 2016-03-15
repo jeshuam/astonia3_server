@@ -2380,7 +2380,7 @@ static void player_update(int nr)
 
 // note: log_player is inherently dangerous as it does not check the correctness
 // of any %s's. please take care, in V2 this was one of the main causes of crashes!
-int log_player(int nr, int color, char *format, ...)
+int log_player(int nr, int color, const char *format, ...)
 {
   va_list args;
   unsigned char buf[1024];
