@@ -12,5 +12,5 @@ Added RCS tags
 
 */
 
-int char_see_char(int cn,int co);
-int char_see_item(int cn,int in);
+int char_see_char(int cn, int co);
+int char_see_item(int cn, int in);
