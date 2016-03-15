@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: drvlib.h,v 1.13 2008/03/24 11:23:56 devel Exp $
  *

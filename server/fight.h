@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: fight.h,v 1.1 2005/09/24 09:55:48 ssim Exp $
@@ -26,11 +28,11 @@ struct fight_driver_data
 {
   struct person enemy[10];
 
-  int start_dist;		// distance from respawn point at which to start attacking
-  int stop_dist;		// distance from respawn point at which to stop attacking
-  int char_dist;		// distance from character we start attacking
+  int start_dist;   // distance from respawn point at which to start attacking
+  int stop_dist;    // distance from respawn point at which to stop attacking
+  int char_dist;    // distance from character we start attacking
 
-  int home_x, home_y;	// position to compare start_dist and start_dist with
+  int home_x, home_y; // position to compare start_dist and start_dist with
 
   int lasthit;
 };

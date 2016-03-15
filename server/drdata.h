@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: drdata.h,v 1.8 2008/03/24 11:23:56 devel Exp $ (c) 2005 D.Brockhaus
  *

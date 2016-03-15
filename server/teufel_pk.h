@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: teufel_pk.h,v 1.1 2006/04/26 16:05:44 ssim Exp $
  *

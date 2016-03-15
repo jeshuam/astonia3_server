@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: player_driver.h,v 1.1 2005/09/24 09:55:48 ssim Exp $

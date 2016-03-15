@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: act.h,v 1.2 2007/10/24 11:39:27 devel Exp $

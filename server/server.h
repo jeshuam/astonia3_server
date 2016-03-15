@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  *
  * $Id: server.h,v 1.4 2006/12/14 13:58:05 devel Exp $
@@ -44,7 +46,7 @@
 #define MAXEFFECT (maxeffect) //512 //1024
 
 #define MAXAREANAME 80
-#define MAXPASSWORD 16
+#define MAXPASSWORD 17
 #define MAXEMAIL  80
 
 #define POWERSCALE  1000    // ch.hp = ch.value[0][V_HP] * POWERSCALE, same for endurance and mana
@@ -539,7 +541,9 @@ struct effect
   int number_of_enemies;    // number of enemies hit by effect last tick
 
   int base_sprite;    // for explosion: sprite number
-} *ef;
+};
+
+extern struct effect *ef;
 
 // *********** BASIC LIBRARY ******************
 unsigned long long prof_start(int task);

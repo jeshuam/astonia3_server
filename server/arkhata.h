@@ -1,3 +1,5 @@
+#pragma once
+
 struct arkhata_ppd
 {
   int rammy_state;

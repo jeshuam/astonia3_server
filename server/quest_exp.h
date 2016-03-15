@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: quest_exp.h,v 1.2 2006/09/14 09:55:22 devel Exp $

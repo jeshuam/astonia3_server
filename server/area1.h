@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: area1.h,v 1.2 2006/09/14 09:55:22 devel Exp $
@@ -15,8 +17,8 @@ Added RCS tags
 
 */
 
-#define AF1_STORAGE_HINT	(1u<<1)
-#define AF1_BUY_HINT		(1u<<2)
+#define AF1_STORAGE_HINT  (1u<<1)
+#define AF1_BUY_HINT    (1u<<2)
 
 struct area1_ppd
 {

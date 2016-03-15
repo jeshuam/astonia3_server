@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  *
  * $Id: player.h,v 1.3 2006/09/14 09:55:22 devel Exp $
@@ -61,7 +63,7 @@ struct player
   int lastcmd;
 
   // input buffer
-  unsigned char inbuf[256];
+  char inbuf[256];
   int in_len;
 
   // output ring buffer

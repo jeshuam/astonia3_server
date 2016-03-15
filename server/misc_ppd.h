@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: misc_ppd.h,v 1.2 2006/12/14 13:58:05 devel Exp $

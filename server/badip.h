@@ -1,3 +1,5 @@
+#pragma once
+
 #include <mysql/mysql.h>
 
 int is_badpass_ip(MYSQL *mysql, unsigned int ip);

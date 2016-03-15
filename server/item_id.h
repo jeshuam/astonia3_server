@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: item_id.h,v 1.9 2008/03/24 11:23:56 devel Exp $
  *

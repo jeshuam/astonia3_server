@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: path.h,v 1.1 2005/09/24 09:55:48 ssim Exp $
@@ -13,7 +15,7 @@ Added RCS tags
 */
 
 int init_path(void);
-int pathfinder(int fx,int fy,int tx,int ty,int mindist,int (*check_target)(int),int maxstephint);
+int pathfinder(int fx, int fy, int tx, int ty, int mindist, int (*check_target)(int), int maxstephint);
 int pathcost(void);
 
 int pathbestdir(void);

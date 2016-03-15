@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  *
  * $Id: clan.h,v 1.3 2007/12/10 10:12:53 devel Exp $ (c) 2005 D.Brockhaus

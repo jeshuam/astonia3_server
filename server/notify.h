@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: notify.h,v 1.2 2008/03/24 11:23:56 devel Exp $
  *

@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: los.h,v 1.1 2005/09/24 09:55:48 ssim Exp $
@@ -12,8 +14,8 @@ Added RCS tags
 
 */
 
-#define MAXDIST		25
-#define SIZE		(MAXDIST*2+1)
+#define MAXDIST   25
+#define SIZE    (MAXDIST*2+1)
 
 struct los
 {

@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAXCLUB   16384
 #define CLUBOFFSET  1024
 

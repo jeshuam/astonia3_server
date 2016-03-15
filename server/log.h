@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: log.h,v 1.2 2007/08/13 18:50:38 devel Exp $

@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAXFLOWER 100
 
 struct flower_ppd

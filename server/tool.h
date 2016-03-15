@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: tool.h,v 1.2 2006/06/23 16:21:07 ssim Exp $
  *

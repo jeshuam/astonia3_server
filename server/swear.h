@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 
 $Id: swear.h,v 1.2 2006/03/22 14:30:13 ssim Exp $

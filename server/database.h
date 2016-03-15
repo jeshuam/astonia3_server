@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: database.h,v 1.4 2006/12/14 14:29:46 devel Exp $
  *

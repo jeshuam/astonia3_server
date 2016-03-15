@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * $Id: questlog.h,v 1.4 2006/10/04 17:30:57 devel Exp $
  *
