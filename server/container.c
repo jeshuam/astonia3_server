@@ -37,203 +37,203 @@ static struct container *fcontainer;
 int used_containers;
 
 // get new container from free list
-int alloc_container(int cn,int in)
+int alloc_container(int cn, int in)
 {
-	int ct;
-	struct container *tmp;
+  int ct;
+  struct container *tmp;
 
-	tmp=fcontainer;
-	if (!tmp) { elog("alloc_item: MAXITEM reached!"); return 0; }
+  tmp = fcontainer;
+  if (!tmp) { elog("alloc_item: MAXITEM reached!"); return 0; }
 
-	fcontainer=tmp->next;
+  fcontainer = tmp->next;
 
-	ct=tmp-con;
+  ct = tmp - con;
 
-	con[ct].cn=cn;
-	con[ct].in=in;
-	con[ct].owner=0;
+  con[ct].cn = cn;
+  con[ct].in = in;
+  con[ct].owner = 0;
 
-	used_containers++;
+  used_containers++;
 
-	return ct;
+  return ct;
 }
 
 // release (delete) container to free list
 void free_container(int ct)
 {
-	if (!con[ct].cn && !con[ct].in) {
-		elog("trying to free already free container %d",ct);
-		return;
-	}
+  if (!con[ct].cn && !con[ct].in) {
+    elog("trying to free already free container %d", ct);
+    return;
+  }
 
-	con[ct].cn=0;
-	con[ct].in=0;
+  con[ct].cn = 0;
+  con[ct].in = 0;
 
-	con[ct].next=fcontainer;
-	fcontainer=con+ct;
+  con[ct].next = fcontainer;
+  fcontainer = con + ct;
 
-	used_containers--;
+  used_containers--;
 }
 
 // create a container and attach it to item in
 int create_item_container(int in)
 {
-	int ct;
+  int ct;
 
-	if (in<1 || in>=MAXITEM) {
-		elog("create_item_container(): trying to create container for illegal item %d",in);
-		return 0;
-	}
+  if (in < 1 || in >= MAXITEM) {
+    elog("create_item_container(): trying to create container for illegal item %d", in);
+    return 0;
+  }
 
-	ct=alloc_container(0,in);
-	if (!ct) return 0;
+  ct = alloc_container(0, in);
+  if (!ct) return 0;
 
-	bzero(con[ct].item,sizeof(con[ct].item));
-	it[in].content=ct;
+  bzero(con[ct].item, sizeof(con[ct].item));
+  it[in].content = ct;
 
-	return ct;
+  return ct;
 }
 
 // remove and free the container attached to in
 int destroy_item_container(int in)
 {
-	int n,ct,in2;
+  int n, ct, in2;
 
-	if (in<1 || in>=MAXITEM) {
-		elog("destroy_item_container(): trying to destroy container for illegal item %d",in);
-		return 0;
-	}
+  if (in < 1 || in >= MAXITEM) {
+    elog("destroy_item_container(): trying to destroy container for illegal item %d", in);
+    return 0;
+  }
 
-	ct=it[in].content;
-	if (!ct) return 0;
+  ct = it[in].content;
+  if (!ct) return 0;
 
-	if (ct<1 || ct>=MAXCONTAINER) {
-		elog("destroy_item_container(): trying to destroy illegal container %d",ct);
-		return 0;
-	}
+  if (ct < 1 || ct >= MAXCONTAINER) {
+    elog("destroy_item_container(): trying to destroy illegal container %d", ct);
+    return 0;
+  }
 
-	if (!con[ct].cn && !con[ct].in) {
-		elog("destroy_item_container(): trying to destroy already erased container %d",ct);
-		return 0;
-	}
+  if (!con[ct].cn && !con[ct].in) {
+    elog("destroy_item_container(): trying to destroy already erased container %d", ct);
+    return 0;
+  }
 
-        for (n=0; n<CONTAINERSIZE; n++) {
-		if ((in2=con[ct].item[n])) {
-			if (in2<1 || in2>=MAXITEM){
-				elog("destroy_item_container(): found illegal item %d in container %d (item %d)",in2,ct,in);
-			} else {			
-				free_item(in2);
-			}
-		}
-	}
-	free_container(ct);
+  for (n = 0; n < CONTAINERSIZE; n++) {
+    if ((in2 = con[ct].item[n])) {
+      if (in2 < 1 || in2 >= MAXITEM) {
+        elog("destroy_item_container(): found illegal item %d in container %d (item %d)", in2, ct, in);
+      } else {
+        free_item(in2);
+      }
+    }
+  }
+  free_container(ct);
 
-	it[in].content=0;
+  it[in].content = 0;
 
-	return 1;
+  return 1;
 }
 
 // add item in to container ct at position pos.
-int add_item_container(int ct,int in,int pos)
+int add_item_container(int ct, int in, int pos)
 {
-	int n;
+  int n;
 
-	if (ct<1 || ct>=MAXCONTAINER) {
-		elog("add_item_container: illegal container %d",ct);
-		return 0;
-	}
-	if (in<1 || in>=MAXITEM) {
-		elog("add_item_container: illegal item %d",in);
-		return 0;
-	}
-	if (pos==-1) {
-		for (n=0; n<CONTAINERSIZE; n++)
-			if (!con[ct].item[n]) break;
-		if (n==CONTAINERSIZE) return 0;
-		
-		pos=n;
-	}
-	if (pos<0 || pos>=CONTAINERSIZE) {
-		elog("add_item_container: illegal pos %d",pos);
-		return 0;
-	}
+  if (ct < 1 || ct >= MAXCONTAINER) {
+    elog("add_item_container: illegal container %d", ct);
+    return 0;
+  }
+  if (in < 1 || in >= MAXITEM) {
+    elog("add_item_container: illegal item %d", in);
+    return 0;
+  }
+  if (pos == -1) {
+    for (n = 0; n < CONTAINERSIZE; n++)
+      if (!con[ct].item[n]) break;
+    if (n == CONTAINERSIZE) return 0;
 
-	if (con[ct].item[pos]) return 0;
+    pos = n;
+  }
+  if (pos < 0 || pos >= CONTAINERSIZE) {
+    elog("add_item_container: illegal pos %d", pos);
+    return 0;
+  }
 
-	con[ct].item[pos]=in;
+  if (con[ct].item[pos]) return 0;
 
-	it[in].contained=ct;
-	it[in].carried=0;
-	it[in].x=it[in].y=0;
+  con[ct].item[pos] = in;
 
-	return 1;
+  it[in].contained = ct;
+  it[in].carried = 0;
+  it[in].x = it[in].y = 0;
+
+  return 1;
 }
 
 // remove item in from its container.
 int remove_item_container(int in)
 {
-	int n,ct;
+  int n, ct;
 
-	if (in<1 || in>=MAXITEM) {
-		elog("remove_item_container: illegal item %d",in);
-		return 0;
-	}
+  if (in < 1 || in >= MAXITEM) {
+    elog("remove_item_container: illegal item %d", in);
+    return 0;
+  }
 
-	ct=it[in].contained;
+  ct = it[in].contained;
 
-	if (ct<1 || ct>=MAXCONTAINER) {
-		elog("remove_item_container: illegal container %d",ct);
-		return 0;
-	}	
+  if (ct < 1 || ct >= MAXCONTAINER) {
+    elog("remove_item_container: illegal container %d", ct);
+    return 0;
+  }
 
-	for (n=0; n<CONTAINERSIZE; n++)
-		if (con[ct].item[n]==in) break;
-	if (n==CONTAINERSIZE) return 0;
+  for (n = 0; n < CONTAINERSIZE; n++)
+    if (con[ct].item[n] == in) break;
+  if (n == CONTAINERSIZE) return 0;
 
-	con[ct].item[n]=0;
-	it[in].contained=0;
+  con[ct].item[n] = 0;
+  it[in].contained = 0;
 
-	return 1;
+  return 1;
 }
 
 // count the number of items in a container
 int container_itemcnt(int in)
 {
-	int n,ct,cnt=0;
+  int n, ct, cnt = 0;
 
-	if (in<1 || in>=MAXITEM) {
-		elog("container_itemcnt: illegal item %d",in);
-		return 0;
-	}
+  if (in < 1 || in >= MAXITEM) {
+    elog("container_itemcnt: illegal item %d", in);
+    return 0;
+  }
 
-	ct=it[in].content;
+  ct = it[in].content;
 
-	if (ct<1 || ct>=MAXCONTAINER) {
-		elog("container_itemcnt: illegal container %d",ct);
-		return 0;
-	}	
+  if (ct < 1 || ct >= MAXCONTAINER) {
+    elog("container_itemcnt: illegal container %d", ct);
+    return 0;
+  }
 
-	for (n=0; n<CONTAINERSIZE; n++)
-		if (con[ct].item[n]) cnt++;
+  for (n = 0; n < CONTAINERSIZE; n++)
+    if (con[ct].item[n]) cnt++;
 
-        return cnt;
+  return cnt;
 }
 
 // called at startup
 int init_container(void)
 {
-	int n;
+  int n;
 
-	con=xcalloc(sizeof(struct container)*MAXCONTAINER,IM_BASE);
-	if (!con) return 0;
-	xlog("Allocated containers: %.2fM (%d*%d)",sizeof(struct container)*MAXCONTAINER/1024.0/1024.0,sizeof(struct container),MAXCONTAINER);
-	mem_usage+=sizeof(struct container)*MAXCONTAINER;
+  con = (struct container*)xcalloc(sizeof(struct container) * MAXCONTAINER, IM_BASE);
+  if (!con) return 0;
+  xlog("Allocated containers: %.2fM (%lu*%d)", sizeof(struct container)*MAXCONTAINER / 1024.0 / 1024.0, sizeof(struct container), MAXCONTAINER);
+  mem_usage += sizeof(struct container) * MAXCONTAINER;
 
-	// add containers to free list
-	for (n=1; n<MAXCONTAINER; n++) { con[n].cn=42; free_container(n); }
+  // add containers to free list
+  for (n = 1; n < MAXCONTAINER; n++) { con[n].cn = 42; free_container(n); }
 
-	used_containers=0;
+  used_containers = 0;
 
-	return 1;
+  return 1;
 }
 

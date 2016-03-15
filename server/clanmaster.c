@@ -74,20 +74,20 @@
 #include "player_driver.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);			// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret, int lastact);      // character driver (decides next action)
+int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);       // called when a character dies
+int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
 int driver(int type, int nr, int obj, int ret, int lastact)
 {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 	return 0;
+  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
+  case CDT_ITEM:    return it_driver(nr, obj, ret);
+  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
+  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
+  default:  return 0;
   }
 }
 
@@ -168,7 +168,7 @@ int analyse_text_driver(int cn, int type, char *text, int co)
       }
       n = 0; text++;
       break;
-    default: 	word[n++] = *text++;
+    default:  word[n++] = *text++;
       if (n > 250) return 0;
       break;
     }
@@ -183,8 +183,8 @@ int analyse_text_driver(int cn, int type, char *text, int co)
       if (n == w && !qa[q].word[n]) {
         if (qa[q].answer) quiet_say(cn, qa[q].answer, ch[co].name, ch[cn].name);
         else switch (qa[q].answer_code) {
-          case 1:	quiet_say(cn, "I'm %s.", ch[cn].name);
-          default:	return qa[q].answer_code;
+          case 1: quiet_say(cn, "I'm %s.", ch[cn].name);
+          default:  return qa[q].answer_code;
           }
         break;
       }
@@ -241,7 +241,7 @@ void clanmaster_driver(int cn, int ret, int lastact)
   char *ptr, tmp[80];
 
   dat = (struct clanmaster_driver_data*)set_data(cn, DRD_CLANMASTERDRIVER, sizeof(struct clanmaster_driver_data));
-  if (!dat) return;	// oops...
+  if (!dat) return; // oops...
 
   if (ch[cn].arg) {
     clanmaster_driver_parse(cn, dat);
@@ -274,7 +274,7 @@ void clanmaster_driver(int cn, int ret, int lastact)
     if (msg->type == NT_TEXT) {
       analyse_text_driver(cn, msg->dat1, (char*)msg->dat2, msg->dat3);
 
-      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn) {	// talk, and not our talk
+      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn) { // talk, and not our talk
         if ((ptr = strcasestr((char*)msg->dat2, "name:")) && (fnd = (struct clan_found_data*)set_data(co, DRD_CLANFOUND, sizeof(struct clan_found_data)))) {
           if (!(ch[co].flags & CF_PAID)) {
             quiet_say(cn, "I'm sorry, %s, but only paying players may found clans.", ch[co].name);
@@ -427,7 +427,7 @@ void clanmaster_driver(int cn, int ret, int lastact)
     if (msg->type == NT_GIVE) {
       co = msg->dat1;
 
-      if ((in = ch[cn].citem)) {	// we still have it
+      if ((in = ch[cn].citem)) {  // we still have it
         if (it[in].ID == IID_CLANJEWEL && (fnd = (struct clan_found_data*)set_data(co, DRD_CLANFOUND, sizeof(struct clan_found_data)))) {
           if (fnd->state == 1) {
             res = found_clan(fnd->name, co, &fnd->nr);
@@ -469,15 +469,15 @@ void clanmaster_driver(int cn, int ret, int lastact)
 
   if (ticker > dat->last_talk + TICKS * 60 && !RANDOM(25)) {
     switch (RANDOM(8)) {
-    case 0:		murmur(cn, "My back itches."); break;
-    case 1:		whisper(cn, "There's something stuck between your teeth."); break;
-    case 2:		murmur(cn, "Oh yeah, those were the days."); break;
-    case 3:		murmur(cn, "Now where did I put it?"); break;
-    case 4:		murmur(cn, "Oh my, life is hard but unfair."); break;
-    case 5:		murmur(cn, "Beware of the fire snails!"); break;
+    case 0:   murmur(cn, "My back itches."); break;
+    case 1:   whisper(cn, "There's something stuck between your teeth."); break;
+    case 2:   murmur(cn, "Oh yeah, those were the days."); break;
+    case 3:   murmur(cn, "Now where did I put it?"); break;
+    case 4:   murmur(cn, "Oh my, life is hard but unfair."); break;
+    case 5:   murmur(cn, "Beware of the fire snails!"); break;
     case 6:         murmur(cn, "I love the clicking of coins."); break;
-    case 7:		murmur(cn, "Gold and Silver, Silver and Gold."); break;
-    default:	break;
+    case 7:   murmur(cn, "Gold and Silver, Silver and Gold."); break;
+    default:  break;
     }
 
     dat->last_talk = ticker;
@@ -504,7 +504,7 @@ void clanclerk_driver(int cn, int ret, int lastact)
   char *ptr, name[40];
 
   dat = (struct clanclerk_driver_data*)set_data(cn, DRD_CLANCLERKDRIVER, sizeof(struct clanclerk_driver_data));
-  if (!dat) return;	// oops...
+  if (!dat) return; // oops...
 
   if (ch[cn].arg) {
     dat->clan = atoi(ch[cn].arg);
@@ -526,10 +526,10 @@ void clanclerk_driver(int cn, int ret, int lastact)
       res = analyse_text_driver(cn, msg->dat1, (char*)msg->dat2, msg->dat3);
 
       switch (res) {
-      case 2:	say(cn, "Our clan has %d jewels.", cnt_jewels(dat->clan)); break;
+      case 2: say(cn, "Our clan has %d jewels.", cnt_jewels(dat->clan)); break;
       }
 
-      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn && char_see_char(cn, co)) {	// talk, and not our talk
+      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn && char_see_char(cn, co)) {  // talk, and not our talk
         if ((ptr = strcasestr((char*)msg->dat2, "deposit"))) {
 
           ptr += 7;
@@ -890,7 +890,7 @@ void clanclerk_driver(int cn, int ret, int lastact)
     if (msg->type == NT_GIVE) {
       co = msg->dat1;
 
-      if ((in = ch[cn].citem)) {	// we still have it
+      if ((in = ch[cn].citem)) {  // we still have it
         if (it[in].ID == IID_CLANJEWEL) {
           say(cn, "You can no longer add jewels directly.");
 
@@ -942,7 +942,7 @@ void clanspawn_driver(int in, int cn)
   freq = it[in].drdata[1];
   if (freq == 0) freq = 48;
 
-  if (!cn) {	// timer calls
+  if (!cn) {  // timer calls
     call_item(IDR_CLANSPAWN, in, 0, ticker + TICKS * 60);
 
     // preset: after an average of 1/2 freq after reboot
@@ -1011,9 +1011,9 @@ void clanjewel_driver(int in, int cn)
 
   // must be timer call now
   if (!*(unsigned int*)(it[in].drdata + 0)) {
-    *(unsigned int*)(it[in].drdata + 0) = realtime;	// remember current time if we havent already done so
+    *(unsigned int*)(it[in].drdata + 0) = realtime; // remember current time if we havent already done so
   }
-  if (realtime > *(unsigned int*)(it[in].drdata + 0) + 60 * 60) {	// time's up?
+  if (realtime > *(unsigned int*)(it[in].drdata + 0) + 60 * 60) { // time's up?
 
     if ((co = it[in].carried)) {
       log_char(co, LOG_SYSTEM, 0, "Your %s expired.", it[in].name);
@@ -1022,7 +1022,7 @@ void clanjewel_driver(int in, int cn)
     remove_item(in);
     destroy_item(in);
 
-  } else call_item(IDR_CLANJEWEL, in, 0, ticker + TICKS * 30);	// please call again
+  } else call_item(IDR_CLANJEWEL, in, 0, ticker + TICKS * 30);  // please call again
 }
 
 void clanspawn_exit(int in, int cn)
@@ -1052,42 +1052,42 @@ void clanspawn_exit(int in, int cn)
 int ch_driver(int nr, int cn, int ret, int lastact)
 {
   switch (nr) {
-  case CDR_CLANMASTER:	clanmaster_driver(cn, ret, lastact); return 1;
-  case CDR_CLANCLERK:	clanclerk_driver(cn, ret, lastact); return 1;
+  case CDR_CLANMASTER:  clanmaster_driver(cn, ret, lastact); return 1;
+  case CDR_CLANCLERK: clanclerk_driver(cn, ret, lastact); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int it_driver(int nr, int in, int cn)
 {
   switch (nr) {
-  case IDR_CLANSPAWN:	clanspawn_driver(in, cn); return 1;
-  case IDR_CLANJEWEL:	clanjewel_driver(in, cn); return 1;
-  case IDR_CLANVAULT:	return 1;
-  case IDR_CLANSPAWNEXIT:	clanspawn_exit(in, cn); return 1;
+  case IDR_CLANSPAWN: clanspawn_driver(in, cn); return 1;
+  case IDR_CLANJEWEL: clanjewel_driver(in, cn); return 1;
+  case IDR_CLANVAULT: return 1;
+  case IDR_CLANSPAWNEXIT: clanspawn_exit(in, cn); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_died_driver(int nr, int cn, int co)
 {
   switch (nr) {
-  case CDR_CLANMASTER:	clanmaster_dead(cn, co); return 1;
-  case CDR_CLANCLERK:	clanmaster_dead(cn, co); return 1;
+  case CDR_CLANMASTER:  clanmaster_dead(cn, co); return 1;
+  case CDR_CLANCLERK: clanmaster_dead(cn, co); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_respawn_driver(int nr, int cn)
 {
   switch (nr) {
-  case CDR_CLANMASTER:	return 1;
-  case CDR_CLANCLERK: 	return 1;
+  case CDR_CLANMASTER:  return 1;
+  case CDR_CLANCLERK:   return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
