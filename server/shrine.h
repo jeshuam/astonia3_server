@@ -12,15 +12,15 @@ Added RCS tags
 
 */
 
-#define MAXSHRINE	256
+#define MAXSHRINE 256
 
-#define DEATH_SHRINE		(51)
-#define DEATH_SHRINE_INDEX	(DEATH_SHRINE/32)
-#define DEATH_SHRINE_BIT	(1u<<(DEATH_SHRINE&31))
+#define DEATH_SHRINE    (51)
+#define DEATH_SHRINE_INDEX  (DEATH_SHRINE/32)
+#define DEATH_SHRINE_BIT  (1u<<(DEATH_SHRINE&31))
 
 struct shrine_ppd
 {
-	unsigned int used[MAXSHRINE/32];
-	unsigned char continuity;
+  unsigned int used[MAXSHRINE / 32];
+  unsigned char continuity;
 };
 

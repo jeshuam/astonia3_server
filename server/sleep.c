@@ -21,54 +21,54 @@ Added RCS tags
 #include "log.h"
 #include "sleep.h"
 
-int cidle_avg=0;
+int cidle_avg = 0;
 
 long long timel(void)
 {
-        struct timeval tv;
+  struct timeval tv;
 
-        gettimeofday(&tv,NULL);
+  gettimeofday(&tv, NULL);
 
-        return (long long)tv.tv_sec*(long long)1000000+(long long)tv.tv_usec;
+  return (long long)tv.tv_sec * (long long)1000000 + (long long)tv.tv_usec;
 }
 
 void tick_sleep(int show)
 {
-	struct timeval tv;
-	long long now,tosleep,diff;
-	static long long next=0;
-	static int nextshow=0,cidle=0;
+  struct timeval tv;
+  long long now, tosleep, diff;
+  static long long next = 0;
+  static int nextshow = 0, cidle = 0;
 
-	//return;	// !!!!!!!!!!!!
+  //return;	// !!!!!!!!!!!!
 
-	if (!next) next=timel()+TICK;
+  if (!next) next = timel() + TICK;
 
-	now=timel();
-	tosleep=next-now;
+  now = timel();
+  tosleep = next - now;
 
-        // sleep while idle
-	if (tosleep>0) {
-		tv.tv_usec=tosleep%1000000;
-		tv.tv_sec=tosleep/1000000;
-		select(0,NULL,NULL,NULL,&tv);
-		
-		// how long did we REALLY sleep? (tends to be too long)
-		now=timel();
-		diff=next-now;		
-	} else { tosleep=0; diff=0; }
+  // sleep while idle
+  if (tosleep > 0) {
+    tv.tv_usec = tosleep % 1000000;
+    tv.tv_sec = tosleep / 1000000;
+    select(0, NULL, NULL, NULL, &tv);
 
-        // update statistics
-	cidle=100.0/TICK*(tosleep-diff);
-	cidle_avg=(cidle_avg*0.0099+cidle*0.01)*100;
+    // how long did we REALLY sleep? (tends to be too long)
+    now = timel();
+    diff = next - now;
+  } else { tosleep = 0; diff = 0; }
 
-        // calculate time for next tick
-	next+=TICK;
+  // update statistics
+  cidle = 100.0 / TICK * (tosleep - diff);
+  cidle_avg = (cidle_avg * 0.0099 + cidle * 0.01) * 100;
 
-	if (show) {
-		if (nextshow) nextshow--;
-		else {
-			xlog("idle=%6.2f%%.",cidle_avg/100.0);
-			nextshow=TICKS*3;
-		}
-	}
+  // calculate time for next tick
+  next += TICK;
+
+  if (show) {
+    if (nextshow) nextshow--;
+    else {
+      xlog("idle=%6.2f%%.", cidle_avg / 100.0);
+      nextshow = TICKS * 3;
+    }
+  }
 }
