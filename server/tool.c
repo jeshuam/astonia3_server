@@ -959,7 +959,7 @@ void give_exp_bonus(int cn, int val)
   give_exp(cn, val);
 }
 
-void give_money(int cn, int val, char *reason)
+void give_money(int cn, int val, const char *reason)
 {
   ch[cn].gold += val;
   ch[cn].flags |= CF_ITEMS;

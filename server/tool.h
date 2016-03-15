@@ -141,7 +141,7 @@ void shutdown_warn(void);
 int check_levelup(int cn);
 int check_can_wear_item(int cn);
 void shutdown_bg(int t, int down);
-void give_money(int cn, int val, char *reason);
+void give_money(int cn, int val, const char *reason);
 void sanitize_item(struct item *in, int cn);
 int count_enhancements(int in);
 
