@@ -15,6 +15,6 @@ Added RCS tags
 
 */
 
-int swearing(int cn,char *ptr);
-void swear_ban(int cn,int minutes);
+int swearing(int cn, const char *ptr);
+void swear_ban(int cn, int minutes);
 

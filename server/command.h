@@ -12,6 +12,6 @@ Added RCS tags
 
 */
 
-int command(int cn,char *ptr);
-void demonspeak(int cn,int nr,char *buf);
-int cmdcmp(char *ptr,char *cmd,int minlen);
+int command(int cn, char *ptr);
+void demonspeak(int cn, int nr, char *buf);
+int cmdcmp(char *ptr, const char *cmd, int minlen);

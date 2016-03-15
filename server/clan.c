@@ -44,7 +44,7 @@
 #include "drvlib.h"
 #include "club.h"
 
-#define CLANHALLRENT	5
+#define CLANHALLRENT  5
 
 static const char *rel_name[] = {
   "none",
@@ -66,10 +66,10 @@ static int update_time, update_state = 0, version = 0;
 static int update_done = 0, clan_changed = 0;
 
 static const char *bonus_name[MAXBONUS] = {
-  "Pentagram Quest",	//0
-  "Military Advisor",	//1
-  "Merchant",		//2
-  "unassigned",		//3
+  "Pentagram Quest",  //0
+  "Military Advisor", //1
+  "Merchant",   //2
+  "unassigned",   //3
   "unassigned",
   "unassigned",
   "unassigned",
@@ -309,7 +309,7 @@ void tick_clan(void)
   switch (update_state) {
   case 0:         if (read_storage(1, version)) update_state++;
     break;
-  case 1:		res = check_read_storage(&version, &tmp, &size);
+  case 1:   res = check_read_storage(&version, &tmp, &size);
     if (res == 1) {
       if (size) {
         if (size != sizeof(clan)) {
@@ -325,29 +325,29 @@ void tick_clan(void)
       update_state = 2;
     }
     break;
-  case 2:		update_done = 1;
-    if (areaID != 3) {	// only area 3 updates clan info
+  case 2:   update_done = 1;
+    if (areaID != 3) {  // only area 3 updates clan info
       if (ticker > update_time + TICKS * 10) update_state = 0;
     } else update_state++;
     break;
 
-  case 3:		if (!update_relations()) update_state++;
+  case 3:   if (!update_relations()) update_state++;
     break;
-  case 4:		if (!update_treasure()) update_state++;
+  case 4:   if (!update_treasure()) update_state++;
     update_training();
     break;
-  case 5:        	if (ticker > update_time + TICKS * 10) {
+  case 5:         if (ticker > update_time + TICKS * 10) {
       update_state++;
       update_time = ticker;
     }
     break;
-  case 6:		if (!clan_changed) {
+  case 6:   if (!clan_changed) {
       update_state = 3;
       break;
     }
     if (update_storage(1, version, clan, sizeof(clan))) update_state++;
     break;
-  case 7:		res = check_update_storage();
+  case 7:   res = check_update_storage();
     if (res == 1) {
       version++;
       update_state = 3;
@@ -358,7 +358,7 @@ void tick_clan(void)
     }
     break;
 
-  default:	update_state = 0; // sanity check, should never happen
+  default:  update_state = 0; // sanity check, should never happen
     break;
   }
 }
@@ -537,11 +537,11 @@ int set_clan_dungeon_use(int cnr, int type, int number, int cn)
   case 15:
   case 16:
   case 17:
-  case 18:	if (number < 0 || number > 10) return -1; break;	// warrior, mage, seyan +0...+5 each
-  case 19:	if (number < 0 || number > 25) return -1; break; 	// teleport traps
-  case 20:	if (number < 0 || number > 1) return -1; break; 	// fake walls
-  case 21:	if (number < 0 || number > 2) return -1; break;	// keys
-  default:	return -1;
+  case 18:  if (number < 0 || number > 10) return -1; break;  // warrior, mage, seyan +0...+5 each
+  case 19:  if (number < 0 || number > 25) return -1; break;  // teleport traps
+  case 20:  if (number < 0 || number > 1) return -1; break;   // fake walls
+  case 21:  if (number < 0 || number > 2) return -1; break; // keys
+  default:  return -1;
   }
 
   for (n = 1; n < 22; n++) {
@@ -563,7 +563,7 @@ int set_clan_dungeon_use(int cnr, int type, int number, int cn)
   case 3:
   case 4:
   case 5:
-  case 6:		clan[cnr].dungeon.warrior[1][type - 1] = number; break;
+  case 6:   clan[cnr].dungeon.warrior[1][type - 1] = number; break;
   case 7:
   case 8:
   case 9:
@@ -575,10 +575,10 @@ int set_clan_dungeon_use(int cnr, int type, int number, int cn)
   case 15:
   case 16:
   case 17:
-  case 18:	clan[cnr].dungeon.seyan[1][type - 13] = number; break;
-  case 19:	clan[cnr].dungeon.teleport[1] = number; break;
-  case 20:	clan[cnr].dungeon.fake[1] = number; break;
-  case 21:	clan[cnr].dungeon.key[1] = number; break;
+  case 18:  clan[cnr].dungeon.seyan[1][type - 13] = number; break;
+  case 19:  clan[cnr].dungeon.teleport[1] = number; break;
+  case 20:  clan[cnr].dungeon.fake[1] = number; break;
+  case 21:  clan[cnr].dungeon.key[1] = number; break;
   }
   clan_changed = 1;
 
@@ -590,28 +590,28 @@ int set_clan_dungeon_use(int cnr, int type, int number, int cn)
 int get_clan_dungeon_cost(int type, int number)
 {
   switch (type) {
-  case 1:		return number * 1;
-  case 2:		return number * 2;
-  case 3:		return number * 4;
-  case 4:		return number * 8;
-  case 5:		return number * 12;
-  case 6:		return number * 16;
-  case 7:		return number * 1;
-  case 8:		return number * 2;
-  case 9:		return number * 4;
-  case 10:	return number * 8;
-  case 11:	return number * 12;
-  case 12:	return number * 16;
-  case 13:	return number * 1;
-  case 14:	return number * 2;
-  case 15:	return number * 4;
-  case 16:	return number * 8;
-  case 17:	return number * 12;
-  case 18:	return number * 16;
+  case 1:   return number * 1;
+  case 2:   return number * 2;
+  case 3:   return number * 4;
+  case 4:   return number * 8;
+  case 5:   return number * 12;
+  case 6:   return number * 16;
+  case 7:   return number * 1;
+  case 8:   return number * 2;
+  case 9:   return number * 4;
+  case 10:  return number * 8;
+  case 11:  return number * 12;
+  case 12:  return number * 16;
+  case 13:  return number * 1;
+  case 14:  return number * 2;
+  case 15:  return number * 4;
+  case 16:  return number * 8;
+  case 17:  return number * 12;
+  case 18:  return number * 16;
 
-  case 19:	return number * 8;
-  case 20:	return number * 16;
-  case 21:	return number * 12;
+  case 19:  return number * 8;
+  case 20:  return number * 16;
+  case 21:  return number * 12;
   }
 
   elog("get_clan_dungeon_cost: unknown type %d", type);
@@ -623,31 +623,31 @@ int get_clan_dungeon(int cnr, int type)
   if (cnr < 1 || cnr >= MAXCLAN) return 0;
 
   switch (type) {
-  case 1:		return clan[cnr].dungeon.warrior[1][0];
-  case 2:		return clan[cnr].dungeon.warrior[1][1];
-  case 3:		return clan[cnr].dungeon.warrior[1][2];
-  case 4:		return clan[cnr].dungeon.warrior[1][3];
-  case 5:		return clan[cnr].dungeon.warrior[1][4];
-  case 6:		return clan[cnr].dungeon.warrior[1][5];
+  case 1:   return clan[cnr].dungeon.warrior[1][0];
+  case 2:   return clan[cnr].dungeon.warrior[1][1];
+  case 3:   return clan[cnr].dungeon.warrior[1][2];
+  case 4:   return clan[cnr].dungeon.warrior[1][3];
+  case 5:   return clan[cnr].dungeon.warrior[1][4];
+  case 6:   return clan[cnr].dungeon.warrior[1][5];
 
-  case 7:		return clan[cnr].dungeon.mage[1][0];
-  case 8:		return clan[cnr].dungeon.mage[1][1];
-  case 9:		return clan[cnr].dungeon.mage[1][2];
-  case 10:	return clan[cnr].dungeon.mage[1][3];
-  case 11:	return clan[cnr].dungeon.mage[1][4];
-  case 12:	return clan[cnr].dungeon.mage[1][5];
+  case 7:   return clan[cnr].dungeon.mage[1][0];
+  case 8:   return clan[cnr].dungeon.mage[1][1];
+  case 9:   return clan[cnr].dungeon.mage[1][2];
+  case 10:  return clan[cnr].dungeon.mage[1][3];
+  case 11:  return clan[cnr].dungeon.mage[1][4];
+  case 12:  return clan[cnr].dungeon.mage[1][5];
 
-  case 13:	return clan[cnr].dungeon.seyan[1][0];
-  case 14:	return clan[cnr].dungeon.seyan[1][1];
-  case 15:	return clan[cnr].dungeon.seyan[1][2];
-  case 16:	return clan[cnr].dungeon.seyan[1][3];
-  case 17:	return clan[cnr].dungeon.seyan[1][4];
-  case 18:	return clan[cnr].dungeon.seyan[1][5];
+  case 13:  return clan[cnr].dungeon.seyan[1][0];
+  case 14:  return clan[cnr].dungeon.seyan[1][1];
+  case 15:  return clan[cnr].dungeon.seyan[1][2];
+  case 16:  return clan[cnr].dungeon.seyan[1][3];
+  case 17:  return clan[cnr].dungeon.seyan[1][4];
+  case 18:  return clan[cnr].dungeon.seyan[1][5];
 
-  case 19:	return clan[cnr].dungeon.teleport[1];
-  case 20:	return clan[cnr].dungeon.fake[1];
-  case 21:	return clan[cnr].dungeon.key[1];
-  default:	return 0;
+  case 19:  return clan[cnr].dungeon.teleport[1];
+  case 20:  return clan[cnr].dungeon.fake[1];
+  case 21:  return clan[cnr].dungeon.key[1];
+  default:  return 0;
   }
 }
 
@@ -685,42 +685,42 @@ int may_enter_clan(int cn, int nr)
   int cnr;
 
   cnr = get_char_clan(cn);
-  if (cnr == nr) return 1;	// everybody may enter his own clan
-  if (!cnr) return 0;	// non clan members may never enter
+  if (cnr == nr) return 1;  // everybody may enter his own clan
+  if (!cnr) return 0; // non clan members may never enter
 
   // you may not enter deleted clans
   if (!clan[nr].name[0]) return 0;
 
-  switch (clan[nr].status.current_relation[cnr]) {		// rest depends on relations
-  case CS_ALLIANCE:	return 1;
-  //case CS_WAR:		return 1;
-  //case CS_FEUD:		return 1;
-  default:		return 0;
+  switch (clan[nr].status.current_relation[cnr]) {    // rest depends on relations
+  case CS_ALLIANCE: return 1;
+  //case CS_WAR:    return 1;
+  //case CS_FEUD:   return 1;
+  default:    return 0;
   }
 }
 
 int clan_can_attack_outside(int c1, int c2)
 {
   switch (clan[c1].status.current_relation[c2]) {
-  case CS_FEUD:		return 1;
-  default:		return 0;
+  case CS_FEUD:   return 1;
+  default:    return 0;
   }
 }
 
 int clan_can_attack_inside(int c1, int c2)
 {
   switch (clan[c1].status.current_relation[c2]) {
-  case CS_WAR:		return 1;
-  case CS_FEUD:		return 1;
-  default:		return 0;
+  case CS_WAR:    return 1;
+  case CS_FEUD:   return 1;
+  default:    return 0;
   }
 }
 
 int clan_alliance(int c1, int c2)
 {
   switch (clan[c1].status.current_relation[c2]) {
-  case CS_ALLIANCE:	return 1;
-  default:		return 0;
+  case CS_ALLIANCE: return 1;
+  default:    return 0;
   }
 }
 
@@ -759,9 +759,9 @@ static int update_relations(void)
       diff2 = realtime - clan[m].status.want_date[n];
       cur = clan[n].status.current_relation[m];
 
-      if (want1 == want2 && cur == want1) continue;	// both want what they have, no work
+      if (want1 == want2 && cur == want1) continue; // both want what they have, no work
 
-      if (want1 == want2) {	// both want the same, set it
+      if (want1 == want2) { // both want the same, set it
         clan[n].status.current_relation[m] = clan[m].status.current_relation[n] = want1;
         clan_changed = 1;
         add_clanlog(n, clan_serial(n), 0, 10, "%s with %s (%d) started", rel_name[want1], get_clan_name(m), m);
@@ -770,7 +770,7 @@ static int update_relations(void)
       }
 
       switch (cur) {
-      case CS_ALLIANCE:	// we are at alliance, but one of them wants out
+      case CS_ALLIANCE: // we are at alliance, but one of them wants out
         if (want1 > CS_ALLIANCE && diff1 > 60 * 60 * 24) {
           cur++; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "Alliance with %s (%d) ended", get_clan_name(m), m);
@@ -784,7 +784,7 @@ static int update_relations(void)
           break;
         }
         break;
-      case CS_PEACETREATY:	// we're at treaty, going up to alliance is only possible if both want
+      case CS_PEACETREATY:  // we're at treaty, going up to alliance is only possible if both want
         // it, and thats dealt with above. therefore, one of them wants out
         if (want1 > CS_PEACETREATY && diff1 > 60 * 60 * 24) {
           cur++; clan_changed = 1;
@@ -799,54 +799,54 @@ static int update_relations(void)
           break;
         }
         break;
-      case CS_NEUTRAL:	// we're at neutral, lets see
-        if (want1 > CS_NEUTRAL && want2 > CS_NEUTRAL) {	// both want at least war, ok without timecheck
+      case CS_NEUTRAL:  // we're at neutral, lets see
+        if (want1 > CS_NEUTRAL && want2 > CS_NEUTRAL) { // both want at least war, ok without timecheck
           cur++; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "War with %s (%d) started", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "War with %s (%d) started", get_clan_name(n), n);
           break;
         }
-        if (want1 > CS_NEUTRAL && diff1 > 60 * 60) {	// nr1 wants war, needs 1 hour
+        if (want1 > CS_NEUTRAL && diff1 > 60 * 60) {  // nr1 wants war, needs 1 hour
           cur++; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "War with %s (%d) started", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "War with %s (%d) started", get_clan_name(n), n);
           break;
         }
-        if (want2 > CS_NEUTRAL && diff2 > 60 * 60) {	// nr2 wants war, needs 1 hour
+        if (want2 > CS_NEUTRAL && diff2 > 60 * 60) {  // nr2 wants war, needs 1 hour
           cur++; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "War with %s (%d) started", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "War with %s (%d) started", get_clan_name(n), n);
           break;
         }
-        if (want1 < CS_NEUTRAL && want2 < CS_NEUTRAL) {	// both want a better status, ok at once
+        if (want1 < CS_NEUTRAL && want2 < CS_NEUTRAL) { // both want a better status, ok at once
           cur--; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "Peace Treaty with %s (%d) started", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "Peace Treaty with %s (%d) started", get_clan_name(n), n);
           break;
         }
         break;
-      case CS_WAR:		// we're at war. changing to feud can only happen if both want it
-        if (want1 < CS_WAR && want2 < CS_WAR) {	// both want a better status, ok at once
+      case CS_WAR:    // we're at war. changing to feud can only happen if both want it
+        if (want1 < CS_WAR && want2 < CS_WAR) { // both want a better status, ok at once
           cur--; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "War with %s (%d) ended", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "War with %s (%d) ended", get_clan_name(n), n);
           break;
         }
         break;
-      case CS_FEUD:		// we have a feud, but at least one of them wants out
-        if (want1 < CS_FEUD && want2 < CS_FEUD) {	// both want a better status, ok at once
+      case CS_FEUD:   // we have a feud, but at least one of them wants out
+        if (want1 < CS_FEUD && want2 < CS_FEUD) { // both want a better status, ok at once
           cur--; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "Feud with %s (%d) ended", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "Feud with %s (%d) ended", get_clan_name(n), n);
           break;
         }
-        if (want1 < CS_FEUD && diff1 > 60 * 60 * 24) {	// nr1 wants out, needs 24 hours
+        if (want1 < CS_FEUD && diff1 > 60 * 60 * 24) {  // nr1 wants out, needs 24 hours
           cur--; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "Feud with %s (%d) ended", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "Feud with %s (%d) ended", get_clan_name(n), n);
           break;
         }
-        if (want2 < CS_FEUD && diff2 > 60 * 60 * 24) {	// nr2 wants out, needs 24 hours
+        if (want2 < CS_FEUD && diff2 > 60 * 60 * 24) {  // nr2 wants out, needs 24 hours
           cur--; clan_changed = 1;
           add_clanlog(n, clan_serial(n), 0, 10, "Feud with %s (%d) ended", get_clan_name(m), m);
           add_clanlog(m, clan_serial(m), 0, 10, "Feud with %s (%d) ended", get_clan_name(n), n);
@@ -899,7 +899,7 @@ static int update_treasure(void)
     }
 
     diff = realtime - clan[cnr].treasure.payed_till;
-    if (diff > 60 * 5) {	// update 5 minutes late to reduce load
+    if (diff > 60 * 5) {  // update 5 minutes late to reduce load
       step = (60 * 60 * 24 * 7) / cost;
       n = diff / step + 1;
       clan[cnr].treasure.debt += n;
@@ -998,22 +998,22 @@ void clan_money_change(int cnr, int diff, int cn)
 
 /*int clan_stolen_jewel_nr(int cnr,int onr,int level)
 {
-	int cnt;
+  int cnt;
 
-	cnt=10;					// 10 is absolute max
-	cnt=min(cnt,cnt_jewels(cnr)/10);	// not more than defender jewels/10
-	cnt=min(cnt,cnt_jewels(onr)/10);	// not more than attacker jewels/10
-	cnt=min(cnt,level/5);			// not more then attacker level/5
-	cnt=max(cnt,2);				// but at least 2
-        cnt=min(cnt,cnt_jewels(cnr)-2);		// but leave 2 jewels for the defender
-	cnt=max(cnt,0);				// no negative results
+  cnt=10;         // 10 is absolute max
+  cnt=min(cnt,cnt_jewels(cnr)/10);  // not more than defender jewels/10
+  cnt=min(cnt,cnt_jewels(onr)/10);  // not more than attacker jewels/10
+  cnt=min(cnt,level/5);     // not more then attacker level/5
+  cnt=max(cnt,2);       // but at least 2
+        cnt=min(cnt,cnt_jewels(cnr)-2);   // but leave 2 jewels for the defender
+  cnt=max(cnt,0);       // no negative results
 
-	if (cnt_jewels(onr)<3) cnt=0;		// dont allow clans with 2 jewels to steal any
+  if (cnt_jewels(onr)<3) cnt=0;   // dont allow clans with 2 jewels to steal any
 
-	return cnt;
+  return cnt;
 }*/
 
-void clan_dungeon_chat(char *ptr)
+void clan_dungeon_chat(const char *ptr)
 {
   int cnr, level, onr, cnt, cID, nr, str;
   char type;
@@ -1029,23 +1029,23 @@ void clan_dungeon_chat(char *ptr)
   type = ptr[3];
 
   switch (type) {
-  case 'T':	if (clan[cnr].dungeon.teleport[0] > 0) {
+  case 'T': if (clan[cnr].dungeon.teleport[0] > 0) {
       clan[cnr].dungeon.teleport[0]--;
       clan_changed = 1;
     }
     break;
-  case 'F':	if (clan[cnr].dungeon.fake[0] > 0) {
+  case 'F': if (clan[cnr].dungeon.fake[0] > 0) {
       clan[cnr].dungeon.fake[0]--;
       clan_changed = 1;
     }
     break;
-  case 'K':	if (clan[cnr].dungeon.key[0] > 0) {
+  case 'K': if (clan[cnr].dungeon.key[0] > 0) {
       clan[cnr].dungeon.key[0]--;
       clan_changed = 1;
     }
     break;
 
-  case 'W':	if (strlen(ptr) < 6) return;
+  case 'W': if (strlen(ptr) < 6) return;
     level = atoi(ptr + 5);
     if (level >= 0 && level <= 5 && clan[cnr].dungeon.warrior[0][level] > 0) {
       clan[cnr].dungeon.warrior[0][level]--;
@@ -1053,21 +1053,21 @@ void clan_dungeon_chat(char *ptr)
       //xlog("clan %d lost warrior %d",cnr,level);
     }
     break;
-  case 'M':	if (strlen(ptr) < 6) return;
+  case 'M': if (strlen(ptr) < 6) return;
     level = atoi(ptr + 5);
     if (level >= 0 && level <= 5 && clan[cnr].dungeon.mage[0][level] > 0) {
       clan[cnr].dungeon.mage[0][level]--;
       clan_changed = 1;
     }
     break;
-  case 'S':	if (strlen(ptr) < 6) return;
+  case 'S': if (strlen(ptr) < 6) return;
     level = atoi(ptr + 5);
     if (level >= 0 && level <= 5 && clan[cnr].dungeon.seyan[0][level] > 0) {
       clan[cnr].dungeon.seyan[0][level]--;
       clan_changed = 1;
     }
     break;
-  case 'J':	if (strlen(ptr) < 19) return;
+  case 'J': if (strlen(ptr) < 19) return;
     // sprintf(buf,"%02d:J:%02d:%03d:%010u:%s",cnr,onr,ch[cn].ID,ch[cn].name);
     // 00:J:00:0000000000:Name
     // 03:J:04:0000000001:Ishtar
@@ -1091,7 +1091,7 @@ void clan_dungeon_chat(char *ptr)
       add_clanlog(onr, clan_serial(onr), cID, 5, "%s raided clan %s (%d) for %d jewels", ptr + 19, get_clan_name(cnr), cnr, cnt);
     }
     break;
-  case 's':	// %02d:s:%01d:%01d
+  case 's': // %02d:s:%01d:%01d
     if (strlen(ptr) < 8) return;
     nr = atoi(ptr + 5); str = atoi(ptr + 7);
     if (clan[cnr].dungeon.simple_pot[nr][str] > 0) {
@@ -1100,7 +1100,7 @@ void clan_dungeon_chat(char *ptr)
       xlog("clan %d lost simple potion: %d %d (%s)", cnr, nr, str, ptr);
     }
     break;
-  case 'a':	// %02d:s:%01d:%01d
+  case 'a': // %02d:s:%01d:%01d
     if (strlen(ptr) < 8) return;
     nr = atoi(ptr + 5); str = atoi(ptr + 7);
     if (clan[cnr].dungeon.alc_pot[nr][str] > 0) {
@@ -1109,7 +1109,7 @@ void clan_dungeon_chat(char *ptr)
       xlog("clan %d lost alc potion: %d %d (%s)", cnr, nr, str, ptr);
     }
     break;
-  case 'X':	// %02d:X:%02d:%10u:%s
+  case 'X': // %02d:X:%02d:%10u:%s
     // 01:X:01:0123456789:Ishtar
     clan[cnr].treasure.jewels += 1;
     clan_changed = 1;
@@ -1263,24 +1263,24 @@ int clan_trade_bonus(int cn)
 
 spawners:
 
-area	cnt
-1	1 * 4
-2	2
-3	1
-4	4 * 2
-5	0
-6	2
-7	4
-8	4
-9	4
-10	0
-11	0
-12	0
-13	0
-14	0
-15	2
-16	2
-17	1
+area  cnt
+1 1 * 4
+2 2
+3 1
+4 4 * 2
+5 0
+6 2
+7 4
+8 4
+9 4
+10  0
+11  0
+12  0
+13  0
+14  0
+15  2
+16  2
+17  1
       ----
        34
 

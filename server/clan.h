@@ -11,8 +11,8 @@
  *
  */
 
-#define MAXCLAN		32
-#define MAXBONUS	14
+#define MAXCLAN   32
+#define MAXBONUS  14
 
 struct clan_bonus
 {
@@ -32,52 +32,52 @@ struct clan_depot
 struct clan_treasure
 {
   int jewels;
-  int cost_per_week;	// in 1/1000
-  int debt;		// in 1/1000
-  int payed_till;		// realtime
+  int cost_per_week;  // in 1/1000
+  int debt;   // in 1/1000
+  int payed_till;   // realtime
 };
 
-#define CS_ALLIANCE	1	// needs 24h for one-sided change to treaty
+#define CS_ALLIANCE 1 // needs 24h for one-sided change to treaty
 // members of clans with an alliance cannot attack each other
-#define CS_PEACETREATY	2	// needs 24h for one-sided change to neutral
+#define CS_PEACETREATY  2 // needs 24h for one-sided change to neutral
 // members of clans with a peace-treaty cannot attack each other
-#define CS_NEUTRAL	3	// members of neutral clans cannot attack each other. needs 1h for one-sided change to war
+#define CS_NEUTRAL  3 // members of neutral clans cannot attack each other. needs 1h for one-sided change to war
 
-#define CS_WAR		4       // members of clans at war can attack each other in clan areas.
+#define CS_WAR    4       // members of clans at war can attack each other in clan areas.
 // killed enemies will not lose EXP, but they will lose their items
 
-#define CS_FEUD		5	// members of clans with a feud can attack each other everywhere.
+#define CS_FEUD   5 // members of clans with a feud can attack each other everywhere.
 // 24 hours for one-sided change to war
 // killed enemies will not lose EXP and items.
 
 struct clan_status
 {
-  int members;					// number of members	(aprox)
+  int members;          // number of members  (aprox)
   int serial;
-  unsigned char current_relation[MAXCLAN];	// relation to clan X
+  unsigned char current_relation[MAXCLAN];  // relation to clan X
   unsigned char want_relation[MAXCLAN];
   int want_date[MAXCLAN];
 };
 
 struct clan_dungeon
 {
-  int warrior[2][6];	// [0][x] total, [1][x] use per dungeon
+  int warrior[2][6];  // [0][x] total, [1][x] use per dungeon
   int mage[2][6];         // [0][x] total, [1][x] use per dungeon
-  int seyan[2][6];	// [0][x] total, [1][x] use per dungeon
-  int teleport[2];	// [0] total, [1] use per dungeon
-  int fake[2];		// [0] total, [1] use per dungeon
-  int key[2];		// [0] total, [1] use per dungeon
+  int seyan[2][6];  // [0][x] total, [1][x] use per dungeon
+  int teleport[2];  // [0] total, [1] use per dungeon
+  int fake[2];    // [0] total, [1] use per dungeon
+  int key[2];   // [0] total, [1] use per dungeon
 
-  unsigned short int alc_pot[2][6];	// 2*6*2=24 bytes
-  unsigned short int simple_pot[3][3];	// 3*3*2=18 bytes
+  unsigned short int alc_pot[2][6]; // 2*6*2=24 bytes
+  unsigned short int simple_pot[3][3];  // 3*3*2=18 bytes
 
   unsigned short reserved1;
 
-  unsigned int doraid;			// 4 bytes
-  unsigned int raidonstart;		// +4 bytes = 8 bytes
+  unsigned int doraid;      // 4 bytes
+  unsigned int raidonstart;   // +4 bytes = 8 bytes
 
-  int training_score;			// 4 bytes
-  int last_training_update;		// +4 bytes = 8 bytes
+  int training_score;     // 4 bytes
+  int last_training_update;   // +4 bytes = 8 bytes
 
   char dummy[160 - 24 - 18 - 10 - 8];
 };
@@ -120,7 +120,7 @@ void remove_member(int cn, int cn_master);
 char *get_clan_name(int cnr);
 int get_clan_money(int cnr);
 void clan_money_change(int cnr, int diff, int cn);
-void clan_dungeon_chat(char *ptr);
+void clan_dungeon_chat(const char *ptr);
 int get_clan_dungeon_cost(int type, int number);
 int set_clan_dungeon_use(int cnr, int type, int number, int cn);
 int set_clan_website(int cnr, char *site, int cn);

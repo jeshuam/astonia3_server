@@ -36,20 +36,20 @@
 #include "club.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);			// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret, int lastact);      // character driver (decides next action)
+int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);       // called when a character dies
+int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
 int driver(int type, int nr, int obj, int ret, int lastact)
 {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 	return 0;
+  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
+  case CDT_ITEM:    return it_driver(nr, obj, ret);
+  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
+  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
+  default:  return 0;
   }
 }
 
@@ -125,7 +125,7 @@ int analyse_text_driver(int cn, int type, char *text, int co)
       }
       n = 0; text++;
       break;
-    default: 	word[n++] = *text++;
+    default:  word[n++] = *text++;
       if (n > 250) return 0;
       break;
     }
@@ -140,8 +140,8 @@ int analyse_text_driver(int cn, int type, char *text, int co)
       if (n == w && !qa[q].word[n]) {
         if (qa[q].answer) quiet_say(cn, qa[q].answer, ch[co].name, ch[cn].name);
         else switch (qa[q].answer_code) {
-          case 1:	quiet_say(cn, "I'm %s.", ch[cn].name);
-          default:	return qa[q].answer_code;
+          case 1: quiet_say(cn, "I'm %s.", ch[cn].name);
+          default:  return qa[q].answer_code;
           }
         break;
       }
@@ -192,7 +192,7 @@ void clubmaster_driver(int cn, int ret, int lastact)
   char *ptr, tmp[80], name[80];
 
   dat = (struct clubmaster_driver_data*)set_data(cn, DRD_CLUBMASTERDRIVER, sizeof(struct clubmaster_driver_data));
-  if (!dat) return;	// oops...
+  if (!dat) return; // oops...
 
   if (ch[cn].arg) {
     clubmaster_driver_parse(cn, dat);
@@ -225,7 +225,7 @@ void clubmaster_driver(int cn, int ret, int lastact)
     if (msg->type == NT_TEXT) {
       analyse_text_driver(cn, msg->dat1, (char*)msg->dat2, msg->dat3);
 
-      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn) {	// talk, and not our talk
+      if ((msg->dat1 == 1 || msg->dat1 == 2) && (co = msg->dat3) != cn) { // talk, and not our talk
         if ((ptr = strcasestr((char*)msg->dat2, "found:"))) {
           if (!(ch[co].flags & CF_PAID)) {
             quiet_say(cn, "I'm sorry, %s, but only paying players may found clubs.", ch[co].name);
@@ -424,7 +424,7 @@ void clubmaster_driver(int cn, int ret, int lastact)
     if (msg->type == NT_GIVE) {
       co = msg->dat1;
 
-      if ((in = ch[cn].citem)) {	// we still have it
+      if ((in = ch[cn].citem)) {  // we still have it
         // try to give it back
         if (give_char_item(cn, co)) return;
 
@@ -443,15 +443,15 @@ void clubmaster_driver(int cn, int ret, int lastact)
 
   if (ticker > dat->last_talk + TICKS * 60 && !RANDOM(25)) {
     switch (RANDOM(8)) {
-    case 0:		murmur(cn, "My back itches."); break;
-    case 1:		whisper(cn, "There's something stuck between your teeth."); break;
-    case 2:		murmur(cn, "Oh yeah, those were the days."); break;
-    case 3:		murmur(cn, "Now where did I put it?"); break;
-    case 4:		murmur(cn, "Oh my, life is hard but unfair."); break;
-    case 5:		murmur(cn, "Beware of the fire snails!"); break;
+    case 0:   murmur(cn, "My back itches."); break;
+    case 1:   whisper(cn, "There's something stuck between your teeth."); break;
+    case 2:   murmur(cn, "Oh yeah, those were the days."); break;
+    case 3:   murmur(cn, "Now where did I put it?"); break;
+    case 4:   murmur(cn, "Oh my, life is hard but unfair."); break;
+    case 5:   murmur(cn, "Beware of the fire snails!"); break;
     case 6:         murmur(cn, "I love the clicking of coins."); break;
-    case 7:		murmur(cn, "Gold and Silver, Silver and Gold."); break;
-    default:	break;
+    case 7:   murmur(cn, "Gold and Silver, Silver and Gold."); break;
+    default:  break;
     }
 
     dat->last_talk = ticker;
@@ -468,33 +468,33 @@ void clubmaster_driver(int cn, int ret, int lastact)
 int ch_driver(int nr, int cn, int ret, int lastact)
 {
   switch (nr) {
-  case CDR_CLUBMASTER:	clubmaster_driver(cn, ret, lastact); return 1;
+  case CDR_CLUBMASTER:  clubmaster_driver(cn, ret, lastact); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int it_driver(int nr, int in, int cn)
 {
   switch (nr) {
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_died_driver(int nr, int cn, int co)
 {
   switch (nr) {
-  case CDR_CLUBMASTER:	return 1;
+  case CDR_CLUBMASTER:  return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_respawn_driver(int nr, int cn)
 {
   switch (nr) {
-  case CDR_CLUBMASTER:	return 1;
+  case CDR_CLUBMASTER:  return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }

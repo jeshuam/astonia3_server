@@ -96,7 +96,7 @@
 #include "questlog.h"
 #include "shrine.h"
 
-#define MAX_IDLE	(TICKS*30)
+#define MAX_IDLE  (TICKS*30)
 
 // remove char from game without changing target area server or coordinates
 void kick_char(int cn)
@@ -216,7 +216,7 @@ void player_to_server(int nr, unsigned int server, int port)
   player[nr]->lastcmd = ticker;
 }
 
-void player_client_exit(int nr, char *reason)
+void player_client_exit(int nr, const char *reason)
 {
   int len;
   char buf[256];
@@ -281,9 +281,9 @@ static void read_login(int nr)
 
   prof = prof_start(29); ret = find_login(name, password, &area, &cn, &mirror, &ID, vendor, &unique, htonl(player[nr]->addr));  prof_stop(29, prof);
 
-  if (ret == 0) return;	// no answer yet
+  if (ret == 0) return; // no answer yet
 
-  if (ret > 0 && cn > 0 && !ch[cn].flags) { 	// the character we got was kicked in the meantime, try again...
+  if (ret > 0 && cn > 0 && !ch[cn].flags) {   // the character we got was kicked in the meantime, try again...
     xlog("avoided race in read_login() - shouldnt happen anymore!");
     return;
   }
@@ -385,7 +385,7 @@ static void read_login(int nr)
 
 static void cl_nop(int nr, char *buf)
 {
-  ;	// nop...
+  ; // nop...
 }
 
 static void cl_stop(int nr)
@@ -657,8 +657,8 @@ static void cl_mapspell(int nr, char *buf, int driver)
     if (co < 1 || co >= MAXCHARS || !char_see_char(cn, co)) return;
 
     switch (driver) {
-    case PAC_FIREBALL:	player_driver_charspell(nr, PAC_FIREBALL2, co); return;
-    case PAC_BALL:		player_driver_charspell(nr, PAC_BALL2, co); return;
+    case PAC_FIREBALL:  player_driver_charspell(nr, PAC_FIREBALL2, co); return;
+    case PAC_BALL:    player_driver_charspell(nr, PAC_BALL2, co); return;
     }
 
     /* x=ch[co].x;
@@ -677,18 +677,18 @@ static void cl_mapspell(int nr, char *buf, int driver)
         int cn,co,x,y;
 
         x=*(unsigned short*)(buf);
-	y=*(unsigned short*)(buf+2);
+  y=*(unsigned short*)(buf+2);
 
-	if (!x) {
-		cn=player[nr]->cn;
-		co=y;
+  if (!x) {
+    cn=player[nr]->cn;
+    co=y;
 
-		if (co<1 || co>=MAXCHARS || !char_see_char(cn,co)) return;
+    if (co<1 || co>=MAXCHARS || !char_see_char(cn,co)) return;
 
-		player[nr]->action=PAC_FIREBALL2;
-		player[nr]->act1=co;
+    player[nr]->action=PAC_FIREBALL2;
+    player[nr]->act1=co;
 
-	} else cl_mapspell(nr,buf,PAC_FIREBALL);
+  } else cl_mapspell(nr,buf,PAC_FIREBALL);
 } */
 
 static void cl_charspell(int nr, char *buf, int driver)
@@ -831,13 +831,13 @@ static void cl_take_gold(int nr, char *buf)
   cn = player[nr]->cn;
   val = *(unsigned int*)(buf);
 
-  if ((in = ch[cn].citem)) {	// already holding something?
-    if ((it[in].flags & IF_MONEY)) {	// money?
+  if ((in = ch[cn].citem)) {  // already holding something?
+    if ((it[in].flags & IF_MONEY)) {  // money?
       dlog(cn, in, "dropped into goldbag");
       ch[cn].gold += destroy_money_item(in);
       ch[cn].citem = 0;
       ch[cn].flags |= CF_ITEMS;
-    } else return;	// not money, leave
+    } else return;  // not money, leave
   }
   if (val < 1 || val > ch[cn].gold) return;
 
@@ -936,8 +936,8 @@ static void cl_clientinfo(int nr, struct client_info *ci)
   xlog("player %d: vidmem=%dK/%dK",nr,ci->vidmemfree>>10,ci->vidmemtotal>>10);
 
   for (n=0; n<CL_MAX_SURFACE; n++) {
-  	if (!ci->surface[n].xres) break;
-  	xlog("player %d: surface %d: type=%d, %dx%d",nr,n,ci->surface[n].type,ci->surface[n].xres,ci->surface[n].yres);
+    if (!ci->surface[n].xres) break;
+    xlog("player %d: surface %d: type=%d, %dx%d",nr,n,ci->surface[n].type,ci->surface[n].xres,ci->surface[n].yres);
   }*/
 }
 
@@ -993,66 +993,66 @@ static void read_input(int nr)
 {
   int need;
 
-  if (player[nr]->in_len < 1) return;	// minimum command size is one byte. obvious, isn't it?
+  if (player[nr]->in_len < 1) return; // minimum command size is one byte. obvious, isn't it?
 
   switch (player[nr]->inbuf[0]) {
-  case CL_NOP:		need = 1; break;
-  case CL_MOVE:		need = 5; break;
-  case CL_SWAP:		need = 2; break;
-  case CL_TAKE:		need = 5; break;
-  case CL_DROP:		need = 5; break;
-  case CL_KILL:		need = 3; break;
+  case CL_NOP:    need = 1; break;
+  case CL_MOVE:   need = 5; break;
+  case CL_SWAP:   need = 2; break;
+  case CL_TAKE:   need = 5; break;
+  case CL_DROP:   need = 5; break;
+  case CL_KILL:   need = 3; break;
 
-  case CL_TEXT:		if (player[nr]->in_len < 2) need = 2;
+  case CL_TEXT:   if (player[nr]->in_len < 2) need = 2;
     else need = player[nr]->inbuf[1] + 2;
     break;
-  case CL_LOG:		if (player[nr]->in_len < 2) need = 2;
+  case CL_LOG:    if (player[nr]->in_len < 2) need = 2;
     else need = player[nr]->inbuf[1] + 2;
     break;
 
-  case CL_USE:		need = 5; break;
+  case CL_USE:    need = 5; break;
 
-  case CL_BLESS:		need = 3; break;
-  case CL_HEAL:		need = 3; break;
+  case CL_BLESS:    need = 3; break;
+  case CL_HEAL:   need = 3; break;
 
-  case CL_FIREBALL:	need = 5; break;
-  case CL_BALL:		need = 5; break;
+  case CL_FIREBALL: need = 5; break;
+  case CL_BALL:   need = 5; break;
 
-  case CL_MAGICSHIELD:	need = 1; break;
-  case CL_FLASH:		need = 1; break;
-  case CL_WARCRY: 	need = 1; break;
-  case CL_FREEZE:		need = 1; break;
-  case CL_PULSE: 		need = 1; break;
+  case CL_MAGICSHIELD:  need = 1; break;
+  case CL_FLASH:    need = 1; break;
+  case CL_WARCRY:   need = 1; break;
+  case CL_FREEZE:   need = 1; break;
+  case CL_PULSE:    need = 1; break;
 
-  case CL_CONTAINER:	need = 2; break;
-  case CL_CONTAINER_FAST:	need = 2; break;
-  case CL_LOOK_CONTAINER:	need = 2; break;
-  case CL_RAISE:		need = 3; break;
-  case CL_USE_INV:	need = 2; break;
-  case CL_FASTSELL:	need = 2; break;
-  case CL_LOOK_MAP:	need = 5; break;
-  case CL_LOOK_INV:	need = 2; break;
-  case CL_LOOK_ITEM:	need = 5; break;
-  case CL_LOOK_CHAR:	need = 3; break;
-  case CL_GIVE:		need = 3; break;
-  case CL_SPEED:		need = 2; break;
-  case CL_FIGHTMODE:	need = 2; break;
-  case CL_STOP:		need = 1; break;
-  case CL_TAKE_GOLD:	need = 5; break;
-  case CL_DROP_GOLD:	need = 1; break;
-  case CL_JUNK_ITEM:	need = 1; break;
-  case CL_CLIENTINFO:	need = 1 + sizeof(struct client_info); break;
-  case CL_TICKER:		need = 5; break;
-  case CL_TELEPORT:	need = 3; break;
-  case CL_PING:		need = 5; break;
-  case CL_GETQUESTLOG:	need = 1; break;
-  case CL_REOPENQUEST:	need = 2; break;
+  case CL_CONTAINER:  need = 2; break;
+  case CL_CONTAINER_FAST: need = 2; break;
+  case CL_LOOK_CONTAINER: need = 2; break;
+  case CL_RAISE:    need = 3; break;
+  case CL_USE_INV:  need = 2; break;
+  case CL_FASTSELL: need = 2; break;
+  case CL_LOOK_MAP: need = 5; break;
+  case CL_LOOK_INV: need = 2; break;
+  case CL_LOOK_ITEM:  need = 5; break;
+  case CL_LOOK_CHAR:  need = 3; break;
+  case CL_GIVE:   need = 3; break;
+  case CL_SPEED:    need = 2; break;
+  case CL_FIGHTMODE:  need = 2; break;
+  case CL_STOP:   need = 1; break;
+  case CL_TAKE_GOLD:  need = 5; break;
+  case CL_DROP_GOLD:  need = 1; break;
+  case CL_JUNK_ITEM:  need = 1; break;
+  case CL_CLIENTINFO: need = 1 + sizeof(struct client_info); break;
+  case CL_TICKER:   need = 5; break;
+  case CL_TELEPORT: need = 3; break;
+  case CL_PING:   need = 5; break;
+  case CL_GETQUESTLOG:  need = 1; break;
+  case CL_REOPENQUEST:  need = 2; break;
 
-  default:		player[nr]->in_len = 0;	// got illegal command. trash all input and bail out
+  default:    player[nr]->in_len = 0; // got illegal command. trash all input and bail out
     return;
   }
 
-  if (player[nr]->in_len < need) return;	// we don't have the whole command yet
+  if (player[nr]->in_len < need) return;  // we don't have the whole command yet
 
   // update idle timer
   if (player[nr]->inbuf[0] != CL_TICKER) {
@@ -1060,64 +1060,64 @@ static void read_input(int nr)
   }
 
   switch (player[nr]->inbuf[0]) {
-  case CL_NOP:		cl_nop(nr, player[nr]->inbuf + 1); break;
-  case CL_MOVE:		cl_move(nr, player[nr]->inbuf + 1); break;
-  case CL_SWAP:		cl_swap(nr, player[nr]->inbuf + 1); break;
-  case CL_TAKE:		cl_take(nr, player[nr]->inbuf + 1); break;
-  case CL_DROP:		cl_drop(nr, player[nr]->inbuf + 1); break;
-  case CL_KILL:		cl_kill(nr, player[nr]->inbuf + 1); break;
-  case CL_TEXT:		cl_text(nr, player[nr]->inbuf + 1); break;
-  case CL_LOG:		cl_log(nr, player[nr]->inbuf + 1); break;
-  case CL_USE:		cl_use(nr, player[nr]->inbuf + 1); break;
+  case CL_NOP:    cl_nop(nr, player[nr]->inbuf + 1); break;
+  case CL_MOVE:   cl_move(nr, player[nr]->inbuf + 1); break;
+  case CL_SWAP:   cl_swap(nr, player[nr]->inbuf + 1); break;
+  case CL_TAKE:   cl_take(nr, player[nr]->inbuf + 1); break;
+  case CL_DROP:   cl_drop(nr, player[nr]->inbuf + 1); break;
+  case CL_KILL:   cl_kill(nr, player[nr]->inbuf + 1); break;
+  case CL_TEXT:   cl_text(nr, player[nr]->inbuf + 1); break;
+  case CL_LOG:    cl_log(nr, player[nr]->inbuf + 1); break;
+  case CL_USE:    cl_use(nr, player[nr]->inbuf + 1); break;
 
-  case CL_BLESS:		cl_charspell(nr, player[nr]->inbuf + 1, PAC_BLESS); break;
-  case CL_HEAL:		cl_charspell(nr, player[nr]->inbuf + 1, PAC_HEAL); break;
+  case CL_BLESS:    cl_charspell(nr, player[nr]->inbuf + 1, PAC_BLESS); break;
+  case CL_HEAL:   cl_charspell(nr, player[nr]->inbuf + 1, PAC_HEAL); break;
 
-  case CL_FIREBALL:  	cl_mapspell(nr, player[nr]->inbuf + 1, PAC_FIREBALL); break;
-  case CL_BALL:		cl_mapspell(nr, player[nr]->inbuf + 1, PAC_BALL); break;
+  case CL_FIREBALL:   cl_mapspell(nr, player[nr]->inbuf + 1, PAC_FIREBALL); break;
+  case CL_BALL:   cl_mapspell(nr, player[nr]->inbuf + 1, PAC_BALL); break;
 
-  case CL_MAGICSHIELD:	cl_selfspell(nr, player[nr]->inbuf + 1, PAC_MAGICSHIELD); break;
-  case CL_FLASH:		cl_selfspell(nr, player[nr]->inbuf + 1, PAC_FLASH); break;
-  case CL_WARCRY:		cl_selfspell(nr, player[nr]->inbuf + 1, PAC_WARCRY); break;
-  case CL_PULSE:		cl_selfspell(nr, player[nr]->inbuf + 1, PAC_PULSE); break;
-  case CL_FREEZE:		cl_selfspell(nr, player[nr]->inbuf + 1, PAC_FREEZE); break;
+  case CL_MAGICSHIELD:  cl_selfspell(nr, player[nr]->inbuf + 1, PAC_MAGICSHIELD); break;
+  case CL_FLASH:    cl_selfspell(nr, player[nr]->inbuf + 1, PAC_FLASH); break;
+  case CL_WARCRY:   cl_selfspell(nr, player[nr]->inbuf + 1, PAC_WARCRY); break;
+  case CL_PULSE:    cl_selfspell(nr, player[nr]->inbuf + 1, PAC_PULSE); break;
+  case CL_FREEZE:   cl_selfspell(nr, player[nr]->inbuf + 1, PAC_FREEZE); break;
 
-  case CL_CONTAINER:	cl_container(nr, player[nr]->inbuf + 1); break;
-  case CL_CONTAINER_FAST:	cl_container_fast(nr, player[nr]->inbuf + 1); break;
+  case CL_CONTAINER:  cl_container(nr, player[nr]->inbuf + 1); break;
+  case CL_CONTAINER_FAST: cl_container_fast(nr, player[nr]->inbuf + 1); break;
   case CL_LOOK_CONTAINER: cl_look_container(nr, player[nr]->inbuf + 1); break;
-  case CL_RAISE:		cl_raise(nr, player[nr]->inbuf + 1); break;
-  case CL_USE_INV:	cl_use_inv(nr, player[nr]->inbuf + 1); break;
-  case CL_FASTSELL:	cl_fastsell(nr, player[nr]->inbuf + 1); break;
-  case CL_LOOK_MAP:	cl_look_map(nr, player[nr]->inbuf + 1); break;
-  case CL_LOOK_INV:	cl_look_inv(nr, player[nr]->inbuf + 1); break;
-  case CL_LOOK_ITEM:	cl_look_item(nr, player[nr]->inbuf + 1); break;
-  case CL_LOOK_CHAR:	cl_look_char(nr, player[nr]->inbuf + 1); break;
-  case CL_GIVE:		cl_give(nr, player[nr]->inbuf + 1); break;
-  case CL_SPEED:		cl_speed(nr, player[nr]->inbuf + 1); break;
-  case CL_FIGHTMODE:	cl_fightmode(nr, player[nr]->inbuf + 1); break;
-  case CL_STOP:		cl_stop(nr); break;
-  case CL_TAKE_GOLD:	cl_take_gold(nr, player[nr]->inbuf + 1); break;
-  case CL_DROP_GOLD:	cl_drop_gold(nr); break;
-  case CL_JUNK_ITEM:	cl_junk_item(nr); break;
-  case CL_CLIENTINFO:	cl_clientinfo(nr, (void*)(player[nr]->inbuf + 1)); break;
-  case CL_TICKER:		cl_ticker(nr, player[nr]->inbuf + 1); break;
-  case CL_TELEPORT:	cl_teleport(nr, player[nr]->inbuf + 1); break;
-  case CL_PING:		cl_ping(nr, player[nr]->inbuf + 1); break;
-  case CL_GETQUESTLOG:	cl_getquestlog(nr); break;
-  case CL_REOPENQUEST:	cl_reopen_quest(nr, player[nr]->inbuf + 1); break;
+  case CL_RAISE:    cl_raise(nr, player[nr]->inbuf + 1); break;
+  case CL_USE_INV:  cl_use_inv(nr, player[nr]->inbuf + 1); break;
+  case CL_FASTSELL: cl_fastsell(nr, player[nr]->inbuf + 1); break;
+  case CL_LOOK_MAP: cl_look_map(nr, player[nr]->inbuf + 1); break;
+  case CL_LOOK_INV: cl_look_inv(nr, player[nr]->inbuf + 1); break;
+  case CL_LOOK_ITEM:  cl_look_item(nr, player[nr]->inbuf + 1); break;
+  case CL_LOOK_CHAR:  cl_look_char(nr, player[nr]->inbuf + 1); break;
+  case CL_GIVE:   cl_give(nr, player[nr]->inbuf + 1); break;
+  case CL_SPEED:    cl_speed(nr, player[nr]->inbuf + 1); break;
+  case CL_FIGHTMODE:  cl_fightmode(nr, player[nr]->inbuf + 1); break;
+  case CL_STOP:   cl_stop(nr); break;
+  case CL_TAKE_GOLD:  cl_take_gold(nr, player[nr]->inbuf + 1); break;
+  case CL_DROP_GOLD:  cl_drop_gold(nr); break;
+  case CL_JUNK_ITEM:  cl_junk_item(nr); break;
+  case CL_CLIENTINFO: cl_clientinfo(nr, (void*)(player[nr]->inbuf + 1)); break;
+  case CL_TICKER:   cl_ticker(nr, player[nr]->inbuf + 1); break;
+  case CL_TELEPORT: cl_teleport(nr, player[nr]->inbuf + 1); break;
+  case CL_PING:   cl_ping(nr, player[nr]->inbuf + 1); break;
+  case CL_GETQUESTLOG:  cl_getquestlog(nr); break;
+  case CL_REOPENQUEST:  cl_reopen_quest(nr, player[nr]->inbuf + 1); break;
 
-  default:	elog("read_input: you need to add a new command to BOTH tables, dude!"); break;
+  default:  elog("read_input: you need to add a new command to BOTH tables, dude!"); break;
 
   }
 
   remove_input(nr, need);
 }
 
-#define DO_ALL		1
-#define DO_UP		2
-#define DO_DOWN		4
-#define DO_LEFT		8
-#define DO_RIGHT	16
+#define DO_ALL    1
+#define DO_UP   2
+#define DO_DOWN   4
+#define DO_LEFT   8
+#define DO_RIGHT  16
 
 void player_reset_map_cache(int nr)
 {
@@ -1261,29 +1261,29 @@ void reset_name(int cn)
 static int trans_ceffect(int fn)
 {
   switch (ef[fn].type) {
-  case EF_MAGICSHIELD:	return 0;
-  case EF_BALL:		return 0;
-  case EF_STRIKE:		return 0;
-  case EF_FIREBALL:	return 0;
-  case EF_FLASH:		return 0;
-  case EF_EXPLODE:	return 1;
-  case EF_WARCRY:		return 0;
-  case EF_BLESS:		return 0;
-  case EF_HEAL:		return 0;
-  case EF_FREEZE:		return 0;
-  case EF_BURN:		return 0;
-  case EF_MIST:		return 1;
-  case EF_POTION:		return 0;
-  case EF_EARTHRAIN:	return 1;
-  case EF_EARTHMUD:	return 1;
-  case EF_EDEMONBALL: 	return 0;
-  case EF_CURSE:		return 0;
-  case EF_CAP:		return 0;
-  case EF_LAG:		return 0;
-  case EF_PULSE:		return 1;
-  case EF_PULSEBACK:	return 0;
-  case EF_FIRERING:	return 0;
-  case EF_BUBBLE:		return 1;
+  case EF_MAGICSHIELD:  return 0;
+  case EF_BALL:   return 0;
+  case EF_STRIKE:   return 0;
+  case EF_FIREBALL: return 0;
+  case EF_FLASH:    return 0;
+  case EF_EXPLODE:  return 1;
+  case EF_WARCRY:   return 0;
+  case EF_BLESS:    return 0;
+  case EF_HEAL:   return 0;
+  case EF_FREEZE:   return 0;
+  case EF_BURN:   return 0;
+  case EF_MIST:   return 1;
+  case EF_POTION:   return 0;
+  case EF_EARTHRAIN:  return 1;
+  case EF_EARTHMUD: return 1;
+  case EF_EDEMONBALL:   return 0;
+  case EF_CURSE:    return 0;
+  case EF_CAP:    return 0;
+  case EF_LAG:    return 0;
+  case EF_PULSE:    return 1;
+  case EF_PULSEBACK:  return 0;
+  case EF_FIRERING: return 0;
+  case EF_BUBBLE:   return 1;
   }
   return 0;
 }
@@ -1291,30 +1291,30 @@ static int trans_ceffect(int fn)
 static int is_char_ceffect(int type)
 {
   switch (type) {
-  case 1:		return 1;
-  case 2:		return 0;
-  case 3:		return 1;
-  case 4:		return 0;
-  case 5:		return 1;
-  case 6:		return 0;
-  case 7:		return 0;
-  case 8:		return 1;
-  case 9:		return 1;
-  case 10:	return 1;
-  case 11:	return 1;
-  case 12:	return 1;
-  case 13:	return 0;
-  case 14:	return 1;
-  case 15:	return 0;
-  case 16:	return 0;
-  case 17:	return 0;
-  case 18:	return 1;
-  case 19:	return 1;
-  case 20:	return 1;
-  case 21:	return 0;
-  case 22:	return 1;
-  case 23:	return 1;
-  case 24:	return 0;
+  case 1:   return 1;
+  case 2:   return 0;
+  case 3:   return 1;
+  case 4:   return 0;
+  case 5:   return 1;
+  case 6:   return 0;
+  case 7:   return 0;
+  case 8:   return 1;
+  case 9:   return 1;
+  case 10:  return 1;
+  case 11:  return 1;
+  case 12:  return 1;
+  case 13:  return 0;
+  case 14:  return 1;
+  case 15:  return 0;
+  case 16:  return 0;
+  case 17:  return 0;
+  case 18:  return 1;
+  case 19:  return 1;
+  case 20:  return 1;
+  case 21:  return 0;
+  case 22:  return 1;
+  case 23:  return 1;
+  case 24:  return 0;
 
   }
   return 0;
@@ -1498,7 +1498,7 @@ static int trans_light(int light)
   return light;
 }
 
-#define MAXEF	64
+#define MAXEF 64
 static void player_map(int nr)
 {
   int xoff, yoff, x, y, m, c, in, co, xs, xe, light = 0, skipx, n, dark = 0;
@@ -1579,7 +1579,7 @@ static void player_map(int nr)
       else flags = 0;
 
       if (light < 1) {
-        //if (map[m].ch==cn) light=1;	// make player visible to himself all the time
+        //if (map[m].ch==cn) light=1; // make player visible to himself all the time
         if (abs(x - DIST) < 2 && abs(y - DIST) < 2) light = 1;
         else if (ch[cn].prof[P_DARK] >= 30) { light = 1; dark = 1; }
         else if (ch[cn].prof[P_LIGHT] >= 30) { light = 1; dark = 2; }
@@ -1625,7 +1625,7 @@ static void player_map(int nr)
           buf[0] = SV_NAME;
           *(unsigned short*)(buf + 1) = co;
           *(unsigned char*)(buf + 3) = ch[co].level;
-          if (ch[co].sprite == 27) {	// hack to make demon sprite look more natural
+          if (ch[co].sprite == 27) {  // hack to make demon sprite look more natural
             *(unsigned short*)(buf + 4) = 0;
             *(unsigned short*)(buf + 6) = 0;
             *(unsigned short*)(buf + 8) = 0;
@@ -1839,63 +1839,63 @@ skip:
           psend(nr, buf11 + 3, p11 - 3);
           if (!player[nr]) return;
           /*xlog("sending 11: %d size=%d [ %d %d %d %d %d %d %d %d ]",
-          	(unsigned char)buf11[3],
-          	p11-3,
-          	(unsigned char)buf11[4],
-          	(unsigned char)buf11[5],
-          	(unsigned char)buf11[6],
-          	(unsigned char)buf11[7],
-          	(unsigned char)buf11[8],
-          	(unsigned char)buf11[9],
-          	(unsigned char)buf11[10],
-          	(unsigned char)buf11[11]);*/
+            (unsigned char)buf11[3],
+            p11-3,
+            (unsigned char)buf11[4],
+            (unsigned char)buf11[5],
+            (unsigned char)buf11[6],
+            (unsigned char)buf11[7],
+            (unsigned char)buf11[8],
+            (unsigned char)buf11[9],
+            (unsigned char)buf11[10],
+            (unsigned char)buf11[11]);*/
         } else if (c == last + 1) {
           buf11[3] |= SV_MAPNEXT;
           psend(nr, buf11 + 3, p11 - 3);
           if (!player[nr]) return;
           /*xlog("sending 11: %d size=%d [ %d %d %d %d %d %d %d %d ]",
-          	(unsigned char)buf11[3],
-          	p11-3,
-          	(unsigned char)buf11[4],
-          	(unsigned char)buf11[5],
-          	(unsigned char)buf11[6],
-          	(unsigned char)buf11[7],
-          	(unsigned char)buf11[8],
-          	(unsigned char)buf11[9],
-          	(unsigned char)buf11[10],
-          	(unsigned char)buf11[11]);*/
+            (unsigned char)buf11[3],
+            p11-3,
+            (unsigned char)buf11[4],
+            (unsigned char)buf11[5],
+            (unsigned char)buf11[6],
+            (unsigned char)buf11[7],
+            (unsigned char)buf11[8],
+            (unsigned char)buf11[9],
+            (unsigned char)buf11[10],
+            (unsigned char)buf11[11]);*/
         } else if (c < last + 255) {
           buf11[2] = SV_MAPOFF | buf11[3];
           buf11[3] = c - last;
           psend(nr, buf11 + 2, p11 - 2);
           if (!player[nr]) return;
           /*xlog("sending 11: %d size=%d [ %d %d %d %d %d %d %d %d ]",
-          	(unsigned char)buf11[2],
-          	p11-2,
-          	(unsigned char)buf11[3],
-          	(unsigned char)buf11[4],
-          	(unsigned char)buf11[5],
-          	(unsigned char)buf11[6],
-          	(unsigned char)buf11[7],
-          	(unsigned char)buf11[8],
-          	(unsigned char)buf11[9],
-          	(unsigned char)buf11[10]);*/
+            (unsigned char)buf11[2],
+            p11-2,
+            (unsigned char)buf11[3],
+            (unsigned char)buf11[4],
+            (unsigned char)buf11[5],
+            (unsigned char)buf11[6],
+            (unsigned char)buf11[7],
+            (unsigned char)buf11[8],
+            (unsigned char)buf11[9],
+            (unsigned char)buf11[10]);*/
         } else {
           buf11[1] = SV_MAPPOS | buf11[3];
           *(unsigned short*)(buf11 + 2) = c;
           psend(nr, buf11 + 1, p11 - 1);
           if (!player[nr]) return;
           /*xlog("sending 11: %d size=%d [ %d %d %d %d %d %d %d %d ]",
-          	(unsigned char)buf11[1],
-          	p11-1,
-          	(unsigned char)buf11[2],
-          	(unsigned char)buf11[3],
-          	(unsigned char)buf11[4],
-          	(unsigned char)buf11[5],
-          	(unsigned char)buf11[6],
-          	(unsigned char)buf11[7],
-          	(unsigned char)buf11[8],
-          	(unsigned char)buf11[9]);*/
+            (unsigned char)buf11[1],
+            p11-1,
+            (unsigned char)buf11[2],
+            (unsigned char)buf11[3],
+            (unsigned char)buf11[4],
+            (unsigned char)buf11[5],
+            (unsigned char)buf11[6],
+            (unsigned char)buf11[7],
+            (unsigned char)buf11[8],
+            (unsigned char)buf11[9]);*/
         }
 
         last = c;
@@ -1944,7 +1944,7 @@ skip:
       if (is_char_ceffect(player[nr]->ceffect[n].generic.type)) {
         co = player[nr]->ceffect[n].strike.cn;
         //say(cn,"effe cn=%s (%d), see=%d",ch[co].name,co,char_see_char(cn,co));
-        if (char_see_char(cn, co)) {	//fast_los(cn,ch[co].x,ch[co].y)
+        if (char_see_char(cn, co)) {  //fast_los(cn,ch[co].x,ch[co].y)
           usedef[n] = 1;
         }
       } else usedef[n] = 1;
@@ -2017,7 +2017,7 @@ static void player_stats(int nr)
   cn = player[nr]->cn;
 
   // values
-  if (ch[cn].flags & CF_UPDATE) {	// only check for value updates if update_char() was called (speed optim.)
+  if (ch[cn].flags & CF_UPDATE) { // only check for value updates if update_char() was called (speed optim.)
     for (n = 0; n < V_MAX; n++) {
       if (ch[cn].value[0][n] != player[nr]->value[0][n]) {
         buf[0] = SV_SETVAL0;
@@ -2483,11 +2483,11 @@ void tick_player(void)
   for (n = 1; n < MAXPLAYER; n++) {
     if (player[n]) {
       switch (player[n]->state) {
-      case ST_CONNECT:	if (player[n]) read_login(n);
+      case ST_CONNECT:  if (player[n]) read_login(n);
         if (player[n]) check_idle(n);
         break;
 
-      case ST_NORMAL:		if (player[n]) player_update(n);
+      case ST_NORMAL:   if (player[n]) player_update(n);
         if (player[n]) read_input(n);
         if (player[n] && player[n]->state != ST_NORMAL) break;
         if (player[n]) check_command(n);
@@ -2496,10 +2496,10 @@ void tick_player(void)
         if (player[n]) check_ingame_idle(n);
         break;
 
-      case ST_EXIT:		if (player[n]) check_idle(n);
+      case ST_EXIT:   if (player[n]) check_idle(n);
         break;
 
-      default:		elog("tick_player(): Unknown player state %d for player %d.", player[n]->state, n);
+      default:    elog("tick_player(): Unknown player state %d for player %d.", player[n]->state, n);
         kick_player(n, NULL);
         break;
       }
@@ -2511,13 +2511,13 @@ void tick_player(void)
   for (n = 1; n < MAXPLAYER; n++) {
     if (player[n]) {
       switch (player[n]->state) {
-      case ST_CONNECT:	break;
-      case ST_NORMAL:		if (player[n]) player_map(n);
+      case ST_CONNECT:  break;
+      case ST_NORMAL:   if (player[n]) player_map(n);
         if (player[n]) player_stats(n);
         if (player[n]) player_act(n);
         break;
-      case ST_EXIT:		break;
-      default:		elog("tick_player(): Unknown player state %d for player %d.", player[n]->state, n);
+      case ST_EXIT:   break;
+      default:    elog("tick_player(): Unknown player state %d for player %d.", player[n]->state, n);
         if (player[n]) kick_player(n, NULL);
         break;
       }

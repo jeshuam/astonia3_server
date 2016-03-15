@@ -11,39 +11,39 @@
  *
  */
 
-#define MAXPLAYER	256
+#define MAXPLAYER 256
 
-#define ST_CONNECT	1
-#define ST_NORMAL	2
-#define ST_EXIT		3
+#define ST_CONNECT  1
+#define ST_NORMAL 2
+#define ST_EXIT   3
 
-#define PAC_IDLE	0
-#define PAC_MOVE	1
-#define PAC_TAKE	2
-#define PAC_DROP	3
-#define PAC_KILL	4
-#define PAC_USE		5
-#define PAC_BLESS	6
-#define PAC_HEAL	7
-#define PAC_FREEZE	8
-#define PAC_FIREBALL	9
-#define PAC_BALL	10
-#define PAC_MAGICSHIELD	11
-#define PAC_FLASH	12
-#define PAC_WARCRY	13
-#define PAC_LOOK_MAP	14
-#define PAC_GIVE	15
-#define PAC_FIREBALL2	16
-#define PAC_BALL2	17
-#define PAC_TELEPORT	18
-#define PAC_PULSE	19
+#define PAC_IDLE  0
+#define PAC_MOVE  1
+#define PAC_TAKE  2
+#define PAC_DROP  3
+#define PAC_KILL  4
+#define PAC_USE   5
+#define PAC_BLESS 6
+#define PAC_HEAL  7
+#define PAC_FREEZE  8
+#define PAC_FIREBALL  9
+#define PAC_BALL  10
+#define PAC_MAGICSHIELD 11
+#define PAC_FLASH 12
+#define PAC_WARCRY  13
+#define PAC_LOOK_MAP  14
+#define PAC_GIVE  15
+#define PAC_FIREBALL2 16
+#define PAC_BALL2 17
+#define PAC_TELEPORT  18
+#define PAC_PULSE 19
 
-#define MAXEF		64
+#define MAXEF   64
 
 #ifdef NEED_PLAYER_STRUCT
-#define OBUFSIZE	16384
+#define OBUFSIZE  16384
 
-#define MAXSCROLLBACK	8192
+#define MAXSCROLLBACK 8192
 
 struct cmd_queue
 {
@@ -76,39 +76,39 @@ struct player
   unsigned int state;
 
   // character data
-  unsigned long long usnr;	// character ID
-  unsigned int cn;		// character number on current server
-  char passwd[16];		// character password as sent from client
-  char command[256];		// command issued by player
+  unsigned long long usnr;  // character ID
+  unsigned int cn;    // character number on current server
+  char passwd[16];    // character password as sent from client
+  char command[256];    // command issued by player
 
   // for compression
   struct z_stream_s zs;
 
   // cache of client data
-  struct cmap cmap[(DIST * 2 + 1) * (DIST * 2 + 1)];	// map
-  int x, y;					// last position on map
+  struct cmap cmap[(DIST * 2 + 1) * (DIST * 2 + 1)];  // map
+  int x, y;         // last position on map
 
-  short value[2][V_MAX];				// character values
+  short value[2][V_MAX];        // character values
 
-  unsigned int item[INVENTORYSIZE];		// item carried by character
-  unsigned int item_flags[INVENTORYSIZE];		// item flags for inv
-  unsigned int item_price[INVENTORYSIZE];		// item price for inv
+  unsigned int item[INVENTORYSIZE];   // item carried by character
+  unsigned int item_flags[INVENTORYSIZE];   // item flags for inv
+  unsigned int item_price[INVENTORYSIZE];   // item price for inv
 
-  short hp, mana, endurance, lifeshield;		// actual power values
+  short hp, mana, endurance, lifeshield;    // actual power values
 
-  unsigned int citem_sprite, citem_flags;		// current item (mouse cursor) sprite and flags
+  unsigned int citem_sprite, citem_flags;   // current item (mouse cursor) sprite and flags
 
-  unsigned char nameflag[TOTAL_MAXCHARS / 8];		// flag is set if client has the name for character X
+  unsigned char nameflag[TOTAL_MAXCHARS / 8];   // flag is set if client has the name for character X
 
   unsigned int exp, exp_used, gold, mil_exp;
   unsigned int speed_mode, fight_mode;
   int rage;
 
-  int con_type;					// 0 = none, 1 = dead body, 2 = store
+  int con_type;         // 0 = none, 1 = dead body, 2 = store
   char con_name[80];
-  int con_cnt;					// number of items in container/store
-  int container[INVENTORYSIZE];			// sprites of items in container/store
-  int price[INVENTORYSIZE];			// prices in store
+  int con_cnt;          // number of items in container/store
+  int container[INVENTORYSIZE];     // sprites of items in container/store
+  int price[INVENTORYSIZE];     // prices in store
   int cprice;
 
   union ceffect ceffect[MAXEF];
@@ -116,10 +116,10 @@ struct player
   unsigned long long uf;
 
   // player character driver
-  int action;					// action
-  int act1, act2;					// vars
+  int action;         // action
+  int act1, act2;         // vars
   struct cmd_queue queue[16];
-  int ticker;					// last tick we received from client
+  int ticker;         // last tick we received from client
   int next_fightback_cn;
   int next_fightback_serial;
   int next_fightback_ticker;
@@ -152,7 +152,7 @@ void player_to_server(int nr, unsigned int server, int port);
 void plr_send_inv(int cn, int co);
 void player_driver(int cn, int ret, int last_action);
 void player_idle(int nr);
-void player_client_exit(int nr, char *reason);
+void player_client_exit(int nr, const char *reason);
 void kick_char(int cn);
 void write_scrollback(int nr, int cn, char *reason, char *namea, char *nameb);
 void plr_ls(int cn, char *dir);
