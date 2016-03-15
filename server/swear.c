@@ -49,7 +49,7 @@ struct swear_ppd
   int banned_till;
 };
 
-int all_upper(char *ptr)
+int all_upper(const char *ptr)
 {
   int cnt = 0;
 
@@ -70,8 +70,8 @@ int swearing(int cn, const char *text)
 
   if (!(ch[cn].flags & CF_PLAYER)) return 0;
 
-  ppd = set_data(cn, DRD_SWEAR_PPD, sizeof(struct swear_ppd));
-  if (!ppd) return 0;	// oops...
+  ppd = (struct swear_ppd*)set_data(cn, DRD_SWEAR_PPD, sizeof(struct swear_ppd));
+  if (!ppd) return 0; // oops...
 
   if (ppd->banned_till > realtime) {
     log_char(cn, LOG_SYSTEM, 0, "°c3Chat is blocked for %.2f minutes.", (ppd->banned_till - realtime) / 60.0);
@@ -85,17 +85,17 @@ int swearing(int cn, const char *text)
     return 1;
   }
 
-  if (realtime - ppd->lasttalk[1] < 1) {	// 0.3s per line
+  if (realtime - ppd->lasttalk[1] < 1) {  // 0.3s per line
     log_char(cn, LOG_SYSTEM, 0, "°c3Chat has been blocked for 30 seconds for excessive usage (1).");
     ppd->bad = realtime;
     return 1;
   }
-  if (realtime - ppd->lasttalk[4] < 10) {	// 2s per line
+  if (realtime - ppd->lasttalk[4] < 10) { // 2s per line
     log_char(cn, LOG_SYSTEM, 0, "°c3Chat has been blocked for 30 seconds for excessive usage (2).");
     ppd->bad = realtime;
     return 1;
   }
-  if (realtime - ppd->lasttalk[9] < 30) {	// 3s per line
+  if (realtime - ppd->lasttalk[9] < 30) { // 3s per line
     log_char(cn, LOG_SYSTEM, 0, "°c3Chat has been blocked for 30 seconds for excessive usage (3).");
     ppd->bad = realtime;
     return 1;
@@ -160,8 +160,8 @@ void shutup_bg(int cnID, int coID, int minutes)
 
   if (!(ch[co].flags & CF_PLAYER)) return;
 
-  ppd = set_data(co, DRD_SWEAR_PPD, sizeof(struct swear_ppd));
-  if (!ppd) return;	// oops...
+  ppd = (struct swear_ppd*)set_data(co, DRD_SWEAR_PPD, sizeof(struct swear_ppd));
+  if (!ppd) return; // oops...
 
   ppd->banned_till = realtime + (minutes * 60);
 

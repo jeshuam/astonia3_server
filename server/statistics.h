@@ -12,21 +12,21 @@ Added RCS tags
 
 */
 
-#define MAXSTAT	365
+#define MAXSTAT 365
 #define RESOLUTION (60*60*24)
 
 struct stats
 {
-	int exp;
-	int gold;
-	int online;
+  int exp;
+  int gold;
+  int online;
 };
 
 struct stats_ppd
 {
-	int last_update;
-	struct stats stats[MAXSTAT];
+  int last_update;
+  struct stats stats[MAXSTAT];
 };
 
-void stats_update(int cn,int onl,int gold);
+void stats_update(int cn, int onl, int gold);
 int stats_online_time(int cn);
