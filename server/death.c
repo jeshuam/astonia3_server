@@ -116,7 +116,7 @@ static void respawn_callback(int tmp, int tmpx, int tmpy, int tmpa, int dum)
   set_timer(ticker + TICKS * 10, respawn_callback, tmp, tmpx, tmpy, tmpa, 0);
 }
 
-void log_player_death(int cn, char *reason, int itemflag)
+void log_player_death(int cn, const char *reason, int itemflag)
 {
   struct lostcon_ppd *ppd;
   int n, in;
@@ -164,7 +164,7 @@ static void give_first_kill(int cn, int co)
 
   if (ch[co].cls < 1 || ch[co].cls > 1023) return;  // victim has no class set, so no first kill...
 
-  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return; // OOPS
+  if (!(ppd = (struct firstkill_ppd*)set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return; // OOPS
 
   index = ch[co].cls / 32;
   offset = ch[co].cls & 31;
@@ -210,7 +210,7 @@ int check_first_kill(int cn, int nr)
 
   if (!(ch[cn].flags & CF_PLAYER)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return 0; // OOPS
+  if (!(ppd = (struct firstkill_ppd*)set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return 0; // OOPS
 
   index = nr / 32;
   offset = nr & 31;
@@ -227,7 +227,7 @@ void check_military_solve(int cn, int co)
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  if (!(ppd = set_data(cn, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
+  if (!(ppd = (struct military_ppd*)set_data(cn, DRD_MILITARY_PPD, sizeof(struct military_ppd)))) return;
 
   if (ppd->took_mission && !ppd->solved_mission) {
     nr = ppd->took_mission - 1;
@@ -798,7 +798,7 @@ int hurt(int cn, int dam, int cc, int armordiv, int armorper, int shieldper)
             teleport_char_driver(cn, 245, 245);
           log_char(cn, LOG_SYSTEM, 0, "You lose. You may enter again after a 5 minute penalty.");
           ch[cn].hp = 5 * POWERSCALE;
-          if ((ppd = set_data(cn, DRD_MISC_PPD, sizeof(struct misc_ppd)))) ppd->last_lq_death = realtime;
+          if ((ppd = (struct misc_ppd*)set_data(cn, DRD_MISC_PPD, sizeof(struct misc_ppd)))) ppd->last_lq_death = realtime;
         } else if (areaID == 21 && (ch[cn].flags & CF_PLAYER)) {  // !!!!!!!!!!!!!!!!! hack !!!!!!!!!!!!!!!
           teleport_char_driver(cn, 7, 7);
           log_char(cn, LOG_SYSTEM, 0, "Fortunately, death is not real here. But neither is experience.");
