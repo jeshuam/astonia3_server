@@ -16,6 +16,9 @@
  * Initial revision
  */
 
+#ifndef _SERVER_H_
+#define _SERVER_H_
+
 #define VERSION  0x030100
 
 #define TICKS   24
@@ -555,3 +558,5 @@ void cmd_show_prof(int cn);
 #undef strdup
 #define strdup  error error error
 #endif
+
+#endif  // _SERVER_H_

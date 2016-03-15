@@ -27,95 +27,95 @@ Added RCS tags
 #include "database.h"
 
 
-int swap_depot(int cn,int nr)
+int swap_depot(int cn, int nr)
 {
-	int in,in2;
-	struct depot_ppd *ppd;
-	
-	ppd=set_data(cn,DRD_DEPOT_PPD,sizeof(struct depot_ppd));
-	if (!ppd) return 0;
+  int in, in2;
+  struct depot_ppd *ppd;
 
-	if (cn<1 || cn>=MAXCHARS) { error=ERR_ILLEGAL_CHARNO; return 0; }
-        if (nr<0 || nr>=MAXDEPOT) { error=ERR_ACCESS_DENIED; return 0; }
+  ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
+  if (!ppd) return 0;
 
-	// remember citem
-	in2=ch[cn].citem;
+  if (cn < 1 || cn >= MAXCHARS) { error = ERR_ILLEGAL_CHARNO; return 0; }
+  if (nr < 0 || nr >= MAXDEPOT) { error = ERR_ACCESS_DENIED; return 0; }
 
-	if (it[in2].flags&IF_NODEPOT) {
-		error=ERR_ACCESS_DENIED;
-		return 0;
-	}
+  // remember citem
+  in2 = ch[cn].citem;
 
-        // remember item from depot
-	if (ppd->itm[nr].flags) {
-		in=alloc_item();
-		if (!in) { error=ERR_CONFUSED; return 0; }	
-		it[in]=ppd->itm[nr];
-		dlog(cn,in,"Took %s from depot slot %d",it[in].name,nr);
-	} else in=0;
+  if (it[in2].flags & IF_NODEPOT) {
+    error = ERR_ACCESS_DENIED;
+    return 0;
+  }
 
-        // set new citem
-	ch[cn].citem=in;
-	ch[cn].flags|=CF_ITEMS;
-	if (in) it[in].carried=cn;
+  // remember item from depot
+  if (ppd->itm[nr].flags) {
+    in = alloc_item();
+    if (!in) { error = ERR_CONFUSED; return 0; }
+    it[in] = ppd->itm[nr];
+    dlog(cn, in, "Took %s from depot slot %d", it[in].name, nr);
+  } else in = 0;
 
-	if (in2) {
-		ppd->itm[nr]=it[in2];
-		dlog(cn,in2,"Put %s into depot slot %d",it[in2].name,nr);
-		free_item(in2);
-	} else ppd->itm[nr].flags=0;	
+  // set new citem
+  ch[cn].citem = in;
+  ch[cn].flags |= CF_ITEMS;
+  if (in) it[in].carried = cn;
 
-	return 1;
+  if (in2) {
+    ppd->itm[nr] = it[in2];
+    dlog(cn, in2, "Put %s into depot slot %d", it[in2].name, nr);
+    free_item(in2);
+  } else ppd->itm[nr].flags = 0;
+
+  return 1;
 }
 
 // character (usually a player) cn is using store NR
 // flag=1 take/drop, flag=0 look
-void player_depot(int cn,int nr,int flag,int fast)
+void player_depot(int cn, int nr, int flag, int fast)
 {
-        struct depot_ppd *ppd;
-	
-	ppd=set_data(cn,DRD_DEPOT_PPD,sizeof(struct depot_ppd));
-	if (!ppd) return;
-	
-        if (flag) {
-		if (fast && ch[cn].citem) {
-			for (nr=0; nr<MAXDEPOT; nr++) {
-				if (!(ppd->itm[nr].flags)) break;
-			}
-			if (nr==MAXDEPOT) return;
-			swap_depot(cn,nr);
-		} else {
-			swap_depot(cn,nr);
-			if (fast) store_citem(cn);
-		}
-	} else {
-		if (!ppd->itm[nr].flags) return;
-		look_item(cn,&ppd->itm[nr]);
-	}
+  struct depot_ppd *ppd;
+
+  ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
+  if (!ppd) return;
+
+  if (flag) {
+    if (fast && ch[cn].citem) {
+      for (nr = 0; nr < MAXDEPOT; nr++) {
+        if (!(ppd->itm[nr].flags)) break;
+      }
+      if (nr == MAXDEPOT) return;
+      swap_depot(cn, nr);
+    } else {
+      swap_depot(cn, nr);
+      if (fast) store_citem(cn);
+    }
+  } else {
+    if (!ppd->itm[nr].flags) return;
+    look_item(cn, &ppd->itm[nr]);
+  }
 }
 
-int depot_cmp(const void *a,const void *b)
+int depot_cmp(const void *a, const void *b)
 {
-	if (!((struct item*)(a))->flags && !((struct item*)(b))->flags) return 0;
-	if (!((struct item*)(a))->flags) return 1;
-	if (!((struct item*)(b))->flags) return -1;
+  if (!((struct item*)(a))->flags && !((struct item*)(b))->flags) return 0;
+  if (!((struct item*)(a))->flags) return 1;
+  if (!((struct item*)(b))->flags) return -1;
 
-        if (((struct item*)(b))->sprite<((struct item*)(a))->sprite) return -1;
-	if (((struct item*)(b))->sprite>((struct item*)(a))->sprite) return 1;
+  if (((struct item*)(b))->sprite < ((struct item*)(a))->sprite) return -1;
+  if (((struct item*)(b))->sprite > ((struct item*)(a))->sprite) return 1;
 
-	if (((struct item*)(b))->value<((struct item*)(a))->value) return -1;
-	if (((struct item*)(b))->value>((struct item*)(a))->value) return 1;
+  if (((struct item*)(b))->value < ((struct item*)(a))->value) return -1;
+  if (((struct item*)(b))->value > ((struct item*)(a))->value) return 1;
 
-	return strncmp(((struct item*)(a))->name,((struct item*)(b))->name,35);	
+  return strncmp(((struct item*)(a))->name, ((struct item*)(b))->name, 35);
 }
 
 void depot_sort(int cn)
 {
-	struct depot_ppd *ppd;
-	
-	ppd=set_data(cn,DRD_DEPOT_PPD,sizeof(struct depot_ppd));
-	if (!ppd) return;
+  struct depot_ppd *ppd;
 
-	qsort(ppd->itm,MAXDEPOT,sizeof(ppd->itm[0]),depot_cmp);
+  ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
+  if (!ppd) return;
+
+  qsort(ppd->itm, MAXDEPOT, sizeof(ppd->itm[0]), depot_cmp);
 
 }
