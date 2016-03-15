@@ -123,8 +123,8 @@ void log_player_death(int cn, char *reason, int itemflag)
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  ppd = set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
-  if (!ppd) return;	// oops...
+  ppd = (struct lostcon_ppd*)set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
+  if (!ppd) return; // oops...
 
   dlog(cn, 0, "Death: Lag Control=%s, Settings: Maxlag=%d, Bless=%s, Fire=%s, Flash=%s, Health Pot=%s, Mana Pot=%s, Combo Pot=%s, Recall=%s, Magic Shield=%s, Warcry=%s",
        ch[cn].driver == CDR_LOSTCON ? "Yes" : "No",
@@ -150,9 +150,9 @@ void log_player_death(int cn, char *reason, int itemflag)
   }
 }
 
-struct firstkill_ppd	// persistent player data
+struct firstkill_ppd  // persistent player data
 {
-  unsigned int kill[32];	// bitfield, containing ones for all kills already done
+  unsigned int kill[32];  // bitfield, containing ones for all kills already done
 };
 
 static void give_first_kill(int cn, int co)
@@ -162,9 +162,9 @@ static void give_first_kill(int cn, int co)
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  if (ch[co].cls < 1 || ch[co].cls > 1023) return;	// victim has no class set, so no first kill...
+  if (ch[co].cls < 1 || ch[co].cls > 1023) return;  // victim has no class set, so no first kill...
 
-  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return;	// OOPS
+  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return; // OOPS
 
   index = ch[co].cls / 32;
   offset = ch[co].cls & 31;
@@ -178,20 +178,20 @@ static void give_first_kill(int cn, int co)
 
   if (ch[co].flags & CF_HASNAME) {
     log_char(cn, LOG_SYSTEM, 0, "You just killed %s for the first time. Congratulations!", ch[co].name);
-  } else if ((ch[co].cls >= 52 && ch[co].cls <= 84) ||	// pents
-             (ch[co].cls >= 85 && ch[co].cls <= 100) ||	// sewers
-             (ch[co].cls >= 101 && ch[co].cls <= 106) ||	// edemon
-             (ch[co].cls >= 107 && ch[co].cls <= 138) ||	// fpents
-             (ch[co].cls >= 139 && ch[co].cls <= 170) ||	// ipents
-             (ch[co].cls >= 172 && ch[co].cls <= 181) ||	// fdemon
-             (ch[co].cls >= 183 && ch[co].cls <= 202) ||	// idemon
-             (ch[co].cls >= 204 && ch[co].cls <= 214) ||	// palace demon
-             (ch[co].cls >= 215 && ch[co].cls <= 220) ||	// palace key bearer
-             (ch[co].cls >= 221 && ch[co].cls <= 228) ||	// mine, silver golem
-             (ch[co].cls >= 229 && ch[co].cls <= 236) ||	// mine, gold golem
+  } else if ((ch[co].cls >= 52 && ch[co].cls <= 84) ||  // pents
+             (ch[co].cls >= 85 && ch[co].cls <= 100) || // sewers
+             (ch[co].cls >= 101 && ch[co].cls <= 106) ||  // edemon
+             (ch[co].cls >= 107 && ch[co].cls <= 138) ||  // fpents
+             (ch[co].cls >= 139 && ch[co].cls <= 170) ||  // ipents
+             (ch[co].cls >= 172 && ch[co].cls <= 181) ||  // fdemon
+             (ch[co].cls >= 183 && ch[co].cls <= 202) ||  // idemon
+             (ch[co].cls >= 204 && ch[co].cls <= 214) ||  // palace demon
+             (ch[co].cls >= 215 && ch[co].cls <= 220) ||  // palace key bearer
+             (ch[co].cls >= 221 && ch[co].cls <= 228) ||  // mine, silver golem
+             (ch[co].cls >= 229 && ch[co].cls <= 236) ||  // mine, gold golem
              (ch[co].cls >= 237 && ch[co].cls <= 244) || // mine, zombie
              (ch[co].cls >= 336 && ch[co].cls <= 365) || // bones, skelly, zombie, wizard
-             (ch[co].cls >= 388 && ch[co].cls <= 403)) {	// hell pents demons
+             (ch[co].cls >= 388 && ch[co].cls <= 403)) {  // hell pents demons
     log_char(cn, LOG_SYSTEM, 0, "You just killed your first level %d %s. Congratulations!", ch[co].level, ch[co].name);
   } else if ((ch[co].cls >= 258 && ch[co].cls <= 305) || (ch[co].cls >= 404 && ch[co].cls <= 411)) {
     if (get_army_rank_int(cn)) {
@@ -210,7 +210,7 @@ int check_first_kill(int cn, int nr)
 
   if (!(ch[cn].flags & CF_PLAYER)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_FIRSTKILL_PPD, sizeof(struct firstkill_ppd)))) return 0; // OOPS
 
   index = nr / 32;
   offset = nr & 31;
@@ -233,7 +233,7 @@ void check_military_solve(int cn, int co)
     nr = ppd->took_mission - 1;
 
     switch (ppd->mis[nr].type) {
-    case 1:		if ((ch[co].cls >= 52 && ch[co].cls <= 84) || (ch[co].cls >= 107 && ch[co].cls <= 170) || (ch[co].cls >= 388 && ch[co].cls <= 403)) { // its a pent demon
+    case 1:   if ((ch[co].cls >= 52 && ch[co].cls <= 84) || (ch[co].cls >= 107 && ch[co].cls <= 170) || (ch[co].cls >= 388 && ch[co].cls <= 403)) { // its a pent demon
         if (ch[co].level == ppd->mis[nr].opt2) {
           ppd->mis[nr].opt1--;
           if (ppd->mis[nr].opt1) {
@@ -250,7 +250,7 @@ void check_military_solve(int cn, int co)
         }
       }
       break;
-    case 2:		if (ch[co].cls >= 85 && ch[co].cls <= 100) { // its a sewer ratling
+    case 2:   if (ch[co].cls >= 85 && ch[co].cls <= 100) { // its a sewer ratling
         if (ch[co].level == ppd->mis[nr].opt2) {
           ppd->mis[nr].opt1--;
           if (ppd->mis[nr].opt1) {
@@ -303,9 +303,9 @@ int kill_char(int cn, int co)
   }
 
   ch[cn].action = AC_DIE;
-  ch[cn].act1 = co;		// remember killer
+  ch[cn].act1 = co;   // remember killer
 
-  if (ch[co].flags & CF_PLAYER)  ch[cn].act2 = 1;	// remember if PK death (to avoid races due to log-outs)
+  if (ch[co].flags & CF_PLAYER)  ch[cn].act2 = 1; // remember if PK death (to avoid races due to log-outs)
   else ch[cn].act2 = 0;
 
   ch[cn].duration = 12;
@@ -324,12 +324,12 @@ static int transfer_to_restarea(int cn)
     return 0;
   }
 
-  if (ch[cn].resta != areaID) {	// respawn point is on different area server
+  if (ch[cn].resta != areaID) { // respawn point is on different area server
     // if the target server is there, send player there. if it isn't, let him remain here
     if (change_area(cn, ch[cn].resta, ch[cn].restx, ch[cn].resty)) return 1;
   }
 
-  if (!ch[cn].player) {		// character without player - kick now
+  if (!ch[cn].player) {   // character without player - kick now
     exit_char(cn);
     return 1;
   }
@@ -360,8 +360,8 @@ int drop_grave(int in, int x, int y, int isplayer)
   if (drop_item_extended(in, x, y, 5)) return 1;
 
   switch (areaID) {
-  case 8:		return drop_item(in, 230, 233);
-  default:	return 0;
+  case 8:   return drop_item(in, 230, 233);
+  default:  return 0;
   }
 }
 
@@ -369,11 +369,11 @@ int drop_grave(int in, int x, int y, int isplayer)
 // NPCs are just killed off, players will be relieved of items and EXP
 // and transported to the last rest area they've been on.
 /* dead body drdata usage:
-[0]	tmp (used for... ??)
-[2..3]	c1 for player bodies
-[4..5]	c2 for player bodies
-[6..7]	c3 for player bodies
-[8..11]	expire timer call count */
+[0] tmp (used for... ??)
+[2..3]  c1 for player bodies
+[4..5]  c2 for player bodies
+[6..7]  c3 for player bodies
+[8..11] expire timer call count */
 int die_char(int cn, int co, int ispk)
 {
   int in, n, x, y, sprite, dir, tmp, ct;
@@ -403,7 +403,7 @@ int die_char(int cn, int co, int ispk)
 
       // set the right sprite
       switch (sprite) {
-      default:	it[in].sprite = 100000 + sprite * 1000 + (dir - 1) / 2 * 8 + 335; break;
+      default:  it[in].sprite = 100000 + sprite * 1000 + (dir - 1) / 2 * 8 + 335; break;
       }
       sprintf(it[in].description, "%s's body.", ch[cn].name);
       if (ch[cn].flags & CF_PLAYER) {
@@ -673,8 +673,8 @@ int allow_body_db(int cnID, int coID)
   int n, cnt = 0;
 
   for (n = 1; n < MAXCONTAINER; n++) {
-    if (!con[n].in) continue;			// empty or not item container (grave)
-    if (con[n].owner != charID_ID(cnID)) continue;	// not owned by cn
+    if (!con[n].in) continue;     // empty or not item container (grave)
+    if (con[n].owner != charID_ID(cnID)) continue;  // not owned by cn
 
     con[n].access = coID ? charID_ID(coID) : 0;
     cnt++;
@@ -737,7 +737,7 @@ int hurt(int cn, int dam, int cc, int armordiv, int armorper, int shieldper)
 
   //say(cn,"hurt: %d",dam);
 
-  if (dam) {	// check for magic shield and death if there was any damage
+  if (dam) {  // check for magic shield and death if there was any damage
 
     if (ch[cn].lifeshield && shieldper > 0) {
       if (ch[cn].value[1][V_MAGICSHIELD]) {
@@ -765,7 +765,7 @@ int hurt(int cn, int dam, int cc, int armordiv, int armorper, int shieldper)
     if (areaID == 34 && (ch[cn].flags & CF_PLAYER) && cc && (ch[cc].flags & CF_PLAYER) && (map[ch[cn].x + ch[cn].y * MAXMAP].flags & MF_ARENA)) teufel_damage(cn, cc, teufel_life + teufel_shield);
 
     if (dam >= POWERSCALE && (ch[cn].flags & CF_PLAYER)) {
-      if (ch[cn].flags & CF_MALE) sound_area(ch[cn].x, ch[cn].y, 9);	// ouch
+      if (ch[cn].flags & CF_MALE) sound_area(ch[cn].x, ch[cn].y, 9);  // ouch
       else  sound_area(ch[cn].x, ch[cn].y, 32);
     }
 
@@ -787,7 +787,7 @@ int hurt(int cn, int dam, int cc, int armordiv, int armorper, int shieldper)
         ch[cn].hp = 1;
       } else {
         if (areaID == 34 && (ch[cn].flags & CF_PLAYER) && (map[ch[cn].x + ch[cn].y * MAXMAP].flags & MF_ARENA)) teufel_death(cn, cc); // teufelheim PK special
-        else if ((areaID == 20 || areaID == 35) && (ch[cn].flags & CF_PLAYER)) {	// LQ area special
+        else if ((areaID == 20 || areaID == 35) && (ch[cn].flags & CF_PLAYER)) {  // LQ area special
           struct misc_ppd *ppd;
           if (!teleport_char_driver(cn, 240, 240) &&
               !teleport_char_driver(cn, 235, 240) &&
@@ -799,18 +799,18 @@ int hurt(int cn, int dam, int cc, int armordiv, int armorper, int shieldper)
           log_char(cn, LOG_SYSTEM, 0, "You lose. You may enter again after a 5 minute penalty.");
           ch[cn].hp = 5 * POWERSCALE;
           if ((ppd = set_data(cn, DRD_MISC_PPD, sizeof(struct misc_ppd)))) ppd->last_lq_death = realtime;
-        } else if (areaID == 21 && (ch[cn].flags & CF_PLAYER)) {	// !!!!!!!!!!!!!!!!! hack !!!!!!!!!!!!!!!
+        } else if (areaID == 21 && (ch[cn].flags & CF_PLAYER)) {  // !!!!!!!!!!!!!!!!! hack !!!!!!!!!!!!!!!
           teleport_char_driver(cn, 7, 7);
           log_char(cn, LOG_SYSTEM, 0, "Fortunately, death is not real here. But neither is experience.");
           ch[cn].hp = 5 * POWERSCALE;
-        } else if (ch[cn].flags & (CF_PLAYER | CF_PLAYERLIKE) && (map[ch[cn].x + ch[cn].y * MAXMAP].flags & MF_ARENA)) {	// arena death, no loss
+        } else if (ch[cn].flags & (CF_PLAYER | CF_PLAYERLIKE) && (map[ch[cn].x + ch[cn].y * MAXMAP].flags & MF_ARENA)) {  // arena death, no loss
           arena_save_char(cn);
-        } else if (cc && (ch[cn].flags & CF_PLAYER) && (ch[cc].flags & CF_PLAYER)) {	// PK death, no saves
+        } else if (cc && (ch[cn].flags & CF_PLAYER) && (ch[cc].flags & CF_PLAYER)) {  // PK death, no saves
           kill_char(cn, cc);
           add_pk_kill(cc, cn);
           add_pk_death(cn);
-        } else {				// normal death, check for saves
-          if ((ch[cn].flags & CF_PLAYER) && ch[cn].saves > 0)	god_save_char(cn);
+        } else {        // normal death, check for saves
+          if ((ch[cn].flags & CF_PLAYER) && ch[cn].saves > 0) god_save_char(cn);
           else if ((ch[cn].flags & CF_PLAYER) && shutdown_at && realtime - shutdown_at < 30) shutdown_save_char(cn);
           else if ((ch[cn].flags & CF_PLAYER) && areaID == 25 && ch[cn].x > 107) area_save_char(cn);
           else if ((ch[cn].flags & CF_PLAYER) && areaID == 22 && ch[cn].x >= 119 && ch[cn].y >= 63 && ch[cn].x <= 133 && ch[cn].y <= 114) area_save_char(cn);
@@ -861,17 +861,17 @@ int kill_score_level(int cnlev, int cclev)
   if (diff <= -5) return val;
 
   switch (diff) {
-  case -4:	return ceil(val * 0.95);
-  case -3:	return ceil(val * 0.90);
-  case -2:	return ceil(val * 0.85);
-  case -1:	return ceil(val * 0.80);
-  case 0:		return ceil(val * 0.75);
-  case 1:		return ceil(val * 0.70);
-  case 2:		return ceil(val * 0.65);
-  case 3:		return ceil(val * 0.60);
-  case 4:		return ceil(val * 0.40);
-  case 5: 	return ceil(val * 0.20);
-  default: 	return 0;
+  case -4:  return ceil(val * 0.95);
+  case -3:  return ceil(val * 0.90);
+  case -2:  return ceil(val * 0.85);
+  case -1:  return ceil(val * 0.80);
+  case 0:   return ceil(val * 0.75);
+  case 1:   return ceil(val * 0.70);
+  case 2:   return ceil(val * 0.65);
+  case 3:   return ceil(val * 0.60);
+  case 4:   return ceil(val * 0.40);
+  case 5:   return ceil(val * 0.20);
+  default:  return 0;
   }
 }
 

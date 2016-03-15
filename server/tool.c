@@ -168,14 +168,14 @@ int speed2(int speedy, int mode, int ticks)
 int dx2offset(int dir, int *x, int *y, int *diag)
 {
   switch (dir) {
-  case DX_UP:		if (x) *x = 0; if (y) *y = -1; if (diag) *diag = 0; break;
-  case DX_DOWN:		if (x) *x = 0; if (y) *y = 1; if (diag) *diag = 0; break;
-  case DX_LEFT:		if (x) *x = -1; if (y) *y = 0; if (diag) *diag = 0; break;
-  case DX_RIGHT:		if (x) *x = 1; if (y) *y = 0; if (diag) *diag = 0; break;
-  case DX_LEFTUP:		if (x) *x = -1; if (y) *y = -1; if (diag) *diag = 1; break;
-  case DX_RIGHTUP:	if (x) *x = 1; if (y) *y = -1; if (diag) *diag = 1; break;
-  case DX_LEFTDOWN:	if (x) *x = -1; if (y) *y = 1; if (diag) *diag = 1; break;
-  case DX_RIGHTDOWN:	if (x) *x = 1; if (y) *y = 1; if (diag) *diag = 1; break;
+  case DX_UP:   if (x) *x = 0; if (y) *y = -1; if (diag) *diag = 0; break;
+  case DX_DOWN:   if (x) *x = 0; if (y) *y = 1; if (diag) *diag = 0; break;
+  case DX_LEFT:   if (x) *x = -1; if (y) *y = 0; if (diag) *diag = 0; break;
+  case DX_RIGHT:    if (x) *x = 1; if (y) *y = 0; if (diag) *diag = 0; break;
+  case DX_LEFTUP:   if (x) *x = -1; if (y) *y = -1; if (diag) *diag = 1; break;
+  case DX_RIGHTUP:  if (x) *x = 1; if (y) *y = -1; if (diag) *diag = 1; break;
+  case DX_LEFTDOWN: if (x) *x = -1; if (y) *y = 1; if (diag) *diag = 1; break;
+  case DX_RIGHTDOWN:  if (x) *x = 1; if (y) *y = 1; if (diag) *diag = 1; break;
   default:                return 0;
   }
   return 1;
@@ -209,17 +209,17 @@ int offset2dx(int frx, int fry, int tox, int toy)
   return 0;
 }
 
-#define MAXHATE	50
+#define MAXHATE 50
 
 struct pk_ppd
 {
-  int kills;		// nr of kills
-  int deaths;		// nr of deaths
+  int kills;    // nr of kills
+  int deaths;   // nr of deaths
 
-  int last_kill;		// realtime of last kill
-  int last_death;		// realtime of last death
+  int last_kill;    // realtime of last kill
+  int last_death;   // realtime of last death
 
-  int hate[MAXHATE];	// IDs of enemies
+  int hate[MAXHATE];  // IDs of enemies
 };
 
 static int arena_check_target(int m)
@@ -258,8 +258,8 @@ int can_help(int cn, int co)
   mf2 = map[m].flags;
 
   // no help unless neither is in an arena or both are in the same arena
-  if ((mf1 & MF_ARENA) && (mf2 & MF_ARENA) && pathfinder(ch[cn].x, ch[cn].y, ch[co].x, ch[co].y, 0, arena_check_target, 0) != -1) return 1;	// both in same
-  if ((mf1 & MF_ARENA) || (mf2 & MF_ARENA)) return 0;	// one in arena or both in different arenas
+  if ((mf1 & MF_ARENA) && (mf2 & MF_ARENA) && pathfinder(ch[cn].x, ch[cn].y, ch[co].x, ch[co].y, 0, arena_check_target, 0) != -1) return 1; // both in same
+  if ((mf1 & MF_ARENA) || (mf2 & MF_ARENA)) return 0; // one in arena or both in different arenas
 
   // everything else is fair game
   return 1;
@@ -333,7 +333,7 @@ int can_attack(int cn, int co)
       return 0;
     }
 
-    if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+    if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
     for (n = 0; n < MAXHATE; n++)
       if (ppd->hate[n] == ch[co].ID)
@@ -388,7 +388,7 @@ int on_hate_list(int cn, int co)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++)
     if (ppd->hate[n] == ch[co].ID) return 1;
 
@@ -422,7 +422,7 @@ void add_hate(int cn, int co)
 
   if (!check_hate(cn, co)) return;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
 
   for (n = 0; n < MAXHATE - 1; n++)
     if (ppd->hate[n] == ch[co].ID) break;
@@ -447,7 +447,7 @@ int del_hate(int cn, int co)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n] == ch[co].ID) {
       ppd->hate[n] = 0;
@@ -469,7 +469,7 @@ int del_hate_ID(int cn, int uID)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n] == uID) {
       ppd->hate[n] = 0;
@@ -489,7 +489,7 @@ int del_all_hate(int cn)
 
   if (!(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
   for (n = 0; n < MAXHATE; n++) {
     ppd->hate[n] = 0;
   }
@@ -504,7 +504,7 @@ void list_hate(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return; // OOPS
 
   for (n = 0; n < MAXHATE; n++) {
     if (ppd->hate[n]) {
@@ -526,7 +526,7 @@ int leave_pk(int cn)
 
   if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) {
     log_char(cn, LOG_SYSTEM, 0, "Could not attach data block, please contact game admin and tell them you found bug #1774");
-    return 0;	// OOPS
+    return 0; // OOPS
   }
 
   if (ppd->last_kill + 60 * 60 * 24 * 28 > realtime) {
@@ -537,7 +537,7 @@ int leave_pk(int cn)
   }
 
   ch[cn].flags &= ~CF_PK;
-  del_data(cn, DRD_PK_PPD);	// remove unneeded data block
+  del_data(cn, DRD_PK_PPD); // remove unneeded data block
 
   dlog(cn, 0, "Left PK");
 
@@ -550,9 +550,9 @@ int join_pk(int cn)
 {
   if (ch[cn].flags & CF_PK) return 0;
 
-  del_data(cn, DRD_PK_PPD);	// make sure its empty
+  del_data(cn, DRD_PK_PPD); // make sure its empty
 
-  if (!set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd))) return 0;	// OOPS
+  if (!set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd))) return 0; // OOPS
 
   ch[cn].flags |= CF_PK;
 
@@ -570,7 +570,7 @@ int add_pk_kill(int cn, int co)
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK) ||
       !(ch[co].flags & CF_PLAYER) || !(ch[co].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->kills++;
   ppd->last_kill = realtime;
@@ -584,7 +584,7 @@ int add_pk_steal(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->last_kill = realtime;
 
@@ -597,7 +597,7 @@ int add_pk_death(int cn)
 
   if (!(ch[cn].flags & CF_PLAYER) || !(ch[cn].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   ppd->deaths++;
   ppd->last_death = realtime;
@@ -611,7 +611,7 @@ int show_pk_info(int cn, int co, char *buf)
 
   if (!(ch[co].flags & CF_PLAYER) || !(ch[co].flags & CF_PK)) return 0;
 
-  if (!(ppd = set_data(co, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(co, DRD_PK_PPD, sizeof(struct pk_ppd)))) return 0; // OOPS
 
   return sprintf(buf, "%s is a player killer. %s killed %d players and died %d times through the hands of other players. ",
                  ch[co].name, Hename(co),
@@ -624,7 +624,7 @@ int check_requirements(int cn, int in)
 
   // check requirements
   for (m = 0; m < MAXMOD; m++) {
-    if (!(v2 = it[in].mod_value[m])) continue;	// ignore empty ones
+    if (!(v2 = it[in].mod_value[m])) continue;  // ignore empty ones
     v1 = it[in].mod_index[m];
     if (v1 <= -V_MAX || v1 >= V_MAX) {
       elog("can_wear(): item %s (%d) has illegal modifier (index %d out of bounds). Removing modifier.", it[in].name, in, v1);
@@ -632,7 +632,7 @@ int check_requirements(int cn, int in)
       it[in].mod_index[m] = 0;
       continue;
     }
-    if (v1 < 0) {	// negative indizes are requirements
+    if (v1 < 0) { // negative indizes are requirements
       if (ch[cn].value[1][-v1] < v2) return 0;
     }
   }
@@ -684,24 +684,24 @@ int can_wear(int cn, int in, int pos)
   }
 
   switch (pos) {
-  case WN_HEAD:	if (!(it[in].flags & IF_WNHEAD)) return 0; break;
-  case WN_NECK:	if (!(it[in].flags & IF_WNNECK)) return 0; break;
-  case WN_BODY:	if (!(it[in].flags & IF_WNBODY)) return 0; break;
-  case WN_ARMS:	if (!(it[in].flags & IF_WNARMS)) return 0; break;
-  case WN_BELT:	if (!(it[in].flags & IF_WNBELT)) return 0; break;
-  case WN_LEGS:	if (!(it[in].flags & IF_WNLEGS)) return 0; break;
-  case WN_FEET:	if (!(it[in].flags & IF_WNFEET)) return 0; break;
-  case WN_CLOAK:	if (!(it[in].flags & IF_WNCLOAK)) return 0; break;
-  case WN_LRING:	if (!(it[in].flags & IF_WNLRING)) return 0; break;
-  case WN_RRING:	if (!(it[in].flags & IF_WNRRING)) return 0; break;
+  case WN_HEAD: if (!(it[in].flags & IF_WNHEAD)) return 0; break;
+  case WN_NECK: if (!(it[in].flags & IF_WNNECK)) return 0; break;
+  case WN_BODY: if (!(it[in].flags & IF_WNBODY)) return 0; break;
+  case WN_ARMS: if (!(it[in].flags & IF_WNARMS)) return 0; break;
+  case WN_BELT: if (!(it[in].flags & IF_WNBELT)) return 0; break;
+  case WN_LEGS: if (!(it[in].flags & IF_WNLEGS)) return 0; break;
+  case WN_FEET: if (!(it[in].flags & IF_WNFEET)) return 0; break;
+  case WN_CLOAK:  if (!(it[in].flags & IF_WNCLOAK)) return 0; break;
+  case WN_LRING:  if (!(it[in].flags & IF_WNLRING)) return 0; break;
+  case WN_RRING:  if (!(it[in].flags & IF_WNRRING)) return 0; break;
 
-  case WN_LHAND:	if (inr && (it[inr].flags & IF_WNTWOHANDED)) return 0;	// left hand is blocked by two-handed weapon
+  case WN_LHAND:  if (inr && (it[inr].flags & IF_WNTWOHANDED)) return 0;  // left hand is blocked by two-handed weapon
     if (!(it[in].flags & IF_WNLHAND)) return 0;
     break;
 
-  case WN_RHAND:	if (it[in].flags & IF_WNTWOHANDED) {			// is it a two-handed weapon?
-      if (inl) return 0;				// yes, but if left hand is full, its still illegal
-    } else if (!(it[in].flags & IF_WNRHAND)) return 0;	// no, but can it be worn on right hand?
+  case WN_RHAND:  if (it[in].flags & IF_WNTWOHANDED) {      // is it a two-handed weapon?
+      if (inl) return 0;        // yes, but if left hand is full, its still illegal
+    } else if (!(it[in].flags & IF_WNRHAND)) return 0;  // no, but can it be worn on right hand?
     break;
   }
 
@@ -756,7 +756,7 @@ int get_fight_skill(int cn)
     in = 0;
   }
 
-  if (!in || !(it[in].flags & IF_WEAPON)) {	// not wielding anything, or not wielding a weapon
+  if (!in || !(it[in].flags & IF_WEAPON)) { // not wielding anything, or not wielding a weapon
     return ch[cn].value[0][V_HAND];
   }
 
@@ -887,18 +887,18 @@ char *save_number(int nr)
   static char buf[80];
 
   switch (nr) {
-  case 0:		return "no";
-  case 1:		return "one";
-  case 2:		return "two";
-  case 3: 	return "three";
-  case 4: 	return "four";
-  case 5: 	return "five";
-  case 6: 	return "six";
-  case 7:		return "seven";
-  case 8:		return "eight";
-  case 9:		return "nine";
-  case 10:	return "ten";
-  default:	sprintf(buf, "%d", nr);
+  case 0:   return "no";
+  case 1:   return "one";
+  case 2:   return "two";
+  case 3:   return "three";
+  case 4:   return "four";
+  case 5:   return "five";
+  case 6:   return "six";
+  case 7:   return "seven";
+  case 8:   return "eight";
+  case 9:   return "nine";
+  case 10:  return "ten";
+  default:  sprintf(buf, "%d", nr);
     return buf;
   }
 }
@@ -947,7 +947,7 @@ int check_levelup(int cn)
 // MUST USE
 void give_exp(int cn, int val)
 {
-  if (areaID == 21) return;	// !!!!!!!!!!!!!!!!! hack !!!!!!!!!!!!!!!
+  if (areaID == 21) return; // !!!!!!!!!!!!!!!!! hack !!!!!!!!!!!!!!!
 
   if (ch[cn].exp < 200 * 200 * 200 * 200) ch[cn].exp += val;
 
@@ -1040,7 +1040,7 @@ void remove_spell(int cn, int in, int pos, int cserial, int iserial)
 
   update_char(cn);
 
-  if (it[in].driver == IDR_FREEZE && ch[cn].duration) {	// adjust duration and step to remove effect of freeze
+  if (it[in].driver == IDR_FREEZE && ch[cn].duration) { // adjust duration and step to remove effect of freeze
     int old_dur, new_dur, real_dur;
 
     old_dur = ch[cn].duration;
@@ -1123,7 +1123,7 @@ int look_item(int cn, struct item *in)
 {
   int n, v, m = 0, r = 0, s;
 
-  if (!in->name[0]) return 1;	// no name means we dont display anything
+  if (!in->name[0]) return 1; // no name means we dont display anything
 
   log_char(cn, LOG_SYSTEM, 0, "°c5%s:", in->name);
   if (in->description[0]) log_char(cn, LOG_SYSTEM, 0, "%s", in->description);
@@ -1189,25 +1189,25 @@ int look_item(int cn, struct item *in)
              ((*(unsigned short*)(in->drdata + 5)) * 2) / 60 / 60, (((*(unsigned short*)(in->drdata + 5)) * 2) / 60) % 60, ((*(unsigned short*)(in->drdata + 5)) * 2) % 60);
   }
   /*if (IDR_ISSPELL(in->driver)) {
-  	log_char(cn,LOG_SYSTEM,0,"Duration: %.2f minutes.",(*(unsigned long*)(in->drdata)-ticker)/TICKS/60.0);
+    log_char(cn,LOG_SYSTEM,0,"Duration: %.2f minutes.",(*(unsigned long*)(in->drdata)-ticker)/TICKS/60.0);
   }*/
 
-  if ((in->sprite >= 59200 && in->sprite < 59299) || in->sprite == 59474) {	// gold item
+  if ((in->sprite >= 59200 && in->sprite < 59299) || in->sprite == 59474) { // gold item
     log_char(cn, LOG_SYSTEM, 0, "The item has been gilded.");
   }
-  if ((in->sprite >= 59299 && in->sprite <= 59390) || in->sprite == 59473) {	// silver item
+  if ((in->sprite >= 59299 && in->sprite <= 59390) || in->sprite == 59473) {  // silver item
     log_char(cn, LOG_SYSTEM, 0, "The item has been silvered.");
   }
 
-  if ((in->sprite >= 53000 && in->sprite <= 53006)) {	// edemon suit
+  if ((in->sprite >= 53000 && in->sprite <= 53006)) { // edemon suit
     log_char(cn, LOG_SYSTEM, 0, "This is part of an earth demon suit.");
   }
 
-  if ((in->sprite >= 53025 && in->sprite <= 53030)) {	// ice suit
+  if ((in->sprite >= 53025 && in->sprite <= 53030)) { // ice suit
     log_char(cn, LOG_SYSTEM, 0, "This is part of an ice demon suit.");
   }
 
-  if ((in->sprite >= 53031 && in->sprite <= 53036)) {	// fire suit
+  if ((in->sprite >= 53031 && in->sprite <= 53036)) { // fire suit
     log_char(cn, LOG_SYSTEM, 0, "This is part of an fire demon suit.");
   }
 
@@ -1215,17 +1215,17 @@ int look_item(int cn, struct item *in)
 }
 
 static char *rankname[] = {
-  "nobody",		//0
-  "Private",		//1
+  "nobody",   //0
+  "Private",    //1
   "Private First Class",  //2
   "Lance Corporal",       //3
   "Corporal",             //4
-  "Sergeant",             //5	lvl 30
+  "Sergeant",             //5 lvl 30
   "Staff Sergeant",       //6
   "Master Sergeant",      //7
-  "First Sergeant",       //8	lvl 45
+  "First Sergeant",       //8 lvl 45
   "Sergeant Major",       //9
-  "Second Lieutenant",    //10	lvl 55
+  "Second Lieutenant",    //10  lvl 55
   "First Lieutenant",     //11
   "Captain",              //12
   "Major",                //13
@@ -1235,11 +1235,11 @@ static char *rankname[] = {
   "Major General",        //17
   "Lieutenant General",   //18
   "General",              //19
-  "Field Marshal",        //20 	lvl 105
+  "Field Marshal",        //20  lvl 105
   "Knight of Astonia",    //21
   "Baron of Astonia",     //22
   "Earl of Astonia",      //23
-  "Warlord of Astonia"    //24	lvl 125
+  "Warlord of Astonia"    //24  lvl 125
 };
 
 struct rank_ppd
@@ -1263,7 +1263,7 @@ int look_char(int cn, int co)
   int len, cnt;
 
   if (ch[cn].flags & CF_PLAYER) {
-    shrine = set_data(co, DRD_RANDOMSHRINE_PPD, sizeof(struct shrine_ppd));
+    shrine = (struct shrine_ppd*)set_data(co, DRD_RANDOMSHRINE_PPD, sizeof(struct shrine_ppd));
     if (shrine && shrine->used[DEATH_SHRINE_INDEX]&DEATH_SHRINE_BIT) {
       log_char(cn, LOG_SYSTEM, 0, "#1%s%s the Brave (%d):", get_title(co), ch[co].name, ch[co].level);
     } else {
@@ -1297,7 +1297,7 @@ int look_char(int cn, int co)
     len += show_prof_info(cn, co, buf + len);
 
     if (ch[co].flags & (CF_PLAYER | CF_PLAYERLIKE)) {
-      if (!(ppd = set_data(co, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0;	// OOPS
+      if (!(ppd = set_data(co, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
       if (ppd->army_rank) {
         len += sprintf(buf + len, "%s is a %s in the Imperial Army. ", ch[co].name, rankname[ppd->army_rank]);
@@ -1333,7 +1333,7 @@ int set_army_rank(int cn, int rank)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   ppd->army_rank = min(24, rank);
 
@@ -1344,7 +1344,7 @@ int get_army_rank_int(int cn)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   if (ppd->army_rank > 24) ppd->army_rank = 24;
 
@@ -1355,7 +1355,7 @@ char *get_army_rank_string(int cn)
 {
   struct rank_ppd *ppd;
 
-  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0;	// OOPS
+  if (!(ppd = set_data(cn, DRD_RANK_PPD, sizeof(struct rank_ppd)))) return 0; // OOPS
 
   return rankname[min(24, ppd->army_rank)];
 }
@@ -1363,12 +1363,12 @@ char *get_army_rank_string(int cn)
 int bigdir(int dir)
 {
   switch (dir) {
-  case DX_RIGHTUP:	return DX_RIGHT;
-  case DX_RIGHTDOWN:	return DX_RIGHT;
-  case DX_LEFTUP:		return DX_LEFT;
-  case DX_LEFTDOWN:	return DX_LEFT;
+  case DX_RIGHTUP:  return DX_RIGHT;
+  case DX_RIGHTDOWN:  return DX_RIGHT;
+  case DX_LEFTUP:   return DX_LEFT;
+  case DX_LEFTDOWN: return DX_LEFT;
 
-  default:		return dir;
+  default:    return dir;
   }
 }
 
@@ -1554,84 +1554,84 @@ struct special_item
   int pricemulti;
 };
 
-#define SP_LOTS		5000
-#define SP_MANY		1000
-#define SP_SOME		250
-#define SP_FEW		50
-#define SP_RARE		10
-#define SP_ULTRA	1
+#define SP_LOTS   5000
+#define SP_MANY   1000
+#define SP_SOME   250
+#define SP_FEW    50
+#define SP_RARE   10
+#define SP_ULTRA  1
 
 struct special_item special_item[] = {
-  {"Wisdom",			{V_WIS, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Intuition",			{V_INT, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Agility",			{V_AGI, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Strength",			{V_STR, -1, -1},				SP_MANY,	0,		0,	1},
+  {"Wisdom",      {V_WIS, -1, -1},        SP_MANY,  0,    0,  1},
+  {"Intuition",     {V_INT, -1, -1},        SP_MANY,  0,    0,  1},
+  {"Agility",     {V_AGI, -1, -1},        SP_MANY,  0,    0,  1},
+  {"Strength",      {V_STR, -1, -1},        SP_MANY,  0,    0,  1},
 
-  {"Hitpoints",			{V_HP, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Mana",			{V_MANA, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Endurance",			{V_ENDURANCE, -1, -1},			SP_MANY,	0,		0,	1},
+  {"Hitpoints",     {V_HP, -1, -1},       SP_MANY,  0,    0,  1},
+  {"Mana",      {V_MANA, -1, -1},       SP_MANY,  0,    0,  1},
+  {"Endurance",     {V_ENDURANCE, -1, -1},      SP_MANY,  0,    0,  1},
 
-  //{"Axe",      			{V_AXE,-1,-1},				SP_SOME,	IF_AXE,		0,	2},
-  {"Dagger",			{V_DAGGER, -1, -1},			SP_SOME,	IF_DAGGER,	0,	2},
-  {"Hand to Hand",		{V_HAND, -1, -1},				SP_SOME,	0,		0,	2},
-  {"Staff",			{V_STAFF, -1, -1},			SP_SOME,	IF_STAFF,	0,	2},
-  {"Sword",			{V_SWORD, -1, -1},			SP_SOME,	IF_SWORD,	0,	2},
-  {"Two-Handed",			{V_TWOHAND, -1, -1},			SP_SOME,	IF_TWOHAND,	0,	2},
+  //{"Axe",           {V_AXE,-1,-1},        SP_SOME,  IF_AXE,   0,  2},
+  {"Dagger",      {V_DAGGER, -1, -1},     SP_SOME,  IF_DAGGER,  0,  2},
+  {"Hand to Hand",    {V_HAND, -1, -1},       SP_SOME,  0,    0,  2},
+  {"Staff",     {V_STAFF, -1, -1},      SP_SOME,  IF_STAFF, 0,  2},
+  {"Sword",     {V_SWORD, -1, -1},      SP_SOME,  IF_SWORD, 0,  2},
+  {"Two-Handed",      {V_TWOHAND, -1, -1},      SP_SOME,  IF_TWOHAND, 0,  2},
 
-  {"Attack",			{V_ATTACK, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Parry",			{V_PARRY, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Warcry",			{V_WARCRY, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Tactics",			{V_TACTICS, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Surround Hit",		{V_SURROUND, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Body Control",		{V_BODYCONTROL, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Speed",			{V_SPEEDSKILL, -1, -1},			SP_MANY,	0,		0,	1},
+  {"Attack",      {V_ATTACK, -1, -1},     SP_SOME,  0,    0,  2},
+  {"Parry",     {V_PARRY, -1, -1},      SP_SOME,  0,    0,  2},
+  {"Warcry",      {V_WARCRY, -1, -1},     SP_MANY,  0,    0,  1},
+  {"Tactics",     {V_TACTICS, -1, -1},      SP_SOME,  0,    0,  2},
+  {"Surround Hit",    {V_SURROUND, -1, -1},     SP_MANY,  0,    0,  1},
+  {"Body Control",    {V_BODYCONTROL, -1, -1},      SP_MANY,  0,    0,  1},
+  {"Speed",     {V_SPEEDSKILL, -1, -1},     SP_MANY,  0,    0,  1},
 
-  {"Bartering",			{V_BARTER, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Perception",			{V_PERCEPT, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Stealth",			{V_STEALTH, -1, -1},			SP_MANY,	0,		0,	1},
+  {"Bartering",     {V_BARTER, -1, -1},     SP_MANY,  0,    0,  1},
+  {"Perception",      {V_PERCEPT, -1, -1},      SP_MANY,  0,    0,  1},
+  {"Stealth",     {V_STEALTH, -1, -1},      SP_MANY,  0,    0,  1},
 
-  {"Bless",			{V_BLESS, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Heal",			{V_HEAL, -1, -1},				SP_MANY,	0,		0,	1},
-  {"Freeze",			{V_FREEZE, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Magic Shield",		{V_MAGICSHIELD, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Lightning",			{V_FLASH, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Fireball",			{V_FIREBALL, -1, -1},			SP_MANY,	0,		0,	1},
-  //{"Ball Lightning",		{V_BALL,-1,-1},				SP_MANY,	0,		0,	1},
-  {"Pulse",			{V_PULSE, -1, -1},			SP_SOME,	0,		0,	2},
+  {"Bless",     {V_BLESS, -1, -1},      SP_MANY,  0,    0,  1},
+  {"Heal",      {V_HEAL, -1, -1},       SP_MANY,  0,    0,  1},
+  {"Freeze",      {V_FREEZE, -1, -1},     SP_SOME,  0,    0,  2},
+  {"Magic Shield",    {V_MAGICSHIELD, -1, -1},      SP_SOME,  0,    0,  2},
+  {"Lightning",     {V_FLASH, -1, -1},      SP_SOME,  0,    0,  2},
+  {"Fireball",      {V_FIREBALL, -1, -1},     SP_MANY,  0,    0,  1},
+  //{"Ball Lightning",    {V_BALL,-1,-1},       SP_MANY,  0,    0,  1},
+  {"Pulse",     {V_PULSE, -1, -1},      SP_SOME,  0,    0,  2},
 
-  {"Regenerate",			{V_REGENERATE, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Meditate",			{V_MEDITATE, -1, -1},			SP_MANY,	0,		0,	1},
-  {"Immunity",			{V_IMMUNITY, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Duration",			{V_DURATION, -1, -1},			SP_SOME,	0,		0,	2},
-  {"Rage",			{V_RAGE, -1, -1},				SP_SOME,	0,		0,	2},
+  {"Regenerate",      {V_REGENERATE, -1, -1},     SP_MANY,  0,    0,  1},
+  {"Meditate",      {V_MEDITATE, -1, -1},     SP_MANY,  0,    0,  1},
+  {"Immunity",      {V_IMMUNITY, -1, -1},     SP_SOME,  0,    0,  2},
+  {"Duration",      {V_DURATION, -1, -1},     SP_SOME,  0,    0,  2},
+  {"Rage",      {V_RAGE, -1, -1},       SP_SOME,  0,    0,  2},
 
-  {"Thief",			{V_STEALTH, V_ENDURANCE, -1},		SP_FEW,		0,		1,	4},
-  {"Vision",			{V_PERCEPT, V_INT, -1},			SP_FEW,		0,		0,	4},
-  {"Wounded",			{V_HEAL, V_REGENERATE, -1},		SP_FEW,		0,		1,	4},
-  {"Eccentric",			{V_BODYCONTROL, V_BLESS, V_SPEEDSKILL},	SP_FEW,		0,		1,	4},
-  {"Sorcery",			{V_MANA, V_DURATION, -1},			SP_FEW,		0,		0,	8},
+  {"Thief",     {V_STEALTH, V_ENDURANCE, -1},   SP_FEW,   0,    1,  4},
+  {"Vision",      {V_PERCEPT, V_INT, -1},     SP_FEW,   0,    0,  4},
+  {"Wounded",     {V_HEAL, V_REGENERATE, -1},   SP_FEW,   0,    1,  4},
+  {"Eccentric",     {V_BODYCONTROL, V_BLESS, V_SPEEDSKILL}, SP_FEW,   0,    1,  4},
+  {"Sorcery",     {V_MANA, V_DURATION, -1},     SP_FEW,   0,    0,  8},
 
-  {"Fighting",			{V_ATTACK, V_PARRY, -1},			SP_RARE,	0,		0,	8},
-  {"Magic",			{V_FLASH, V_MAGICSHIELD, -1},		SP_RARE,	0,		0,	8},
-  {"Berserk",			{V_ATTACK, V_RAGE, -1},			SP_RARE,	0,		0,	8},
+  {"Fighting",      {V_ATTACK, V_PARRY, -1},      SP_RARE,  0,    0,  8},
+  {"Magic",     {V_FLASH, V_MAGICSHIELD, -1},   SP_RARE,  0,    0,  8},
+  {"Berserk",     {V_ATTACK, V_RAGE, -1},     SP_RARE,  0,    0,  8},
 
-  {"One Handed Offense",		{V_ATTACK, V_SWORD, -1},			SP_RARE,	IF_SWORD,	0,	8},
-  {"One Handed Defense",		{V_PARRY, V_SWORD, -1},			SP_RARE,	IF_SWORD,	0,	8},
-  {"Two Handed Offense",		{V_ATTACK, V_TWOHAND, -1},		SP_RARE,	IF_TWOHAND,	0,	8},
-  {"Two Handed Defense",		{V_PARRY, V_TWOHAND, -1},			SP_RARE,	IF_TWOHAND,	0,	8},
+  {"One Handed Offense",    {V_ATTACK, V_SWORD, -1},      SP_RARE,  IF_SWORD, 0,  8},
+  {"One Handed Defense",    {V_PARRY, V_SWORD, -1},     SP_RARE,  IF_SWORD, 0,  8},
+  {"Two Handed Offense",    {V_ATTACK, V_TWOHAND, -1},    SP_RARE,  IF_TWOHAND, 0,  8},
+  {"Two Handed Defense",    {V_PARRY, V_TWOHAND, -1},     SP_RARE,  IF_TWOHAND, 0,  8},
 
-  {"Tactical Offense",		{V_ATTACK, V_TACTICS, -1},		SP_RARE,	0,		0,	8},
-  {"Tactical Defense",		{V_PARRY, V_TACTICS, -1},			SP_RARE,	0,		0,	8},
+  {"Tactical Offense",    {V_ATTACK, V_TACTICS, -1},    SP_RARE,  0,    0,  8},
+  {"Tactical Defense",    {V_PARRY, V_TACTICS, -1},     SP_RARE,  0,    0,  8},
 
-  {"Magical Offense",		{V_FLASH, V_FIREBALL, V_PULSE},		SP_RARE,	0,		0,	8},
-  {"Magical Defense",		{V_MAGICSHIELD, V_FREEZE, V_HEAL},	SP_RARE,	0,		0,	8},
+  {"Magical Offense",   {V_FLASH, V_FIREBALL, V_PULSE},   SP_RARE,  0,    0,  8},
+  {"Magical Defense",   {V_MAGICSHIELD, V_FREEZE, V_HEAL},  SP_RARE,  0,    0,  8},
 
-  {"Warrior",			{V_ATTACK, V_PARRY, V_IMMUNITY},		SP_ULTRA,	0,		1,	16},
-  {"Mage",			{V_FLASH, V_MAGICSHIELD, V_IMMUNITY},	SP_ULTRA,	0,		1,	16},
-  {"Tactician",			{V_ATTACK, V_PARRY, V_TACTICS},		SP_ULTRA,	0,		1,	16},
-  {"Seyan'Du",			{V_ATTACK, V_PARRY, V_BLESS},		SP_ULTRA,	0,		1,	16},
-  {"Arch-Warrior",		{V_ATTACK, V_PARRY, V_RAGE},		SP_ULTRA,	0,		1,	16},
-  {"Arch-Mage",			{V_FLASH, V_MAGICSHIELD, V_DURATION},	SP_ULTRA,	0,		1,	16}
+  {"Warrior",     {V_ATTACK, V_PARRY, V_IMMUNITY},    SP_ULTRA, 0,    1,  16},
+  {"Mage",      {V_FLASH, V_MAGICSHIELD, V_IMMUNITY}, SP_ULTRA, 0,    1,  16},
+  {"Tactician",     {V_ATTACK, V_PARRY, V_TACTICS},   SP_ULTRA, 0,    1,  16},
+  {"Seyan'Du",      {V_ATTACK, V_PARRY, V_BLESS},   SP_ULTRA, 0,    1,  16},
+  {"Arch-Warrior",    {V_ATTACK, V_PARRY, V_RAGE},    SP_ULTRA, 0,    1,  16},
+  {"Arch-Mage",     {V_FLASH, V_MAGICSHIELD, V_DURATION}, SP_ULTRA, 0,    1,  16}
 };
 
 void set_item_requirements_sub(int in, int maxlvl)
@@ -1642,12 +1642,12 @@ void set_item_requirements_sub(int in, int maxlvl)
 
   for (n = sum = high = 0; n < MAXMOD; n++) {
     switch (it[in].mod_index[n]) {
-    case V_WEAPON:	break;
-    case V_ARMOR:	break;
-    case V_SPEED:	break;
-    case V_DEMON:	break;
-    case V_LIGHT:	break;
-    default:	if (it[in].mod_index[n] >= 0) {
+    case V_WEAPON:  break;
+    case V_ARMOR: break;
+    case V_SPEED: break;
+    case V_DEMON: break;
+    case V_LIGHT: break;
+    default:  if (it[in].mod_index[n] >= 0) {
         high = max(high, it[in].mod_value[n]);
         sum += it[in].mod_value[n];
       }
@@ -1655,31 +1655,31 @@ void set_item_requirements_sub(int in, int maxlvl)
     }
   }
   switch (high) {
-  case 0:		lvl = 0; break;
-  case 1:		lvl = 2; break;
-  case 2:		lvl = 3; break;
-  case 3:		lvl = 5; break;
-  case 4:		lvl = 10; break;
-  case 5:		lvl = 15; break;
-  case 6:		lvl = 17; break;
-  case 7:		lvl = 20; break;
-  case 8:		lvl = 23; break;
-  case 9:		lvl = 26; break;
-  case 10:	lvl = 30; it[in].needs_class |= 8; break;
-  case 11:	lvl = 33; it[in].needs_class |= 8; break;
-  case 12:	lvl = 36; it[in].needs_class |= 8; break;
-  case 13:	lvl = 40; it[in].needs_class |= 8; break;
-  case 14:	lvl = 43; it[in].needs_class |= 8; break;
-  case 15:	lvl = 46; it[in].needs_class |= 8; break;
-  case 16:	lvl = 50; it[in].needs_class |= 8; break;
-  case 17:	lvl = 53; it[in].needs_class |= 8; break;
-  case 18:	lvl = 56; it[in].needs_class |= 8; break;
-  case 19:	lvl = 60; it[in].needs_class |= 8; break;
-  case 20:	lvl = 63; it[in].needs_class |= 8; break;
-  case 21:	lvl = 66; it[in].needs_class |= 8; break;
-  case 22:	lvl = 70; it[in].needs_class |= 8; break;
-  case 23:	lvl = 73; it[in].needs_class |= 8; break;
-  default:	lvl = 76; it[in].needs_class |= 8; break;
+  case 0:   lvl = 0; break;
+  case 1:   lvl = 2; break;
+  case 2:   lvl = 3; break;
+  case 3:   lvl = 5; break;
+  case 4:   lvl = 10; break;
+  case 5:   lvl = 15; break;
+  case 6:   lvl = 17; break;
+  case 7:   lvl = 20; break;
+  case 8:   lvl = 23; break;
+  case 9:   lvl = 26; break;
+  case 10:  lvl = 30; it[in].needs_class |= 8; break;
+  case 11:  lvl = 33; it[in].needs_class |= 8; break;
+  case 12:  lvl = 36; it[in].needs_class |= 8; break;
+  case 13:  lvl = 40; it[in].needs_class |= 8; break;
+  case 14:  lvl = 43; it[in].needs_class |= 8; break;
+  case 15:  lvl = 46; it[in].needs_class |= 8; break;
+  case 16:  lvl = 50; it[in].needs_class |= 8; break;
+  case 17:  lvl = 53; it[in].needs_class |= 8; break;
+  case 18:  lvl = 56; it[in].needs_class |= 8; break;
+  case 19:  lvl = 60; it[in].needs_class |= 8; break;
+  case 20:  lvl = 63; it[in].needs_class |= 8; break;
+  case 21:  lvl = 66; it[in].needs_class |= 8; break;
+  case 22:  lvl = 70; it[in].needs_class |= 8; break;
+  case 23:  lvl = 73; it[in].needs_class |= 8; break;
+  default:  lvl = 76; it[in].needs_class |= 8; break;
   }
 
   //lvl+=sum-high;
@@ -1743,53 +1743,53 @@ int create_special_item(int strength, int base, int potionprob, int maxchance)
     else n = 3;
 
     switch (RANDOM(3)) {
-    case 0:		sprintf(buf, "healing_potion%d", n); break;
-    case 1:		sprintf(buf, "mana_potion%d", n); break;
-    case 2:		sprintf(buf, "combo_potion%d", n); break;
+    case 0:   sprintf(buf, "healing_potion%d", n); break;
+    case 1:   sprintf(buf, "mana_potion%d", n); break;
+    case 2:   sprintf(buf, "combo_potion%d", n); break;
     }
     in = create_item(buf);
     return in;
   }
 
   switch (base) {
-  case 1:		break;
-  case 10:	base = 2; break;
-  case 20:	base = 3; break;
-  case 30:	base = 4; break;
-  case 40:	base = 5; break;
-  case 50:	base = 6; break;
-  case 60:	base = 7; break;
-  case 70:	base = 8; break;
-  case 80:	base = 9; break;
-  case 90:	base = 10; break;
+  case 1:   break;
+  case 10:  base = 2; break;
+  case 20:  base = 3; break;
+  case 30:  base = 4; break;
+  case 40:  base = 5; break;
+  case 50:  base = 6; break;
+  case 60:  base = 7; break;
+  case 70:  base = 8; break;
+  case 80:  base = 9; break;
+  case 90:  base = 10; break;
   }
 
   type = RANDOM(21);
 
   switch (type) {
-  case 0:		sprintf(buf, "armor%dq3", base); break;
-  case 1:		sprintf(buf, "helmet%dq3", base); break;
-  case 2:		sprintf(buf, "sleeves%dq3", base); break;
-  case 3:		sprintf(buf, "leggings%dq3", base); break;
-  case 4:		sprintf(buf, "sword%dq3", base); break;
-  case 5:		sprintf(buf, "twohanded%dq3", base); break;
-  case 6:		sprintf(buf, "dagger%dq3", base); break;
-  case 7:		sprintf(buf, "staff%dq3", base); break;
-  case 8:		sprintf(buf, "plain_gold_ring"); break;
-  case 9:		sprintf(buf, "plain_gold_ring"); break;
-  case 10:	sprintf(buf, "green_hat"); break;
-  case 11:	sprintf(buf, "brown_hat"); break;
-  case 12:	sprintf(buf, "blue_cape"); break;
-  case 13:	sprintf(buf, "brown_cape"); break;
-  case 14:	sprintf(buf, "belt"); break;
-  case 15:	sprintf(buf, "amulet"); break;
-  case 16:	sprintf(buf, "boots"); break;
-  case 17:	sprintf(buf, "vest"); break;
-  case 18:	sprintf(buf, "trousers"); break;
-  case 19:	sprintf(buf, "bracelet"); break;
-  case 20:	sprintf(buf, "gloves"); break;
+  case 0:   sprintf(buf, "armor%dq3", base); break;
+  case 1:   sprintf(buf, "helmet%dq3", base); break;
+  case 2:   sprintf(buf, "sleeves%dq3", base); break;
+  case 3:   sprintf(buf, "leggings%dq3", base); break;
+  case 4:   sprintf(buf, "sword%dq3", base); break;
+  case 5:   sprintf(buf, "twohanded%dq3", base); break;
+  case 6:   sprintf(buf, "dagger%dq3", base); break;
+  case 7:   sprintf(buf, "staff%dq3", base); break;
+  case 8:   sprintf(buf, "plain_gold_ring"); break;
+  case 9:   sprintf(buf, "plain_gold_ring"); break;
+  case 10:  sprintf(buf, "green_hat"); break;
+  case 11:  sprintf(buf, "brown_hat"); break;
+  case 12:  sprintf(buf, "blue_cape"); break;
+  case 13:  sprintf(buf, "brown_cape"); break;
+  case 14:  sprintf(buf, "belt"); break;
+  case 15:  sprintf(buf, "amulet"); break;
+  case 16:  sprintf(buf, "boots"); break;
+  case 17:  sprintf(buf, "vest"); break;
+  case 18:  sprintf(buf, "trousers"); break;
+  case 19:  sprintf(buf, "bracelet"); break;
+  case 20:  sprintf(buf, "gloves"); break;
 
-  default:	return 0;
+  default:  return 0;
   }
 
   in = create_item(buf);
@@ -1806,27 +1806,27 @@ int create_special_item(int strength, int base, int potionprob, int maxchance)
   else strength = strength - 7 + lowhi_random(7);
 
   switch (strength) {
-  case 1:		str_desc = "Extremely Weak "; priceadd += 200; break;
-  case 2:		str_desc = "Very Weak "; priceadd += 300; break;
-  case 3:		str_desc = "Weak "; priceadd += 400; break;
-  case 4:		str_desc = "Fairly Weak "; priceadd += 500; break;
-  case 5:		str_desc = "Somewhat Weak "; priceadd += 600; break;
-  case 6:		str_desc = ""; priceadd += 700; break;
-  case 7:		str_desc = "Somewhat Strong "; priceadd += 800; break;
-  case 8:		str_desc = "Fairly Strong "; priceadd += 1000; break;
-  case 9:		str_desc = "Strong "; priceadd += 1200; break;
-  case 10:	str_desc = "Very Strong "; priceadd += 1400; break;
-  case 11:	str_desc = "Extremely Strong "; priceadd += 1600; break;
-  case 12:	str_desc = "Somewhat Powerful "; priceadd += 2000; break;
-  case 13:	str_desc = "Fairly Powerful "; priceadd += 2400; break;
-  case 14:	str_desc = "Powerful "; priceadd += 2800; break;
-  case 15:	str_desc = "Very Powerful "; priceadd += 3200; break;
-  case 16:	str_desc = "Extremely Powerful "; priceadd += 4000; break;
-  case 17:	str_desc = "Superhuman "; priceadd += 4800; break;
-  case 18:	str_desc = "Demi-Godly "; priceadd += 5600; break;
-  case 19:	str_desc = "Godly "; priceadd += 10000; break;
-  case 20:	str_desc = "Ultimate "; priceadd += 20000; break;
-  default:	return 0;
+  case 1:   str_desc = "Extremely Weak "; priceadd += 200; break;
+  case 2:   str_desc = "Very Weak "; priceadd += 300; break;
+  case 3:   str_desc = "Weak "; priceadd += 400; break;
+  case 4:   str_desc = "Fairly Weak "; priceadd += 500; break;
+  case 5:   str_desc = "Somewhat Weak "; priceadd += 600; break;
+  case 6:   str_desc = ""; priceadd += 700; break;
+  case 7:   str_desc = "Somewhat Strong "; priceadd += 800; break;
+  case 8:   str_desc = "Fairly Strong "; priceadd += 1000; break;
+  case 9:   str_desc = "Strong "; priceadd += 1200; break;
+  case 10:  str_desc = "Very Strong "; priceadd += 1400; break;
+  case 11:  str_desc = "Extremely Strong "; priceadd += 1600; break;
+  case 12:  str_desc = "Somewhat Powerful "; priceadd += 2000; break;
+  case 13:  str_desc = "Fairly Powerful "; priceadd += 2400; break;
+  case 14:  str_desc = "Powerful "; priceadd += 2800; break;
+  case 15:  str_desc = "Very Powerful "; priceadd += 3200; break;
+  case 16:  str_desc = "Extremely Powerful "; priceadd += 4000; break;
+  case 17:  str_desc = "Superhuman "; priceadd += 4800; break;
+  case 18:  str_desc = "Demi-Godly "; priceadd += 5600; break;
+  case 19:  str_desc = "Godly "; priceadd += 10000; break;
+  case 20:  str_desc = "Ultimate "; priceadd += 20000; break;
+  default:  return 0;
   }
 
   // find all fitting items
@@ -1861,7 +1861,7 @@ int create_special_item(int strength, int base, int potionprob, int maxchance)
   for (n = m = 0; n < MAXMOD && m < 3; n++) {
     if (special_item[nr].mod_index[m] == -1) break;
 
-    if (!it[in].mod_index[n]) {	// add modifier
+    if (!it[in].mod_index[n]) { // add modifier
       it[in].mod_index[n] = special_item[nr].mod_index[m];
       it[in].mod_value[n] = strength;
       m++;
@@ -1897,41 +1897,41 @@ int lowhi_random(int val)
 int create_spell_timer(int cn, int in, int pos)
 {
   switch (it[in].driver) {
-  case IDR_BLESS:		create_show_effect(EF_BLESS, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, it[in].mod_value[0]);
+  case IDR_BLESS:   create_show_effect(EF_BLESS, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, it[in].mod_value[0]);
     set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
-  case IDR_WARCRY:	create_show_effect(EF_WARCRY, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, 0);
+  case IDR_WARCRY:  create_show_effect(EF_WARCRY, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, 0);
     set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
-  case IDR_FREEZE:	create_show_effect(EF_FREEZE, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, 0);
+  case IDR_FREEZE:  create_show_effect(EF_FREEZE, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, 0);
     set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
-  case IDR_FLASH:		set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
+  case IDR_FLASH:   set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
   case IDR_ARMOR:
   case IDR_WEAPON:
   case IDR_HP:
-  case IDR_MANA:		set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
+  case IDR_MANA:    set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
-  case IDR_POTION_SP:	create_show_effect(EF_POTION, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, it[in].mod_value[0]);
+  case IDR_POTION_SP: create_show_effect(EF_POTION, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, it[in].mod_value[0]);
     set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
 
-  case IDR_CURSE:		create_show_effect(EF_CURSE, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, -it[in].mod_value[0]);
+  case IDR_CURSE:   create_show_effect(EF_CURSE, cn, *(signed long*)(it[in].drdata + 4), *(signed long*)(it[in].drdata), 0, -it[in].mod_value[0]);
     set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
 
   case IDR_POISON0:
   case IDR_POISON1:
   case IDR_POISON2:
-  case IDR_POISON3:	set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
+  case IDR_POISON3: set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     set_timer(ticker + TICKS, poison_callback, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
   case IDR_NONOMAGIC:
   case IDR_FIRERING:
   case IDR_INFRARED:
   case IDR_OXYGEN:
-  case IDR_UWTALK:	set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
+  case IDR_UWTALK:  set_timer(*(unsigned long*)(it[in].drdata), remove_spell, cn, in, pos, ch[cn].serial, it[in].serial);
     break;
   }
   return 1;
@@ -1983,7 +1983,7 @@ void look_values_bg(int cnID, int coID)
   sprintf(buf, "Playing for %d hours.", stats_online_time(co) / 60);
   tell_chat(0, cnID, 1, "%s", buf);
 
-  ppd = set_data(co, DRD_BANK_PPD, sizeof(struct bank_ppd));
+  ppd = (struct bank_ppd*)set_data(co, DRD_BANK_PPD, sizeof(struct bank_ppd));
   if (ppd) {
     sprintf(buf, "Gold in hand: %.2fG, gold in bank: %.2fG", ch[co].gold / 100.0, ppd->imperial_gold / 100.0);
     tell_chat(0, cnID, 1, "%s", buf);
@@ -2100,9 +2100,9 @@ int calc_cost(int hint, struct cost_data *dat, int wanted)
   }
 
   avg_amount = (avg_amount + hint * (20 - num)) / 20;
-  avg_date = (avg_date + (dat->created - 24 * 60 * 60 * wanted) * (20 - num)) / 20;	// theoretical creation time is 10 days ago
+  avg_date = (avg_date + (dat->created - 24 * 60 * 60 * wanted) * (20 - num)) / 20; // theoretical creation time is 10 days ago
 
-  days = (realtime - avg_date) / (60 * 60 * 24.0 * 10 / wanted);		// we want to have wanted missions in 10 days
+  days = (realtime - avg_date) / (60 * 60 * 24.0 * 10 / wanted);    // we want to have wanted missions in 10 days
   if (days < 0.01) days = 0.01;
   if (days > 100) days = 100;
 
@@ -2139,7 +2139,7 @@ void remove_destroy_char(int cn)
 }
 
 
-#define END_COST	(POWERSCALE/4)
+#define END_COST  (POWERSCALE/4)
 int end_cost(int cn)
 {
   if (ch[cn].prof[P_ATHLETE]) return END_COST - (ch[cn].prof[P_ATHLETE] * END_COST / 45);
@@ -2290,39 +2290,39 @@ int create_orb(void)
   r = RANDOM(32);
 
   switch (r) {
-  case 0:		what = V_ENDURANCE; break;
-  case 1:		what = V_HP; break;
-  case 2:		what = V_MANA; break;
-  case 3:		what = V_WIS; break;
-  case 4:		what = V_INT; break;
-  case 5:		what = V_AGI; break;
-  case 6:		what = V_STR; break;
-  case 7:		what = V_BARTER; break;
-  case 8:		what = V_PERCEPT; break;
-  case 9:		what = V_STEALTH; break;
-  case 10:	what = V_HAND; break;
-  case 11:	what = V_WARCRY; break;
-  case 12:	what = V_SURROUND; break;
-  case 13:	what = V_BODYCONTROL; break;
-  case 14:	what = V_SPEEDSKILL; break;
-  case 15:	what = V_HEAL; break;
-  case 16:	what = V_FIREBALL; break;
-  case 17:	what = V_TACTICS; break;
-  case 18:	what = V_DURATION; break;
-  case 19:	what = V_RAGE; break;
-  case 20:	what = V_BLESS; break;
-  case 21:	what = V_FREEZE; break;
-  case 22:	what = V_MAGICSHIELD; break;
-  case 23:	what = V_FLASH; break;
-  case 24:	what = V_PULSE; break;
-  case 25:	what = V_DAGGER; break;
-  case 26:	what = V_STAFF; break;
-  case 27:	what = V_SWORD; break;
-  case 28:	what = V_TWOHAND; break;
-  case 29:	what = V_ATTACK; break;
-  case 30:	what = V_PARRY; break;
-  case 31:	what = V_IMMUNITY; break;
-  default:	elog("unknown %d in create_orb()", r); what = V_HP; break;
+  case 0:   what = V_ENDURANCE; break;
+  case 1:   what = V_HP; break;
+  case 2:   what = V_MANA; break;
+  case 3:   what = V_WIS; break;
+  case 4:   what = V_INT; break;
+  case 5:   what = V_AGI; break;
+  case 6:   what = V_STR; break;
+  case 7:   what = V_BARTER; break;
+  case 8:   what = V_PERCEPT; break;
+  case 9:   what = V_STEALTH; break;
+  case 10:  what = V_HAND; break;
+  case 11:  what = V_WARCRY; break;
+  case 12:  what = V_SURROUND; break;
+  case 13:  what = V_BODYCONTROL; break;
+  case 14:  what = V_SPEEDSKILL; break;
+  case 15:  what = V_HEAL; break;
+  case 16:  what = V_FIREBALL; break;
+  case 17:  what = V_TACTICS; break;
+  case 18:  what = V_DURATION; break;
+  case 19:  what = V_RAGE; break;
+  case 20:  what = V_BLESS; break;
+  case 21:  what = V_FREEZE; break;
+  case 22:  what = V_MAGICSHIELD; break;
+  case 23:  what = V_FLASH; break;
+  case 24:  what = V_PULSE; break;
+  case 25:  what = V_DAGGER; break;
+  case 26:  what = V_STAFF; break;
+  case 27:  what = V_SWORD; break;
+  case 28:  what = V_TWOHAND; break;
+  case 29:  what = V_ATTACK; break;
+  case 30:  what = V_PARRY; break;
+  case 31:  what = V_IMMUNITY; break;
+  default:  elog("unknown %d in create_orb()", r); what = V_HP; break;
   }
   sprintf(it[in].name, "Orb of %s", skill[what].name);
   it[in].drdata[0] = what;
@@ -2417,7 +2417,7 @@ void buggy_items(int cn)
   struct depot_ppd *ppd;
   int n, in;
 
-  ppd = set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
+  ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
 
   for (n = 0; n < INVENTORYSIZE; n++) {
     if (n >= 12 && n < 30) continue;
@@ -2513,8 +2513,8 @@ void player_use_potion(int cn)
   int n, in;
   struct lostcon_ppd *ppd;
 
-  ppd = set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
-  if (!ppd) return;	// oops...
+  ppd = (struct lostcon_ppd*)set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
+  if (!ppd) return; // oops...
 
   if (ch[cn].hp < ch[cn].value[1][V_HP] * (int)(POWERSCALE * 0.50)) {
     if (!ppd->nolife || !ppd->nocombo) {
@@ -2536,8 +2536,8 @@ void player_use_recall(int cn)
   // dont use recall *after* you died
   if (ch[cn].hp < (POWERSCALE / 2)) return;
 
-  ppd = set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
-  if (!ppd) return;	// oops...
+  ppd = (struct lostcon_ppd*)set_data(cn, DRD_LOSTCON_PPD, sizeof(struct lostcon_ppd));
+  if (!ppd) return; // oops...
 
   if (ch[cn].hp < ch[cn].value[1][V_HP] * (int)(POWERSCALE * 0.40) && !ppd->norecall) {
     for (n = 30; n < INVENTORYSIZE; n++) {
@@ -2580,20 +2580,20 @@ void sanitize_item(struct item *in, int cn)
     if (!in->mod_value[n]) continue;
 
     switch (in->mod_index[n]) {
-    case V_ARMOR: 		armor = in->mod_value[n]; continue;
-    case V_WEAPON:		weapon = in->mod_value[n]; continue;
-    case V_LIGHT: 		continue;
-    case V_SPEED:		dlog(cn, 0, "%s: change raw speed to speed skill", in->name);
+    case V_ARMOR:     armor = in->mod_value[n]; continue;
+    case V_WEAPON:    weapon = in->mod_value[n]; continue;
+    case V_LIGHT:     continue;
+    case V_SPEED:   dlog(cn, 0, "%s: change raw speed to speed skill", in->name);
       in->mod_index[n] = V_SPEEDSKILL;
       break;
-    case V_EMPTY:		dlog(cn, 0, "%s: remove +empty", in->name);
+    case V_EMPTY:   dlog(cn, 0, "%s: remove +empty", in->name);
       in->mod_index[n] = in->mod_value[n] = 0;
       continue;
-    case -V_ARMORSKILL:	armor_req = in->mod_value[n]; req_idx = n; continue;
+    case -V_ARMORSKILL: armor_req = in->mod_value[n]; req_idx = n; continue;
     case -V_DAGGER:
     case -V_SWORD:
     case -V_STAFF:
-    case -V_TWOHAND:	weapon_req = in->mod_value[n]; req_idx = n; continue;
+    case -V_TWOHAND:  weapon_req = in->mod_value[n]; req_idx = n; continue;
     }
     if (in->mod_index[n] < 0) continue;
 
@@ -2691,16 +2691,16 @@ int count_enhancements(int in)
 
   // check requirements
   for (m = 0; m < MAXMOD; m++) {
-    if (!(it[in].mod_value[m])) continue;	// ignore empty ones
-    if (it[in].mod_index[m] < 0) continue;				// ignore requirements
+    if (!(it[in].mod_value[m])) continue; // ignore empty ones
+    if (it[in].mod_index[m] < 0) continue;        // ignore requirements
 
     switch (it[in].mod_index[m]) {
-    case V_WEAPON:	break;
-    case V_ARMOR:	break;
-    case V_SPEED:	break;
-    case V_DEMON:	break;
-    case V_LIGHT:	break;
-    default:	cnt++;
+    case V_WEAPON:  break;
+    case V_ARMOR: break;
+    case V_SPEED: break;
+    case V_DEMON: break;
+    case V_LIGHT: break;
+    default:  cnt++;
       break;
     }
   }

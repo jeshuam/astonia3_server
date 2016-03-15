@@ -63,35 +63,35 @@
 #include "skill.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);	// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret, int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);       // called when a character dies
+int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
 int driver(int type, int nr, int obj, int ret, int lastact)
 {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 	return 0;
+  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
+  case CDT_ITEM:    return it_driver(nr, obj, ret);
+  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
+  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
+  default:  return 0;
   }
 }
 
-#define MAXLEVEL	56
+#define MAXLEVEL  56
 
 static int init_done = 0;
 static int solve_ser = 255;
 static int total = 0, active = 0, solve = 12;
 static int lastsolve = 0;
 static int power[MAXLEVEL]; /*={
-		2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
-		2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
-		2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
-		2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
-		2000,2000,2000,2000,2000,2000,2000,2000};*/
+    2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
+    2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
+    2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
+    2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,
+    2000,2000,2000,2000,2000,2000,2000,2000};*/
 static int areacnt[MAXLEVEL + 1];
 static int areadone[MAXLEVEL + 1];
 static int areaser[MAXLEVEL + 1] = {
@@ -110,7 +110,7 @@ char pent_record_name[40] = {"Nobody"};
 
 struct pent_nppd
 {
-  int status;	// 0 = normal, 1 = got 5 of same color
+  int status; // 0 = normal, 1 = got 5 of same color
   int pent_it[6];
   int pent_color[6];
   int pent_value[6];
@@ -126,9 +126,9 @@ void set_demon_prof(int cn)
 
   if (!ch[cn].deaths) ch[cn].deaths = ch[cn].prof[P_DEMON];
 
-  if (ch[cn].cls < 258 || ch[cn].cls > 305) {	// normal demon
+  if (ch[cn].cls < 258 || ch[cn].cls > 305) { // normal demon
     val = ch[cn].deaths * (max(0, tpower) + 20000) / 64000;
-  } else {					// demon lord or hell demon
+  } else {          // demon lord or hell demon
     val = ch[cn].deaths * (max(0, tpower) + 52000) / 64000;
   }
 
@@ -155,15 +155,15 @@ static void solve_pents(int cc)
   for (cn = getfirst_char(); cn; cn = getnext_char(cn)) {
     if (!(ch[cn].flags & CF_PLAYER)) continue;
 
-    if (areaID == 25 && ch[cn].x > 107) continue;	// no messages for players in RWW
+    if (areaID == 25 && ch[cn].x > 107) continue; // no messages for players in RWW
 
-    nppd = set_data(cn, DRD_PENT_NPPD, sizeof(struct pent_nppd));
+    nppd = (struct pent_nppd*)set_data(cn, DRD_PENT_NPPD, sizeof(struct pent_nppd));
     if (!nppd) continue;
 
     for (n = exp = 0; n < 6; n++) {
       exp += nppd->pent_worth[n]; nppd->pent_value[n] = nppd->pent_worth[n] = 0;
 
-      if (nppd->status && n < 5) {	// color bonus? reset pent colors;
+      if (nppd->status && n < 5) {  // color bonus? reset pent colors;
         in = nppd->pent_it[n];
 
         oldcolor = it[in].drdata[2];
@@ -216,7 +216,7 @@ static void add_pent(int cn, int in, int didsolve)
   nr = *(unsigned char*)(it[in].drdata + 3);
   value = level * 50 + nr;
 
-  nppd = set_data(cn, DRD_PENT_NPPD, sizeof(struct pent_nppd));
+  nppd = (struct pent_nppd*)set_data(cn, DRD_PENT_NPPD, sizeof(struct pent_nppd));
   if (!nppd) return;
 
   if (didsolve) nppd->bonus += value * 3;
@@ -352,7 +352,7 @@ void pent_init(void)
     if (it[n].driver != IDR_PENT) continue;
 
     // set number
-    l = it[n].drdata[0];	// level
+    l = it[n].drdata[0];  // level
     level_nr[l]++;
     it[n].drdata[3] = level_nr[l];
 
@@ -395,7 +395,7 @@ void pentenhance_char(int cn)
     case V_FREEZE:
     case V_FLASH:
     case V_FIREBALL:
-    case V_IMMUNITY:	if (ch[cn].value[1][v]) {
+    case V_IMMUNITY:  if (ch[cn].value[1][v]) {
         ch[cn].value[1][v] += RANDOM(ch[cn].value[1][v]);
         sprintf(ch[cn].name, "%s %d", skill[v].name, ch[cn].value[1][v]);
       }
@@ -420,9 +420,9 @@ void pent_driver(int in, int cn)
   nr = *(unsigned char*)(it[in].drdata + 3);
   areastatus = *(unsigned char*)(it[in].drdata + 4);
 
-  if (cn) {	// player activated pent
-    if (!status) {	// player use only allowed when pent is not active
-      status = *(unsigned char*)(it[in].drdata + 1) = solve_ser;	// activate pent
+  if (cn) { // player activated pent
+    if (!status) {  // player use only allowed when pent is not active
+      status = *(unsigned char*)(it[in].drdata + 1) = solve_ser;  // activate pent
       it[in].sprite += color;
       remove_item_light(in); it[in].mod_value[0] = 100; add_item_light(in);
 
@@ -446,27 +446,27 @@ void pent_driver(int in, int cn)
         set_pent_solve_cnt();
 
         solve_pents(cn);
-        return;	// no spawn on solve
+        return; // no spawn on solve
       } else add_pent(cn, in, 0);
 
-      cnt = 3;	// spawn three on activate
+      cnt = 3;  // spawn three on activate
     } else return;
-  } else {	// if (!cn) ...
+  } else {  // if (!cn) ...
     call_item(it[in].driver, in, 0, ticker + RANDOM(TICKS * 5) + TICKS * 2);
-    if (status && (status != solve_ser || areastatus != areaser[level])) {			// pent is active, but quest has been solved
-      status = *(unsigned char*)(it[in].drdata + 1) = *(unsigned char*)(it[in].drdata + 4) = 0;	// mark pent non-active
+    if (status && (status != solve_ser || areastatus != areaser[level])) {      // pent is active, but quest has been solved
+      status = *(unsigned char*)(it[in].drdata + 1) = *(unsigned char*)(it[in].drdata + 4) = 0; // mark pent non-active
       it[in].sprite -= color;
       remove_item_light(in); it[in].mod_value[0] = 10; add_item_light(in);
-      cnt = 3;	// spawn three on reset
+      cnt = 3;  // spawn three on reset
 
       if (areadone[level] > 0) areadone[level]--;
-    } else if (!status) { 			// pent is not active, but quest has not been solved
-      if (!RANDOM(15)) cnt = 1;		// spawn one on normal timer call
+    } else if (!status) {       // pent is not active, but quest has not been solved
+      if (!RANDOM(15)) cnt = 1;   // spawn one on normal timer call
       else return;
     } else return;
   }
 
-  if (!cnt) return;	// sanity check
+  if (!cnt) return; // sanity check
 
   if (level < 16) maxspawn = 3;
   else maxspawn = 2;
@@ -504,7 +504,7 @@ void pent_driver(int in, int cn)
         *(unsigned short*)(it[in].drdata + 6 + n * 4) = co;
         *(unsigned short*)(it[in].drdata + 8 + n * 4) = ch[co].serial;
         cnt--;
-        if (cnt < 1) break;	// only cnt spawns per call
+        if (cnt < 1) break; // only cnt spawns per call
       } else {
         destroy_char(co);
         break;
@@ -517,7 +517,7 @@ void pentboss_door_driver(int in, int cn)
 {
   int x, y, oldx, oldy, dx, dy;
 
-  if (!cn) return;	// always make sure its not an automatic call if you don't handle it
+  if (!cn) return;  // always make sure its not an automatic call if you don't handle it
 
   dx = (ch[cn].x - it[in].x);
   dy = (ch[cn].y - it[in].y);
@@ -546,10 +546,10 @@ void pentboss_door_driver(int in, int cn)
   }
 
   switch (ch[cn].dir) {
-  case DX_RIGHT:	ch[cn].dir = DX_LEFT; break;
-  case DX_LEFT:	ch[cn].dir = DX_RIGHT; break;
-  case DX_UP:	ch[cn].dir = DX_DOWN; break;
-  case DX_DOWN:	ch[cn].dir = DX_UP; break;
+  case DX_RIGHT:  ch[cn].dir = DX_LEFT; break;
+  case DX_LEFT: ch[cn].dir = DX_RIGHT; break;
+  case DX_UP: ch[cn].dir = DX_DOWN; break;
+  case DX_DOWN: ch[cn].dir = DX_UP; break;
   }
 }
 
@@ -680,8 +680,8 @@ void tester(int cn, int ret, int lastact)
   struct msg *msg, *next;
   int co, n, in;
 
-  dat = set_data(cn, DRD_TESTERDRIVER, sizeof(struct tester_data));
-  if (!dat) return;	// oops...
+  dat = (struct tester_data*)set_data(cn, DRD_TESTERDRIVER, sizeof(struct tester_data));
+  if (!dat) return; // oops...
 
   scan_item_driver(cn);
 
@@ -788,37 +788,37 @@ void tester(int cn, int ret, int lastact)
 int ch_driver(int nr, int cn, int ret, int lastact)
 {
   switch (nr) {
-  case CDR_PENTER:	penter(cn, ret, lastact); return 1;
-  case CDR_TESTER:	tester(cn, ret, lastact); return 1;
+  case CDR_PENTER:  penter(cn, ret, lastact); return 1;
+  case CDR_TESTER:  tester(cn, ret, lastact); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int it_driver(int nr, int in, int cn)
 {
   switch (nr) {
-  case IDR_PENT:		pent_driver(in, cn); return 1;
-  case IDR_PENTBOSSDOOR:	pentboss_door_driver(in, cn); return 1;
+  case IDR_PENT:    pent_driver(in, cn); return 1;
+  case IDR_PENTBOSSDOOR:  pentboss_door_driver(in, cn); return 1;
 
-  default:		return 0;
+  default:    return 0;
   }
 }
 
 int ch_died_driver(int nr, int cn, int co)
 {
   switch (nr) {
-  case CDR_PENTER:	penter_dead(cn, co); return 1;
-  case CDR_TERION:	return 1;
-  default:		return 0;
+  case CDR_PENTER:  penter_dead(cn, co); return 1;
+  case CDR_TERION:  return 1;
+  default:    return 0;
   }
 }
 int ch_respawn_driver(int nr, int cn)
 {
   switch (nr) {
-  case CDR_PENTER:	return 1;
-  case CDR_TESTER:	return 1;
-  default:		return 0;
+  case CDR_PENTER:  return 1;
+  case CDR_TESTER:  return 1;
+  default:    return 0;
   }
 }
 
