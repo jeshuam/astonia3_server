@@ -111,30 +111,30 @@
 #include "club.h"
 #include "badip.h"
 
-#define DT_QUERY		1
-#define DT_LOAD			2
-#define DT_AREA			3
-#define DT_CREATE_STORAGE	4
-#define DT_UPDATE_STORAGE	5
-#define DT_READ_STORAGE		6
-#define DT_LOOKUP_ID		7
-#define DT_LOOKUP_NAME		8
-#define DT_READ_NOTES		9
-#define DT_CLANLOG		10
-#define DT_EXTERMINATE		11
-#define DT_CHECK_TASK		12
-#define DT_RENAME		13
-#define DT_RESCUE		14
-#define DT_STAT_UPDATE		15
-#define DT_LASTSEEN		16
-#define DT_LOCKNAME		17
-#define DT_UNLOCKNAME		18
-#define DT_CLUBS		19
-#define DT_PVPLIST		20
-#define DT_KARMALOG		21
+#define DT_QUERY    1
+#define DT_LOAD     2
+#define DT_AREA     3
+#define DT_CREATE_STORAGE 4
+#define DT_UPDATE_STORAGE 5
+#define DT_READ_STORAGE   6
+#define DT_LOOKUP_ID    7
+#define DT_LOOKUP_NAME    8
+#define DT_READ_NOTES   9
+#define DT_CLANLOG    10
+#define DT_EXTERMINATE    11
+#define DT_CHECK_TASK   12
+#define DT_RENAME   13
+#define DT_RESCUE   14
+#define DT_STAT_UPDATE    15
+#define DT_LASTSEEN   16
+#define DT_LOCKNAME   17
+#define DT_UNLOCKNAME   18
+#define DT_CLUBS    19
+#define DT_PVPLIST    20
+#define DT_KARMALOG   21
 
-#define MAXAREA		40
-#define MAXMIRROR	27
+#define MAXAREA   40
+#define MAXMIRROR 27
 
 MYSQL mysql;
 
@@ -227,7 +227,7 @@ int mysql_query_con(MYSQL *my, const char *query)
     } else break;
   }
 
-  db_raw += strlen(query) + 120;	// - we need to check for incoming results too!!!
+  db_raw += strlen(query) + 120;  // - we need to check for incoming results too!!!
 
   query_cnt++;
   diff = timel() - start;
@@ -293,7 +293,7 @@ static void wait_db_thread(void)
 
   xlog("Database thread finished with exit code %d", exit_status);
 
-  if (query_cnt == 0) query_cnt = 1;	// sanity check, should never happen...
+  if (query_cnt == 0) query_cnt = 1;  // sanity check, should never happen...
   xlog("%d queries, %.2fs (%.2fms/q), %d long queries. Average long query: %.2fms, longest query: %.2fms.",
        query_cnt, query_time / 1000000.0, (double)query_time / query_cnt / 1000.0,
        query_long,
@@ -306,17 +306,17 @@ static void wait_db_thread(void)
 
 /*void *my_mysql_malloc(unsigned int size)
 {
-	return xmalloc(size,IM_MYSQL);
+  return xmalloc(size,IM_MYSQL);
 }
 
 void my_mysql_free(void *ptr)
 {
-	return xfree(ptr);
+  return xfree(ptr);
 }
 
 void *my_mysql_realloc(void *ptr,unsigned int size)
 {
-	return xrealloc(ptr,size,IM_MYSQL);
+  return xrealloc(ptr,size,IM_MYSQL);
 }
 
 void mysql_set_malloc_proc(void* (*new_malloc_proc)(size_t));
@@ -377,7 +377,7 @@ int init_database(void)
   else return 1;
 }
 
-#define MAXDRDATA	(1024*64)
+#define MAXDRDATA (1024*64)
 
 // save character cn to database
 // will mark cn as logged out if area is not zero
@@ -409,7 +409,7 @@ int save_char(int cn, int area)
   for (n = 0; n < INVENTORYSIZE; n++) {
     if ((in = ch[cn].item[n])) {
       *itmp = it[in]; ilen += sizeof(struct item);
-      if (IDR_ISSPELL(itmp->driver)) {	// make drdata contain the remaining duration
+      if (IDR_ISSPELL(itmp->driver)) {  // make drdata contain the remaining duration
         *(signed long*)(itmp->drdata) -= ticker;
         *(signed long*)(itmp->drdata + 4) -= ticker;
         //xlog("save: remembering time for spell. time left: %ld ticks",*(unsigned long*)(itmp->drdata));
@@ -466,7 +466,7 @@ int save_char(int cn, int area)
   // note the ...and current_area=areaID and current_mirror=areaM, this makes sure that we will not overwrite
   // the data if the character already left our area (needed because this is a delayed write)
 
-  if (!area) {	// just a data backup.
+  if (!area) {  // just a data backup.
     sprintf(buf, "update chars set chr='%s',item='%s',ppd='%s',class=%u,karma=%d,clan=%d,clan_rank=%d,clan_serial=%d,experience=%d,mirror=%d,spacer=0 where ID=%d and current_area=%d and current_mirror=%d",
             cbuf,
             ibuf,
@@ -482,7 +482,7 @@ int save_char(int cn, int area)
             areaID,
             areaM);
     save_char_cnt++;
-  } else {	// logout
+  } else {  // logout
 #ifdef CHARINFO
     sprintf(buf, "update charinfo set current_area=0,logout_time=%d,class=%u,karma=%d,clan=%d,clan_rank=%d,clan_serial=%d,experience=%d where ID=%d",
             time_now,
@@ -523,7 +523,7 @@ int save_char(int cn, int area)
   return 1;
 }
 
-#define COMPRESS_MAGIC	0x84736251
+#define COMPRESS_MAGIC  0x84736251
 
 int compress_escape_string(MYSQL *my, unsigned char *dst, unsigned char *src, int ilen)
 {
@@ -628,7 +628,7 @@ int save_char_new(int cn, int area)
   for (n = 0; n < INVENTORYSIZE; n++) {
     if ((in = ch[cn].item[n])) {
       *itmp = it[in]; ilen += sizeof(struct item);
-      if (IDR_ISSPELL(itmp->driver)) {	// make drdata contain the remaining duration
+      if (IDR_ISSPELL(itmp->driver)) {  // make drdata contain the remaining duration
         *(signed long*)(itmp->drdata) -= ticker;
         *(signed long*)(itmp->drdata + 4) -= ticker;
         //xlog("save: remembering time for spell. time left: %ld ticks",*(unsigned long*)(itmp->drdata));
@@ -682,7 +682,7 @@ int save_char_new(int cn, int area)
   // note the ...and current_area=areaID and current_mirror=areaM, this makes sure that we will not overwrite
   // the data if the character already left our area (needed because this is a delayed write)
 
-  if (!area) {	// just a data backup.
+  if (!area) {  // just a data backup.
     sprintf(buf, "update chars set chr='%s',item='%s',ppd='%s',class=%u,karma=%d,clan=%d,clan_rank=%d,clan_serial=%d,experience=%d,mirror=%d,spacer=0 where ID=%d and current_area=%d and current_mirror=%d",
             cbuf,
             ibuf,
@@ -698,7 +698,7 @@ int save_char_new(int cn, int area)
             areaID,
             areaM);
     save_char_cnt++;
-  } else {	// logout
+  } else {  // logout
 #ifdef CHARINFO
     sprintf(buf, "update charinfo set current_area=0,logout_time=%d,class=%u,karma=%d,clan=%d,clan_rank=%d,clan_serial=%d,experience=%d where ID=%d",
             time_now,
@@ -786,8 +786,8 @@ int release_char_nolock(int cn)
 
 void exit_database(void)
 {
-  if (multi) wait_db_thread();	// wait for background thread to write back data still in buffers
-  else tick_login();		// write back data still in buffers
+  if (multi) wait_db_thread();  // wait for background thread to write back data still in buffers
+  else tick_login();    // write back data still in buffers
 
   mysql_close(&mysql);
 }
@@ -1041,10 +1041,10 @@ void unlock_server(void)
   pthread_mutex_unlock(&server_mutex);
 }
 
-#define CSS_EMPTY	0
-#define CSS_CREATE	1
-#define CSS_DONE	2
-#define CSS_FAILED	3
+#define CSS_EMPTY 0
+#define CSS_CREATE  1
+#define CSS_DONE  2
+#define CSS_FAILED  3
 
 struct create_storage
 {
@@ -1058,7 +1058,7 @@ struct create_storage
 
 static struct create_storage cs;
 
-int create_storage(int ID, char *desc, void *content, int size)
+int create_storage(int ID, const char *desc, void *content, int size)
 {
   if (size > 60000) {
     elog("create_storage() cannot handle more than 60000 byte objects");
@@ -1095,10 +1095,10 @@ int check_create_storage(void)
   return nr;
 }
 
-#define USS_EMPTY	0
-#define USS_CREATE	1
-#define USS_DONE	2
-#define USS_FAILED	3
+#define USS_EMPTY 0
+#define USS_CREATE  1
+#define USS_DONE  2
+#define USS_FAILED  3
 
 struct update_storage
 {
@@ -1150,10 +1150,10 @@ int check_update_storage(void)
   return nr;
 }
 
-#define RSS_EMPTY	0
-#define RSS_CREATE	1
-#define RSS_DONE	2
-#define RSS_FAILED	3
+#define RSS_EMPTY 0
+#define RSS_CREATE  1
+#define RSS_DONE  2
+#define RSS_FAILED  3
 
 struct read_storage
 {
@@ -1262,9 +1262,9 @@ static int running_query_nr = 1;
 int used_queries = 0;
 
 static struct query
-  *fquery = NULL,	// free queries
-   *wquery = NULL,	// top of used queries
-    *equery = NULL;	// end of used queries
+  *fquery = NULL, // free queries
+   *wquery = NULL,  // top of used queries
+    *equery = NULL; // end of used queries
 
 static int add_query(int type, char *opt1, char *opt2, int nolock)
 {
@@ -1336,7 +1336,7 @@ void list_queries(int cn)
   }
   pthread_mutex_unlock(&data_mutex);
 
-  if (query_cnt == 0) query_cnt = 1;	// sanity check, should never happen...
+  if (query_cnt == 0) query_cnt = 1;  // sanity check, should never happen...
   log_char(cn, LOG_SYSTEM, 0, "%d queries, %.2fs (%.2fms/q), %d long queries. Average long query: %.2fms, longest query: %.2fms.",
            query_cnt, query_time / 1000000.0, (double)query_time / query_cnt / 1000.0,
            query_long,
@@ -1371,50 +1371,50 @@ static void db_thread_sub(void)
     pthread_mutex_unlock(&data_mutex);
 
     switch (type) {
-    case DT_QUERY:		if (mysql_query_con(&mysql, opt1)) {
+    case DT_QUERY:    if (mysql_query_con(&mysql, opt1)) {
         elog("Failed to create %s entry query=\"%60.60s\": Error: %s (%d)", opt2, opt1, mysql_error(&mysql), mysql_errno(&mysql));
       }
       if (mysql_affected_rows(&mysql) == 0) elog("(%60.60s) affected %llu rows", opt1, mysql_affected_rows(&mysql));
       break;
-    case DT_LOAD:		load_char(opt1, opt2);
+    case DT_LOAD:   load_char(opt1, opt2);
       break;
-    case DT_AREA:		update_arealist();
+    case DT_AREA:   update_arealist();
       break;
-    case DT_CREATE_STORAGE:	db_create_storage();
+    case DT_CREATE_STORAGE: db_create_storage();
       break;
-    case DT_UPDATE_STORAGE:	db_update_storage();
+    case DT_UPDATE_STORAGE: db_update_storage();
       break;
-    case DT_READ_STORAGE:	db_read_storage();
+    case DT_READ_STORAGE: db_read_storage();
       break;
-    case DT_LOOKUP_ID:	db_lookup_id(opt1);
+    case DT_LOOKUP_ID:  db_lookup_id(opt1);
       break;
-    case DT_LOOKUP_NAME:	db_lookup_name(opt1);
+    case DT_LOOKUP_NAME:  db_lookup_name(opt1);
       break;
-    case DT_READ_NOTES:	db_read_notes(opt1, opt2);
+    case DT_READ_NOTES: db_read_notes(opt1, opt2);
       break;
-    case DT_KARMALOG:	db_karmalog(opt1);
+    case DT_KARMALOG: db_karmalog(opt1);
       break;
-    case DT_CLANLOG:	db_read_clanlog(opt1);
+    case DT_CLANLOG:  db_read_clanlog(opt1);
       break;
-    case DT_EXTERMINATE:	db_exterminate(opt1, opt2);
+    case DT_EXTERMINATE:  db_exterminate(opt1, opt2);
       break;
-    case DT_CHECK_TASK:	check_task();
+    case DT_CHECK_TASK: check_task();
       break;
-    case DT_RENAME:		db_rename(opt1, opt2);
+    case DT_RENAME:   db_rename(opt1, opt2);
       break;
-    case DT_LOCKNAME:	db_lockname(opt1, opt2);
+    case DT_LOCKNAME: db_lockname(opt1, opt2);
       break;
-    case DT_UNLOCKNAME:	db_unlockname(opt1, opt2);
+    case DT_UNLOCKNAME: db_unlockname(opt1, opt2);
       break;
-    case DT_RESCUE:		db_rescue_char(opt1);
+    case DT_RESCUE:   db_rescue_char(opt1);
       break;
-    case DT_STAT_UPDATE:	db_stat_update();
+    case DT_STAT_UPDATE:  db_stat_update();
       break;
-    case DT_LASTSEEN:	db_lastseen(opt1, opt2);
+    case DT_LASTSEEN: db_lastseen(opt1, opt2);
       break;
-    case DT_CLUBS:		db_read_clubs();
+    case DT_CLUBS:    db_read_clubs();
       break;
-    case DT_PVPLIST:	db_pvplist(opt1, opt2);
+    case DT_PVPLIST:  db_pvplist(opt1, opt2);
       break;
     }
 
@@ -1439,14 +1439,14 @@ void *db_thread(void *dummy)
   pthread_sigmask(SIG_BLOCK, &set, NULL);
 
   while (42) {
-    if (wquery) {	// work to be done?
+    if (wquery) { // work to be done?
       db_thread_sub();
     } else {
       if (db_thread_quit) break;
 
       tv.tv_sec = 0;
       tv.tv_usec = 10000;
-      select(0, NULL, NULL, NULL, &tv);	// sleep for 1/100 of a second. wish i had yield(). or semaphores.
+      select(0, NULL, NULL, NULL, &tv); // sleep for 1/100 of a second. wish i had yield(). or semaphores.
     }
   }
   xlog("DB thread exiting");
@@ -1470,20 +1470,20 @@ void *db_thread(void *dummy)
 // with the same character trying to login from different computers at once. some thought
 // would be needed to make this work in parallel.
 
-#define LS_EMPTY	0	// no query in progress
-#define LS_READ		1	// waiting for database read to finish
-#define LS_CREATE	2	// waiting for character create/usurp to finish
-#define LS_OK		3	// character created and ready for takeoff
-#define LS_NEWAREA	4	// send player to another area
-#define LS_FAILED	5	// error, send player away
-#define LS_LOCKED	6	// error, send player away
-#define LS_PASSWD	7	// error, send player away
-#define LS_DUP		8	// error, send player away
-#define LS_NOPAY	9	// error, send player away
-#define LS_SHUTDOWN	10	// error, send player away
-#define LS_IPLOCKED	11	// error, send player away
-#define LS_NOTFIXED	12	// error, send player away
-#define LS_TOOMANY	13	// error, send player away
+#define LS_EMPTY  0 // no query in progress
+#define LS_READ   1 // waiting for database read to finish
+#define LS_CREATE 2 // waiting for character create/usurp to finish
+#define LS_OK   3 // character created and ready for takeoff
+#define LS_NEWAREA  4 // send player to another area
+#define LS_FAILED 5 // error, send player away
+#define LS_LOCKED 6 // error, send player away
+#define LS_PASSWD 7 // error, send player away
+#define LS_DUP    8 // error, send player away
+#define LS_NOPAY  9 // error, send player away
+#define LS_SHUTDOWN 10  // error, send player away
+#define LS_IPLOCKED 11  // error, send player away
+#define LS_NOTFIXED 12  // error, send player away
+#define LS_TOOMANY  13  // error, send player away
 
 struct login {
   int status;
@@ -1500,12 +1500,12 @@ struct login {
 
   // working data
   int ID;
-  int current;		// DB: current area of char
-  unsigned char *chr;	// DB: character data
+  int current;    // DB: current area of char
+  unsigned char *chr; // DB: character data
   int chr_len;
-  unsigned char *itm;	// DB: item data
+  unsigned char *itm; // DB: item data
   int itm_len;
-  unsigned char *ppd;	// DB: persistent player data
+  unsigned char *ppd; // DB: persistent player data
   int ppd_len;
   int paid_till;
   int paid;
@@ -1533,7 +1533,7 @@ int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirr
   // remove stale login data if it wasnt collected for two ticks
   if (login.status > LS_CREATE && ticker > login.age + 2) {
     //xlog("removed stale login from %s %s (status=%d)",login.name,login.password,login.status);
-    if (login.status == LS_OK) {	// character has been created but client did not pick it up - we must destroy it.
+    if (login.status == LS_OK) {  // character has been created but client did not pick it up - we must destroy it.
       if (!login.didusurp) {
         release_char_nolock(login.cn);
         remove_destroy_char(login.cn);
@@ -1544,7 +1544,7 @@ int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirr
     login.status = LS_EMPTY;
   }
 
-  if (login.status == LS_EMPTY) {		// no login waiting? add this one
+  if (login.status == LS_EMPTY) {   // no login waiting? add this one
     bzero(&login, sizeof(login));
     login.status = LS_READ;
     login.age = ticker;
@@ -1556,67 +1556,67 @@ int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirr
     //xlog("set login.ip=%u",login.ip);
     pthread_mutex_unlock(&data_mutex);
 
-    add_query(DT_LOAD, name, password, 0);	// send query to database
+    add_query(DT_LOAD, name, password, 0);  // send query to database
     return 0;
   }
 
-  if (strcasecmp(login.name, name)) {	// not our login? leave and try again later
+  if (strcasecmp(login.name, name)) { // not our login? leave and try again later
     pthread_mutex_unlock(&data_mutex);
     return 0;
   }
 
-  if (login.status == LS_FAILED) {		// login failed. send him away and mark login as free
+  if (login.status == LS_FAILED) {    // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -1;
   }
 
-  if (login.status == LS_LOCKED) {		// login failed. send him away and mark login as free
+  if (login.status == LS_LOCKED) {    // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -2;
   }
 
-  if (login.status == LS_PASSWD) {		// login failed. send him away and mark login as free
+  if (login.status == LS_PASSWD) {    // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -3;
   }
 
-  if (login.status == LS_DUP) {		// login failed. send him away and mark login as free
+  if (login.status == LS_DUP) {   // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -4;
   }
-  if (login.status == LS_NOPAY) {		// login failed. send him away and mark login as free
+  if (login.status == LS_NOPAY) {   // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -5;
   }
-  if (login.status == LS_SHUTDOWN) {	// login failed. send him away and mark login as free
+  if (login.status == LS_SHUTDOWN) {  // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -6;
   }
 
-  if (login.status == LS_IPLOCKED) {		// login failed. send him away and mark login as free
+  if (login.status == LS_IPLOCKED) {    // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -7;
   }
-  if (login.status == LS_NOTFIXED) {		// login failed. send him away and mark login as free
+  if (login.status == LS_NOTFIXED) {    // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -8;
   }
 
-  if (login.status == LS_TOOMANY) {		// login failed. send him away and mark login as free
+  if (login.status == LS_TOOMANY) {   // login failed. send him away and mark login as free
     login.status = LS_EMPTY;
     pthread_mutex_unlock(&data_mutex);
     return -9;
   }
 
-  if (login.status == LS_NEWAREA) {		// he's supposed to be on a different area. sent him there (ugly) and mark login as free
+  if (login.status == LS_NEWAREA) {   // he's supposed to be on a different area. sent him there (ugly) and mark login as free
     login.status = LS_EMPTY;
     if (area_ptr) *area_ptr = login.new_area;
     if (mirror_ptr) *mirror_ptr = login.mirror;
@@ -1627,7 +1627,7 @@ int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirr
     return 1;
   }
 
-  if (login.status == LS_OK) {		// ok, we got him. return character and free login
+  if (login.status == LS_OK) {    // ok, we got him. return character and free login
     login.status = LS_EMPTY;
     if (area_ptr) *area_ptr = 0;
     if (mirror_ptr) *mirror_ptr = 0;
@@ -1772,7 +1772,7 @@ void tick_login(void)
 
   // make sure input data is ready
   pthread_mutex_lock(&data_mutex);
-  if (login.status != LS_CREATE) {	// no work
+  if (login.status != LS_CREATE) {  // no work
     pthread_mutex_unlock(&data_mutex);
     return;
   }
@@ -1781,7 +1781,7 @@ void tick_login(void)
   if (login.current) {
     // he's supposed to be online here. find the corresponding character
     for (n = 1; n < MAXCHARS; n++) {
-      if (ch[n].flags && ch[n].ID == login.ID) {	// and return it
+      if (ch[n].flags && ch[n].ID == login.ID) {  // and return it
         if (ch[n].flags & CF_PLAYER) {
           //xlog("usurping existing character %s (%d)",ch[n].name,n);
           xfree(login.chr); xfree(login.itm); xfree(login.ppd);
@@ -1792,7 +1792,7 @@ void tick_login(void)
             ch[n].player = 0;
           }
 
-          ch[n].driver = 0;	// disable lostcon
+          ch[n].driver = 0; // disable lostcon
           login_ok(n, 1);
           return;
         } else elog("character %s (%d) has ID %d but isn't a player", ch[n].name, n, ch[n].ID);
@@ -1809,7 +1809,7 @@ void tick_login(void)
 
   //xlog("tick_login(): creating new character for %s",login.name);
 
-  if (!(flags & CF_USED)) {		// character marked as unused, new account
+  if (!(flags & CF_USED)) {   // character marked as unused, new account
     if (flags & CF_WARRIOR) {
       if (flags & CF_MALE) cn = create_char("new_warrior_m", 0);
       else cn = create_char("new_warrior_f", 0);
@@ -1830,14 +1830,14 @@ void tick_login(void)
     ch[cn].tmpx = ch[cn].restx = 126;
     ch[cn].tmpy = ch[cn].resty = 179;
 
-    ch[cn].channel |= (1 | 128 | 256);	// make them join channel info, area and mirror
+    ch[cn].channel |= (1 | 128 | 256);  // make them join channel info, area and mirror
 
     newbie = 1;
 
     sprintf(buf, "0000000000°c17%s°c18, a new player, has entered the game.", login.name);
     server_chat(1, buf);
 
-  } else {						// existing account, retrieve items
+  } else {            // existing account, retrieve items
     cn = alloc_char();
     if (!cn) {
       elog("alloc_char returned error");
@@ -1894,17 +1894,17 @@ void tick_login(void)
 
         /*// !!! hack to change sprites of legacy items !!!
         if (it[in].sprite>64000) {
-        	if (it[in].sprite>=100000) {
-        		it[in].sprite=it[in].sprite-100000+50000;
-        	} else xlog("strange item sprite found for %s: %s %d",ch[cn].name,it[in].name,it[in].sprite);
+          if (it[in].sprite>=100000) {
+            it[in].sprite=it[in].sprite-100000+50000;
+          } else xlog("strange item sprite found for %s: %s %d",ch[cn].name,it[in].name,it[in].sprite);
         }
 
         // !!! hack to remove max_damage and cur_damage values !!! //
         if (*(unsigned int*)(&it[in].min_level)==2500 || *(unsigned int*)(&it[in].min_level)==100) {
-        	it[in].min_level=0;
-        	it[in].max_level=0;
-        	it[in].needs_class=0;
-        	it[in].expire_sn=0;
+          it[in].min_level=0;
+          it[in].max_level=0;
+          it[in].needs_class=0;
+          it[in].expire_sn=0;
         }*/
 
         ch[cn].item[n] = in;
@@ -1941,7 +1941,7 @@ void tick_login(void)
     }
 
     // drdata aka persistent player data (ppd)
-    ch[cn].dat = NULL;	// start with empty set...
+    ch[cn].dat = NULL;  // start with empty set...
 
     for (pos = 0; pos < login.ppd_len; ) {
       ppd_id = *(unsigned int*)(login.ppd + pos); pos += 4;
@@ -2019,10 +2019,10 @@ void tick_login(void)
   ch[cn].flags |= CF_ALIVE;
 
   /*if (!(ch[cn].flags&CF_MAGE)) {
-  	while (ch[cn].value[1][V_PULSE]>1) lower_value(cn,V_PULSE);
-  	if (ch[cn].value[1][V_PULSE]==1) ch[cn].value[1][V_PULSE]=0;
+    while (ch[cn].value[1][V_PULSE]>1) lower_value(cn,V_PULSE);
+    if (ch[cn].value[1][V_PULSE]==1) ch[cn].value[1][V_PULSE]=0;
   } else {
-  	if (ch[cn].value[1][V_PULSE]==0) ch[cn].value[1][V_PULSE]=1;
+    if (ch[cn].value[1][V_PULSE]==0) ch[cn].value[1][V_PULSE]=1;
   }
 
   while (ch[cn].value[1][V_ARCANE]>1 && lower_value(cn,V_ARCANE)) ;
@@ -2132,11 +2132,11 @@ static int load_char_pwd(char *pass, int sID, int *ppaid_till, int *ppaid, int v
 #endif
 
   if (paid_till && (paid_till > time_now || paid_till > creation_time + 60 * 60 * 24 * 7 * 4)) {
-    if (paid_till & 1) t = paid_till;				// 12 hour paid account?
-    else t = (paid_till + 60 * 60 * 24 - 1) & 0xfffffffe;		// paid account?
+    if (paid_till & 1) t = paid_till;       // 12 hour paid account?
+    else t = (paid_till + 60 * 60 * 24 - 1) & 0xfffffffe;   // paid account?
     if (ppaid) *ppaid = paid_till;
   } else {
-    t = (creation_time + 60 * 60 * 24 * 28 + 60 * 60 * 24 - 1) & 0xfffffffe;	// new testers get four weeks
+    t = (creation_time + 60 * 60 * 24 * 28 + 60 * 60 * 24 - 1) & 0xfffffffe;  // new testers get four weeks
     if (ppaid) *ppaid = 0;
   }
 
@@ -2167,7 +2167,7 @@ static int load_char_dup(int ID, int sID)
   MYSQL_RES *result;
   char buf[256];
 
-  if (sID == 1) return 1;	// hack for easier testing
+  if (sID == 1) return 1; // hack for easier testing
 
   sprintf(buf, "select sID from chars where sID=%d and ID!=%d and current_area!=0 limit 1", sID, ID);
   if (mysql_query_con(&mysql, buf)) {
@@ -2225,7 +2225,7 @@ static void load_char(char *name, char *password)
   }
 
   // read the data we need
-  //                    0   1    2    3            4            5      6  7   8      9		 10
+  //                    0   1    2    3            4            5      6  7   8      9     10
   sprintf(buf, "select sID,chr,item,name,current_area,allowed_area,locked,ID,ppd,mirror,current_mirror from chars where name='%s'", login.name);
   if (mysql_query_con(&mysql, buf)) {
     elog("Failed to select account name=%s: Error: %s (%d)", login.name, mysql_error(&mysql), mysql_errno(&mysql));
@@ -2323,7 +2323,7 @@ static void load_char(char *name, char *password)
   login.ID = ID;
 
   // is he supposed to be somewhere else?
-  if (allowed != areaID) {	// nope, send him to where he belongs
+  if (allowed != areaID) {  // nope, send him to where he belongs
     //xlog("character is supposed to enter area %d (%d)",allowed,areaID);
     mysql_free_result_cnt(result);
     if (newmirror) {
@@ -2341,7 +2341,7 @@ static void load_char(char *name, char *password)
 
   // database thinks the player is currently online somewhere
   if (current) {
-    if (current != areaID || current_mirror != areaM) {	// online in a different area. send him there.
+    if (current != areaID || current_mirror != areaM) { // online in a different area. send him there.
       //xlog("character is marked active on different area/mirror (%d/%d)",current,current_mirror);
       mysql_free_result_cnt(result);
       if (newmirror) {
@@ -2385,7 +2385,7 @@ static void load_char(char *name, char *password)
     login.ppd = xmalloc(len[8], IM_DATABASE);
 
     if (!login.chr || !login.itm || !login.ppd) {
-      elog("memory low in load_char");	// !!! handle gracefully !!!
+      elog("memory low in load_char");  // !!! handle gracefully !!!
       exit(1);
     }
 
@@ -2393,7 +2393,7 @@ static void load_char(char *name, char *password)
     login.itm_len = len[2];
     login.ppd_len = len[8];
 
-    if (len[1] == 1028) {	// ver 1 char
+    if (len[1] == 1028) { // ver 1 char
 
       memcpy(login.chr, row[1], 300);
 
@@ -2402,7 +2402,7 @@ static void load_char(char *name, char *password)
 
       xlog("converted version1 char");
 
-    } else memcpy(login.chr, row[1], len[1]);	// current ver
+    } else memcpy(login.chr, row[1], len[1]); // current ver
 
     memcpy(login.itm, row[2], len[2]);
     memcpy(login.ppd, row[8], len[8]);
@@ -2642,7 +2642,7 @@ static void db_update_storage(void)
     return;
   }
 
-  if (mysql_affected_rows(&mysql) == 0) {	// version was changed, and no row fit
+  if (mysql_affected_rows(&mysql) == 0) { // version was changed, and no row fit
     pthread_mutex_lock(&data_mutex);
     us.state = USS_FAILED;
     pthread_mutex_unlock(&data_mutex);
@@ -2935,7 +2935,7 @@ void db_read_notes(char *suID, char *srID)
     if (row[3]) date = atoi(row[3]); else date = 0;
 
     switch (kind) {
-    case 1:		list_punishment(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4])); break;
+    case 1:   list_punishment(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4])); break;
     }
 
   }
@@ -2993,7 +2993,7 @@ void db_karmalog(char *xrID)
     if (row[3]) date = atoi(row[3]); else date = 0;
 
     switch (kind) {
-    case 1:		karmalog_s(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4]), atoi(row[5])); break;
+    case 1:   karmalog_s(rID, (void*)row[1], atoi(row[2]), date, atoi(row[4]), atoi(row[5])); break;
     }
 
   }
@@ -3092,7 +3092,7 @@ void db_read_clanlog(char *query)
     return;
   }
 
-  // 0    1      2    3	 4
+  // 0    1      2    3  4
   //%d,clan,serial,time,text
   while ((row = mysql_fetch_row(result)) && row[0] && row[1] && row[2] && row[3] && row[4]) {
     cnID = atoi(row[0]);
@@ -3154,17 +3154,17 @@ void db_exterminate(char *name, char *master)
     sID = atoi(row[0]);
     mysql_free_result_cnt(result);
     /*#ifdef CHARINFO
-    		sprintf(query,"update charinfo set locked='Y' where sID=%d",sID);
-    		if (mysql_query_con(&mysql,query)) {
-    			elog("exterminate: Failed to lock charinfo: Error: %s (%d)",mysql_error(&mysql),mysql_errno(&mysql));
-    		}
+        sprintf(query,"update charinfo set locked='Y' where sID=%d",sID);
+        if (mysql_query_con(&mysql,query)) {
+          elog("exterminate: Failed to lock charinfo: Error: %s (%d)",mysql_error(&mysql),mysql_errno(&mysql));
+        }
     #endif
 
                     sprintf(query,"update chars set locked='Y' where sID=%d",sID);
-    		if (mysql_query_con(&mysql,query)) {
-    			elog("exterminate: Failed to lock chars: Error: %s (%d)",mysql_error(&mysql),mysql_errno(&mysql));
-    		}
-    		nrc=mysql_affected_rows(&mysql);*/
+        if (mysql_query_con(&mysql,query)) {
+          elog("exterminate: Failed to lock chars: Error: %s (%d)",mysql_error(&mysql),mysql_errno(&mysql));
+        }
+        nrc=mysql_affected_rows(&mysql);*/
 
     sprintf(query, "update subscriber set locked='Y' where ID=%d", sID);
     if (mysql_query_con(&mysql, query)) {
@@ -3690,14 +3690,14 @@ void add_iplog(int ID, unsigned int ip)
     return;
   }
 
-  if ((row = mysql_fetch_row(result))) { 	// found suitable entry
+  if ((row = mysql_fetch_row(result))) {  // found suitable entry
     int use_count;
 
     use_count = atoi(row[1]);
     mysql_free_result(result);
 
     sprintf(buf, "update iplog set use_time=%d,use_count=%d where ID=%s", (int)time(NULL), use_count + 1, row[0]);
-  } else {				// no suitable entry found
+  } else {        // no suitable entry found
     mysql_free_result(result);
 
     sprintf(buf, "insert into iplog values(0,%u,%d,1,%d)", ip & 0xffffff00, (int)time(NULL), ID);

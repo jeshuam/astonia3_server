@@ -28,7 +28,7 @@ runtime/37/arkhata.dll create_account create_character
 
 CC=clang
 DEBUG=-g
-CFLAGS=-Wall -Wshadow $(DEBUG) -DSTAFF -Winvalid-source-encoding
+CFLAGS=-Wall -Wshadow $(DEBUG) -DSTAFF -Wno-invalid-source-encoding
 LDFLAGS=-O $(DEBUG) -L/usr/lib/mysql
 LDRFLAGS=-O $(DEBUG) -rdynamic -L/usr/lib/mysql
 DDFLAGS=-O $(DEBUG) -fPIC -shared

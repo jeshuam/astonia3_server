@@ -25,7 +25,7 @@ int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirr
 void tick_login(void);
 int query_ID(unsigned int ID);
 int query_name(char *name);
-int create_storage(int ID, char *desc, void *content, int size);
+int create_storage(int ID, const char *desc, void *content, int size);
 int check_create_storage(void);
 int update_storage(int ID, int version, void *content, int size);
 int check_update_storage(void);
