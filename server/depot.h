@@ -12,12 +12,14 @@ Added RCS tags
 
 */
 
-#define MAXDEPOT	80
+#include "server.h"
+
+#define MAXDEPOT  80
 
 struct depot_ppd
 {
-	struct item itm[MAXDEPOT];
+  struct item itm[MAXDEPOT];
 };
-int swap_depot(int cn,int nr);
-void player_depot(int cn,int nr,int flag,int fast);
+int swap_depot(int cn, int nr);
+void player_depot(int cn, int nr, int flag, int fast);
 void depot_sort(int cn);
