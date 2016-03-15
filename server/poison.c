@@ -26,106 +26,106 @@ Added RCS tags
 
 #define POISONDURATION	(TICKS*60*60*2)
 
-void poison_someone(int cn,int pwr,int type)
+void poison_someone(int cn, int pwr, int type)
 {
-	int fre,in,endtime;
+  int fre, in, endtime;
 
-	if (type<0 || type>3) return;
-        if (!(fre=may_add_spell(cn,IDR_POISON0+type))) return;
+  if (type < 0 || type > 3) return;
+  if (!(fre = may_add_spell(cn, IDR_POISON0 + type))) return;
 
-        in=create_item("poison");
-	if (!in) return;
+  in = create_item("poison");
+  if (!in) return;
 
-        it[in].mod_value[0]=-1;
-	
-	it[in].driver=IDR_POISON0+type;
+  it[in].mod_value[0] = -1;
 
-	endtime=ticker+POISONDURATION;
+  it[in].driver = IDR_POISON0 + type;
 
-	*(signed long*)(it[in].drdata)=endtime;
-	*(signed long*)(it[in].drdata+4)=ticker;
-	*(unsigned short*)(it[in].drdata+8)=pwr;
-	*(unsigned short*)(it[in].drdata+10)=9;
+  endtime = ticker + POISONDURATION;
 
-	it[in].carried=cn;
+  *(signed long*)(it[in].drdata) = endtime;
+  *(signed long*)(it[in].drdata + 4) = ticker;
+  *(unsigned short*)(it[in].drdata + 8) = pwr;
+  *(unsigned short*)(it[in].drdata + 10) = 9;
 
-        ch[cn].item[fre]=in;
+  it[in].carried = cn;
 
-        create_spell_timer(cn,in,fre);
+  ch[cn].item[fre] = in;
 
-	update_char(cn);
+  create_spell_timer(cn, in, fre);
 
-	log_char(cn,LOG_SYSTEM,0,"You have been poisoned.");
+  update_char(cn);
+
+  log_char(cn, LOG_SYSTEM, 0, "You have been poisoned.");
 }
 
-void poison_callback(int cn,int in,int pos,int cserial,int iserial)
+void poison_callback(int cn, int in, int pos, int cserial, int iserial)
 {
-	int pwr,tick;
+  int pwr, tick;
 
-	// char alive and the right one?
-	if (!(ch[cn].flags) || ch[cn].serial!=cserial) return;
+  // char alive and the right one?
+  if (!(ch[cn].flags) || ch[cn].serial != cserial) return;
 
-	// item existant and the right one?
-	if (!(it[in].flags) || it[in].serial!=iserial) return;
+  // item existant and the right one?
+  if (!(it[in].flags) || it[in].serial != iserial) return;
 
-	// item where we expect it to be?
-	if (ch[cn].item[pos]!=in) return;
+  // item where we expect it to be?
+  if (ch[cn].item[pos] != in) return;
 
-	pwr=*(unsigned short*)(it[in].drdata+8);
-	tick=*(unsigned short*)(it[in].drdata+10);
-	if (pwr>20) pwr=20;
-	if (pwr<1) pwr=1;	
+  pwr = *(unsigned short*)(it[in].drdata + 8);
+  tick = *(unsigned short*)(it[in].drdata + 10);
+  if (pwr > 20) pwr = 20;
+  if (pwr < 1) pwr = 1;
 
-	switch(it[in].driver) {
-		case IDR_POISON0:
-		case IDR_POISON1:
-		case IDR_POISON2:
-		case IDR_POISON3:	if (!tick) {
-						if (it[in].mod_value[0]>-1000) it[in].mod_value[0]--;
-						update_char(cn);
-					}
-					hurt(cn,POWERSCALE/3,0,1,0,50);
-					break;
-	}
-	if (tick==0) tick=9;
-	else tick--;
-	*(unsigned short*)(it[in].drdata+10)=tick;
-	
-	set_timer(ticker+TICKS*2/pwr,poison_callback,cn,in,pos,ch[cn].serial,it[in].serial);
+  switch (it[in].driver) {
+  case IDR_POISON0:
+  case IDR_POISON1:
+  case IDR_POISON2:
+  case IDR_POISON3:	if (!tick) {
+      if (it[in].mod_value[0] > -1000) it[in].mod_value[0]--;
+      update_char(cn);
+    }
+    hurt(cn, POWERSCALE / 3, 0, 1, 0, 50);
+    break;
+  }
+  if (tick == 0) tick = 9;
+  else tick--;
+  *(unsigned short*)(it[in].drdata + 10) = tick;
+
+  set_timer(ticker + TICKS * 2 / pwr, poison_callback, cn, in, pos, ch[cn].serial, it[in].serial);
 }
 
 int remove_all_poison(int cn)
 {
-	int n,in,flag=0;
+  int n, in, flag = 0;
 
-	for (n=12; n<30; n++) {
-		if ((in=ch[cn].item[n]) && it[in].driver>=IDR_POISON0 && it[in].driver<=IDR_POISON3) {
-			ch[cn].item[n]=0;
-			free_item(in);
-			flag=1;
-		}
-	}
-	if (flag) {
-		update_char(cn);
-	}
-	return flag;
+  for (n = 12; n < 30; n++) {
+    if ((in = ch[cn].item[n]) && it[in].driver >= IDR_POISON0 && it[in].driver <= IDR_POISON3) {
+      ch[cn].item[n] = 0;
+      free_item(in);
+      flag = 1;
+    }
+  }
+  if (flag) {
+    update_char(cn);
+  }
+  return flag;
 }
 
-int remove_poison(int cn,int type)
+int remove_poison(int cn, int type)
 {
-	int n,in,flag=0;
+  int n, in, flag = 0;
 
-	if (type<0 || type>3) return 0;
+  if (type < 0 || type > 3) return 0;
 
-	for (n=12; n<30; n++) {
-		if ((in=ch[cn].item[n]) && it[in].driver==IDR_POISON0+type) {
-			ch[cn].item[n]=0;
-			free_item(in);
-			flag=1;
-		}
-	}
-	if (flag) {
-		update_char(cn);
-	}
-	return flag;
+  for (n = 12; n < 30; n++) {
+    if ((in = ch[cn].item[n]) && it[in].driver == IDR_POISON0 + type) {
+      ch[cn].item[n] = 0;
+      free_item(in);
+      flag = 1;
+    }
+  }
+  if (flag) {
+    update_char(cn);
+  }
+  return flag;
 }
