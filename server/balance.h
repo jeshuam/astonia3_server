@@ -12,8 +12,8 @@ Added RCS tags
 
 */
 
-#define ATTACK_DIV		5	// orig 5
+#define ATTACK_DIV    5 // orig 5
 
-#define FIREBALL_DAMAGE		5	// orig 5
-#define STRIKE_DAMAGE		5	// orig 5
+#define FIREBALL_DAMAGE   5 // orig 5
+#define STRIKE_DAMAGE   5 // orig 5
 

@@ -125,7 +125,7 @@ void set_legacy_item_lvl(int in, int cn);
 void tabunga(int cn, int co, char *ptr);
 void buggy_items(int cn);
 int warcry_damage(int cn, int co, int pwr);
-int add_spell(int cn, int driver, int duration, char *name);
+int add_spell(int cn, int driver, int duration, const char *name);
 void bondtake_item(int in, int cn);
 void bondwear_item(int in, int cn);
 int cnt_free_inv(int cn);

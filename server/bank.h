@@ -14,6 +14,6 @@ Added RCS tags
 
 struct bank_ppd
 {
-	int imperial_gold;
+  int imperial_gold;
 };
 

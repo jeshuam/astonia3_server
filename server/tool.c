@@ -1094,7 +1094,7 @@ int add_same_spell(int cn, int driver)
   return fre;
 }
 
-int add_spell(int cn, int driver, int duration, char *name)
+int add_spell(int cn, int driver, int duration, const char *name)
 {
   int in, fre = -1;
 
