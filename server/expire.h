@@ -12,5 +12,5 @@ Added RCS tags
 
 */
 
-int set_expire(int in,int duration);
-int set_expire_body(int in,int duration);
+int set_expire(int in, int duration);
+int set_expire_body(int in, int duration);
