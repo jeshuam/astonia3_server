@@ -129,7 +129,8 @@ void xlog(const char *format, ...)
 void charlog(int cn, const char *format, ...)
 {
   va_list args;
-  char buf[1024], buf2[1024], *name, pbuf[80];
+  char buf[1024], buf2[1024], pbuf[80];
+  const char* name;
   int addr, nr;
 
   if (cn < 1 || cn >= MAXCHARS) name = "ILLEGAL CN";
@@ -253,7 +254,7 @@ void log_items(int cn)
   }
 
   ilog("ID=%d: %s eqlog depot:", ch[cn].ID, ch[cn].name);
-  if ((ppd = set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd)))) {
+  if ((ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd)))) {
     for (n = 0; n < MAXDEPOT; n++) {
       if (ppd->itm[n].flags) log_item(cn, ppd->itm + n);
     }
