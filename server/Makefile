@@ -434,14 +434,14 @@ runtime/10/ice.dll:	.obj/ice.o
 	$(CC) $(DDFLAGS) -o ice.tmp .obj/ice.o
 	mv ice.tmp runtime/10/ice.dll
 
-.obj/ice.o:	ice.c ice_shared.c server.h log.h notify.h do.h direction.h path.h error.h drdata.h see.h drvlib.h death.h effect.h tool.h store.h area1.h
+.obj/ice.o:	ice.c server.h log.h notify.h do.h direction.h path.h error.h drdata.h see.h drvlib.h death.h effect.h tool.h store.h area1.h
 	$(CC) $(DFLAGS) -o .obj/ice.o -c ice.c
 
 runtime/11/palace.dll:	.obj/palace.o
 	$(CC) $(DDFLAGS) -o palace.tmp .obj/palace.o
 	mv palace.tmp runtime/11/palace.dll
 
-.obj/palace.o:	palace.c ice_shared.c server.h log.h notify.h do.h direction.h path.h error.h drdata.h see.h drvlib.h death.h effect.h tool.h store.h area1.h
+.obj/palace.o:	palace.c server.h log.h notify.h do.h direction.h path.h error.h drdata.h see.h drvlib.h death.h effect.h tool.h store.h area1.h
 	$(CC) $(DFLAGS) -o .obj/palace.o -c palace.c
 
 runtime/13/dungeon.dll:	.obj/dungeon.o
