@@ -18,7 +18,7 @@ drdata.c (C) 2001 D.Brockhaus
 drdata is used to
 	- temporarily remember things for NPCs
 	- remember things about player characters forever
-	
+
 To use the persistent player data feature, make sure you set the PPD flag.
 */
 
@@ -35,139 +35,139 @@ To use the persistent player data feature, make sure you set the PPD flag.
 // it will be returned as is. if size is bigger than the previous biggest
 // blocksize, the data block will be grown to size.
 // returns buf or NULL on error
-void *set_data(int cn,int ID,int size)
+void *set_data(int cn, int ID, int size)
 {
-	struct data *dat,*old;
-	void *tmp;
-	unsigned long long prof;
+  struct data *dat, *old;
+  void *tmp;
+  unsigned long long prof;
 
-	prof=prof_start(35);
+  prof = prof_start(35);
 
-	//xlog("set_data(): ID=%d, size=%d, dat=%p",ID,size,dat);
+  //xlog("set_data(): ID=%d, size=%d, dat=%p",ID,size,dat);
 
-	for (dat=ch[cn].dat; dat; dat=dat->next)
-		if (dat->ID==ID) break;
+  for (dat = ch[cn].dat; dat; dat = dat->next)
+    if (dat->ID == ID) break;
 
-        if (dat) {	// already got a block for ID
-		if (size>dat->size) {	// new block is bigger, re-allocate it
-			tmp=xrealloc(dat->data,size,IM_DRDATA);
-			if (!tmp) { elog("PANIC: realloc failed in set_data()"); return NULL; }
-			mem_usage+=size-dat->size;
+  if (dat) {	// already got a block for ID
+    if (size > dat->size) {	// new block is bigger, re-allocate it
+      tmp = xrealloc(dat->data, size, IM_DRDATA);
+      if (!tmp) { elog("PANIC: realloc failed in set_data()"); return NULL; }
+      mem_usage += size - dat->size;
 
-			bzero(tmp+dat->size,size-dat->size);
+      bzero((char*)tmp + dat->size, size - dat->size);
 
-			dat->data=tmp;
-			dat->size=size;
-		} /*else if (size<dat->size) { safe to use this one??
+      dat->data = tmp;
+      dat->size = size;
+    } /*else if (size<dat->size) { safe to use this one??
 			tmp=xrealloc(dat->data,size,IM_DRDATA);
 			if (!tmp) { elog("PANIC: realloc failed in set_data()"); return NULL; }
 			mem_usage-=size-dat->size;
 			dat->data=tmp;
 			dat->size=size;
 		}*/
-		prof_stop(35,prof);
-		return dat->data;
-	} else {	// no block for ID yet
-                dat=xmalloc(sizeof(struct data),IM_DRHDR);
-		if (!dat) { elog("PANIC: malloc failed in set_data() 1"); prof_stop(35,prof); return NULL; }
+    prof_stop(35, prof);
+    return dat->data;
+  } else {	// no block for ID yet
+    dat = (struct data*)xmalloc(sizeof(struct data), IM_DRHDR);
+    if (!dat) { elog("PANIC: malloc failed in set_data() 1"); prof_stop(35, prof); return NULL; }
 
-		dat->data=xmalloc(size,IM_DRDATA);
-		
-		if (!dat->data) { elog("PANIC: malloc failed in set_data() 2"); prof_stop(35,prof); return NULL; }
+    dat->data = xmalloc(size, IM_DRDATA);
 
-                dat->size=size;
-		dat->ID=ID;
+    if (!dat->data) { elog("PANIC: malloc failed in set_data() 2"); prof_stop(35, prof); return NULL; }
 
-                bzero(dat->data,size);
+    dat->size = size;
+    dat->ID = ID;
 
-		mem_usage+=sizeof(struct data);
-		mem_usage+=size;
+    bzero(dat->data, size);
 
-		// remember old first data block
-		old=ch[cn].dat;
-		
-		// we have no previous data block, so set it to NULL
-		dat->prev=NULL;
+    mem_usage += sizeof(struct data);
+    mem_usage += size;
 
-		// our next data block is the former first block (old)
-		dat->next=old;
+    // remember old first data block
+    old = ch[cn].dat;
 
-		// if there was already a first data block (old) make it remember that we're there now:
-		if (old) old->prev=dat;
+    // we have no previous data block, so set it to NULL
+    dat->prev = NULL;
 
-		// make us the first block
-		ch[cn].dat=dat;
+    // our next data block is the former first block (old)
+    dat->next = old;
 
-		// linked list is setup.
+    // if there was already a first data block (old) make it remember that we're there now:
+    if (old) old->prev = dat;
 
-		prof_stop(35,prof);
-		return dat->data;;
-	}
+    // make us the first block
+    ch[cn].dat = dat;
+
+    // linked list is setup.
+
+    prof_stop(35, prof);
+    return dat->data;;
+  }
 }
 
 // remove data block ID from cn
-int del_data(int cn,int ID)
+int del_data(int cn, int ID)
 {
-	struct data *dat,*next,*prev;
+  struct data *dat, *next, *prev;
 
-	for (dat=ch[cn].dat; dat; dat=dat->next)
-		if (dat->ID==ID) break;
-	if (!dat) return 0;		// we didn't find it
+  for (dat = ch[cn].dat; dat; dat = dat->next)
+    if (dat->ID == ID) break;
+  if (!dat) return 0;		// we didn't find it
 
-	// junk the data
-        xfree(dat->data);
+  // junk the data
+  xfree(dat->data);
 
-	// remember our neighbours
-	next=dat->next;
-	prev=dat->prev;
+  // remember our neighbours
+  next = dat->next;
+  prev = dat->prev;
 
-	// link them with each other, removing us from the list
-	if (next) next->prev=prev;
-	if (prev) prev->next=next;	
+  // link them with each other, removing us from the list
+  if (next) next->prev = prev;
+  if (prev) prev->next = next;
 
-	// first entry needs special care...
-	if (dat==ch[cn].dat) ch[cn].dat=next;
+  // first entry needs special care...
+  if (dat == ch[cn].dat) ch[cn].dat = next;
 
-        // all done, now free the data block itself
-	mem_usage-=sizeof(struct data)+dat->size;
+  // all done, now free the data block itself
+  mem_usage -= sizeof(struct data) + dat->size;
 
-	//dat->next=empty;
-	//empty=dat;
-	xfree(dat);
+  //dat->next=empty;
+  //empty=dat;
+  xfree(dat);
 
-        return 1;
+  return 1;
 }
 
-void *get_data(int cn,int ID,int size)
+void *get_data(int cn, int ID, int size)
 {
-	struct data *dat;
+  struct data *dat;
 
-	for (dat=ch[cn].dat; dat; dat=dat->next)
-		if (dat->ID==ID) break;
-	if (!dat) return NULL;			// we didn't find it
+  for (dat = ch[cn].dat; dat; dat = dat->next)
+    if (dat->ID == ID) break;
+  if (!dat) return NULL;			// we didn't find it
 
-	if (dat->size<size) return NULL;	// user expects more memory than we have
+  if (dat->size < size) return NULL;	// user expects more memory than we have
 
-	//xlog("get_data: ID=%d, size=%d, dat=%p",ID,size,dat);
+  //xlog("get_data: ID=%d, size=%d, dat=%p",ID,size,dat);
 
-	return dat->data;
+  return dat->data;
 }
 
 void del_all_data(int cn)
 {
-	struct data *dat,*next;
+  struct data *dat, *next;
 
-        for (dat=ch[cn].dat; dat; dat=next) {
-		
-		mem_usage-=sizeof(struct data)+dat->size;
+  for (dat = ch[cn].dat; dat; dat = next) {
 
-		next=dat->next;
-		xfree(dat->data);
-		
-		//dat->next=empty;
-		//empty=dat;
-		xfree(dat);
-	}
-	
-	ch[cn].dat=NULL;
+    mem_usage -= sizeof(struct data) + dat->size;
+
+    next = dat->next;
+    xfree(dat->data);
+
+    //dat->next=empty;
+    //empty=dat;
+    xfree(dat);
+  }
+
+  ch[cn].dat = NULL;
 }
