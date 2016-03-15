@@ -35,18 +35,17 @@ extern int moonlight;
 extern int sunlight;
 
 extern int minute;  // 0...59
-extern int hour;  // 0...23
-extern int mday;  // 0...29
-extern int wday;  // 0...6
-extern int yday;  // 0...359
-extern int week;  // warning: weeks since beginning of time !
-extern int month; // 0...12
-extern int year;  // 0...
+extern int hour;    // 0...23
+extern int mday;    // 0...29
+extern int wday;    // 0...6
+extern int yday;    // 0...359
+extern int week;    // warning: weeks since beginning of time !
+extern int month;   // 0...12
+extern int year;    // 0...
 
-extern int moon;  // warning: moons since beginning of time !
-extern int moonday; // 0...27
+extern int moon;      // warning: moons since beginning of time !
+extern int moonday;   // 0...27
 extern int realtime;  // seconds realtime since beginning of our epoch
-
 
 void tick_date(void);
 void showtime(int cn);

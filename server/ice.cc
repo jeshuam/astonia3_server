@@ -45,20 +45,26 @@ Added RCS tags
 #include "consistency.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);  // character driver (decides next action)
-int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);       // called when a character dies
-int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);  // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
+int ch_respawn_driver(int nr,
+                      int cn);  // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM:    return it_driver(nr, obj, ret);
-  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
-  default:  return 0;
+    case CDT_DRIVER:
+      return ch_driver(nr, obj, ret, lastact);
+    case CDT_ITEM:
+      return it_driver(nr, obj, ret);
+    case CDT_DEAD:
+      return ch_died_driver(nr, obj, ret);
+    case CDT_RESPAWN:
+      return ch_respawn_driver(nr, obj);
+    default:
+      return 0;
   }
 }
 
@@ -76,48 +82,94 @@ Added RCS tags
 
 */
 
-void itemspawn(int in, int cn)
-{
+void itemspawn(int in, int cn) {
   int in2;
 
-  if (!cn) return;  // always make sure its not an automatic call if you don't handle it
+  if (!cn)
+    return;  // always make sure its not an automatic call if you don't handle
+             // it
 
   if (ch[cn].citem) {
-    log_char(cn, LOG_SYSTEM, 0, "Please empty your 'hand' (mouse cursor) first.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Please empty your 'hand' (mouse cursor) first.");
     return;
   }
 
   // get item to spawn
   switch (it[in].drdata[0]) {
-  case 0:   in2 = create_item("melting_key"); break;
-  case 1:   in2 = create_item("ice_boots1"); break;
-  case 2:   in2 = create_item("ice_cape1"); break;
-  case 3:   in2 = create_item("ice_belt1"); break;
-  case 4:   in2 = create_item("ice_ring1"); break;
-  case 5:   in2 = create_item("ice_amulet1"); break;
-  case 6:   in2 = create_item("melting_key2"); break;
+    case 0:
+      in2 = create_item("melting_key");
+      break;
+    case 1:
+      in2 = create_item("ice_boots1");
+      break;
+    case 2:
+      in2 = create_item("ice_cape1");
+      break;
+    case 3:
+      in2 = create_item("ice_belt1");
+      break;
+    case 4:
+      in2 = create_item("ice_ring1");
+      break;
+    case 5:
+      in2 = create_item("ice_amulet1");
+      break;
+    case 6:
+      in2 = create_item("melting_key2");
+      break;
 
-  case 7:   in2 = create_item("ice_boots2"); break;
-  case 8:   in2 = create_item("ice_cape2"); break;
-  case 9:   in2 = create_item("ice_belt2"); break;
-  case 10:  in2 = create_item("ice_ring2"); break;
-  case 11:  in2 = create_item("ice_amulet2"); break;
+    case 7:
+      in2 = create_item("ice_boots2");
+      break;
+    case 8:
+      in2 = create_item("ice_cape2");
+      break;
+    case 9:
+      in2 = create_item("ice_belt2");
+      break;
+    case 10:
+      in2 = create_item("ice_ring2");
+      break;
+    case 11:
+      in2 = create_item("ice_amulet2");
+      break;
 
-  case 12:  in2 = create_item("ice_boots3"); break;
-  case 13:  in2 = create_item("ice_cape3"); break;
-  case 14:  in2 = create_item("ice_belt3"); break;
-  case 15:  in2 = create_item("ice_ring3"); break;
-  case 16:  in2 = create_item("ice_amulet3"); break;
-  case 17:  in2 = create_item("palace_bomb"); break;
-  case 18:  in2 = create_item("palace_cap"); break;
+    case 12:
+      in2 = create_item("ice_boots3");
+      break;
+    case 13:
+      in2 = create_item("ice_cape3");
+      break;
+    case 14:
+      in2 = create_item("ice_belt3");
+      break;
+    case 15:
+      in2 = create_item("ice_ring3");
+      break;
+    case 16:
+      in2 = create_item("ice_amulet3");
+      break;
+    case 17:
+      in2 = create_item("palace_bomb");
+      break;
+    case 18:
+      in2 = create_item("palace_cap");
+      break;
 
-  default:
-    log_char(cn, LOG_SYSTEM, 0, "Congratulations, %s, you have just discovered bug #4244B-%d-%d, please report it to the authorities!", ch[cn].name, it[in].x, it[in].y);
-    return;
+    default:
+      log_char(cn, LOG_SYSTEM, 0,
+               "Congratulations, %s, you have just discovered bug "
+               "#4244B-%d-%d, please report it to the authorities!",
+               ch[cn].name, it[in].x, it[in].y);
+      return;
   }
 
   if (!in2) {
-    log_char(cn, LOG_SYSTEM, 0, "Congratulations, %s, you have just discovered bug #4244C-%d-%d, please report it to the authorities!", ch[cn].name, it[in].x, it[in].y);
+    log_char(cn, LOG_SYSTEM, 0,
+             "Congratulations, %s, you have just discovered bug #4244C-%d-%d, "
+             "please report it to the authorities!",
+             ch[cn].name, it[in].x, it[in].y);
     return;
   }
 
@@ -134,14 +186,14 @@ void itemspawn(int in, int cn)
   log_char(cn, LOG_SYSTEM, 0, "You got a %s.", it[in2].name);
 }
 
-void warmfire(int in, int cn)
-{
+void warmfire(int in, int cn) {
   int in2, fn, n;
 
   if (!cn) return;
 
   if (ch[cn].citem) {
-    log_char(cn, LOG_SYSTEM, 0, "Please empty your 'hand' (mouse cursor) first.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Please empty your 'hand' (mouse cursor) first.");
     return;
   }
   if (!it[in].drdata[0]) {
@@ -154,7 +206,9 @@ void warmfire(int in, int cn)
       it[in2].drdata[0] = ch[cn].x;
       it[in2].drdata[1] = ch[cn].y;
 
-      log_char(cn, LOG_SYSTEM, 0, "Next to the fire, you find an ancient scroll. It seems to be a scroll of teleport which will take you back here.");
+      log_char(cn, LOG_SYSTEM, 0,
+               "Next to the fire, you find an ancient scroll. It seems to be a "
+               "scroll of teleport which will take you back here.");
     }
   }
 
@@ -176,11 +230,12 @@ void warmfire(int in, int cn)
     }
   }
   update_char(cn);
-  log_char(cn, LOG_SYSTEM, 0, "You move close to the heat of the fire, and you feel the demon's cold leave you.");
+  log_char(cn, LOG_SYSTEM, 0,
+           "You move close to the heat of the fire, and you feel the demon's "
+           "cold leave you.");
 }
 
-void backtofire(int in, int cn)
-{
+void backtofire(int in, int cn) {
   if (!cn) return;
   if (!it[in].carried) return;  // can only use if item is carried
 
@@ -192,8 +247,7 @@ void backtofire(int in, int cn)
   }
 }
 
-void meltingkey(int in, int cn)
-{
+void meltingkey(int in, int cn) {
   int sprite;
 
   if (cn) return;
@@ -201,7 +255,9 @@ void meltingkey(int in, int cn)
 
   it[in].drdata[1]++;
   if (it[in].drdata[1] >= it[in].drdata[0]) {
-    if (it[in].carried) log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s melted away.", it[in].name);
+    if (it[in].carried)
+      log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s melted away.",
+               it[in].name);
     if (ch[cn].flags & CF_PLAYER) dlog(cn, in, "dropped because it melted");
     remove_item(in);
     destroy_item(in);
@@ -214,7 +270,8 @@ void meltingkey(int in, int cn)
     if (it[in].carried) {
       ch[it[in].carried].flags |= CF_ITEMS;
       if (sprite == 50495) {
-        log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s starts to melt.", it[in].name);
+        log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s starts to melt.",
+                 it[in].name);
       }
     }
   }
@@ -222,8 +279,7 @@ void meltingkey(int in, int cn)
   call_item(it[in].driver, in, 0, ticker + TICKS * 10);
 }
 
-void freakdoor(int in, int cn)
-{
+void freakdoor(int in, int cn) {
   int me, you, in2;
 
   if (!cn) return;
@@ -242,23 +298,26 @@ void freakdoor(int in, int cn)
         if (!it[in2].flags) continue;
         if (it[in2].driver != IDR_FREAKDOOR) continue;
         if (in2 == in) continue;
-        if (it[in2].drdata[15]) continue; // no-target freak
+        if (it[in2].drdata[15]) continue;  // no-target freak
         if (it[in2].drdata[8] == me) break;
       }
       if (in2 == MAXITEM) {
-        elog("PANIC: freakdoor %d at %d,%d: partner not found", me, it[in].x, it[in].y);
+        elog("PANIC: freakdoor %d at %d,%d: partner not found", me, it[in].x,
+             it[in].y);
         return;
       }
       you = *(unsigned int*)(it[in].drdata + 10) = in2;
     }
-  } else you = in;
+  } else
+    you = in;
 
-  //log_char(cn,LOG_SYSTEM,0,"Door %d (%d/%d)",me,in,you);
+  // log_char(cn,LOG_SYSTEM,0,"Door %d (%d/%d)",me,in,you);
 
   if (it[in].x != ch[cn].x || it[in].y != ch[cn].y) {
     item_driver(IDR_DOOR, in, cn);
     // open the other door if it is closed and our door was opened
-    if (you != in && it[in].drdata[0] && !it[you].drdata[0]) item_driver(IDR_DOOR, you, cn);
+    if (you != in && it[in].drdata[0] && !it[you].drdata[0])
+      item_driver(IDR_DOOR, you, cn);
   } else if (in != you) {
     int dx, dy, px, py;
 
@@ -268,7 +327,8 @@ void freakdoor(int in, int cn)
     if (player_driver_get_move(cn, &px, &py)) {
       dx = px - ch[cn].x;
       dy = py - ch[cn].y;
-    } else dx = dy = 0;
+    } else
+      dx = dy = 0;
 
     it[you].drdata[9] = 1;  // set flag: no 2nd jump
     teleport_char_driver(cn, it[you].x, it[you].y);
@@ -280,36 +340,45 @@ void freakdoor(int in, int cn)
   }
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-
-  default:  return 0;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  case IDR_ITEMSPAWN: itemspawn(in, cn); return 1;
-  case IDR_MELTINGKEY:  meltingkey(in, cn); return 1;
-  case IDR_WARMFIRE:  warmfire(in, cn); return 1;
-  case IDR_BACKTOFIRE:  backtofire(in, cn); return 1;
-  case IDR_FREAKDOOR: freakdoor(in, cn); return 1;
+    case IDR_ITEMSPAWN:
+      itemspawn(in, cn);
+      return 1;
+    case IDR_MELTINGKEY:
+      meltingkey(in, cn);
+      return 1;
+    case IDR_WARMFIRE:
+      warmfire(in, cn);
+      return 1;
+    case IDR_BACKTOFIRE:
+      backtofire(in, cn);
+      return 1;
+    case IDR_FREAKDOOR:
+      freakdoor(in, cn);
+      return 1;
 
-  default:  return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  default:  return 0;
+    default:
+      return 0;
   }
 }
-int ch_respawn_driver(int nr, int cn)
-{
+int ch_respawn_driver(int nr, int cn) {
   switch (nr) {
-  default:  return 0;
+    default:
+      return 0;
   }
 }

@@ -34,16 +34,15 @@ Added RCS tags
 volatile int quit = 0;
 volatile int reload = 1;
 
-#define min(a,b) ((a)<(b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define MAXCHAT   256
-#define MAXFILE   256
+#define MAXCHAT 256
+#define MAXFILE 256
 #define BLOCKSIZE 4096
 #define INBUFSIZE 1024
-#define OUTBUFSIZE  (BLOCKSIZE+4)
+#define OUTBUFSIZE (BLOCKSIZE + 4)
 
-struct chat
-{
+struct chat {
   int sock;
   char inbuf[INBUFSIZE];
   char obuf[OUTBUFSIZE];
@@ -52,8 +51,7 @@ struct chat
   int handle;
 };
 
-struct file
-{
+struct file {
   char name[16];
   int change;
   int size;
@@ -66,18 +64,11 @@ struct chat *chat;
 
 unsigned long long sent_bytes = 0;
 
-void sig_leave(int dummy)
-{
-  quit = 1;
-}
+void sig_leave(int dummy) { quit = 1; }
 
-void sig_reload(int dummy)
-{
-  reload = 1;
-}
+void sig_reload(int dummy) { reload = 1; }
 
-void kick_chat(int nr)
-{
+void kick_chat(int nr) {
   close(chat[nr].sock);
   chat[nr].sock = 0;
 
@@ -86,8 +77,7 @@ void kick_chat(int nr)
   printf("kicked client %d\n", nr);
 }
 
-void send_chat(int nr)
-{
+void send_chat(int nr) {
   int ret, len;
   char *ptr;
 
@@ -100,13 +90,13 @@ void send_chat(int nr)
   }
 
   ret = send(chat[nr].sock, ptr, len, 0);
-  if (ret == -1) { // send failure
+  if (ret == -1) {  // send failure
     printf("send failure on %d\n", nr);
     kick_chat(nr);
     return;
   }
 
-  //printf("sent %d bytes to client %d\n",ret,nr);
+  // printf("sent %d bytes to client %d\n",ret,nr);
 
   chat[nr].optr += ret;
 
@@ -115,8 +105,7 @@ void send_chat(int nr)
   sent_bytes += ret;
 }
 
-int csend(int nr, char *buf, int len)
-{
+int csend(int nr, char *buf, int len) {
   int size;
 
   if (chat[nr].sock == 0) return -1;
@@ -130,31 +119,37 @@ int csend(int nr, char *buf, int len)
     size = min(size, len);
     memcpy(chat[nr].obuf + chat[nr].iptr, buf, size);
 
-    chat[nr].iptr += size; if (chat[nr].iptr == OUTBUFSIZE) chat[nr].iptr = 0;
-    buf += size; len -= size;
+    chat[nr].iptr += size;
+    if (chat[nr].iptr == OUTBUFSIZE) chat[nr].iptr = 0;
+    buf += size;
+    len -= size;
 
     if (chat[nr].iptr == chat[nr].optr) {
       printf("send buffer overflow, kicking client %d\n", nr);
       kick_chat(nr);
       return -1;
     }
-    //xlog("add: iptr=%d, optr=%d, len=%d, size=%d",player[nr]->iptr,player[nr]->optr,len,size);
+    // xlog("add: iptr=%d, optr=%d, len=%d,
+    // size=%d",player[nr]->iptr,player[nr]->optr,len,size);
   }
   return 0;
 }
 
-void new_chat(int sock)
-{
+void new_chat(int sock) {
   int nr, nsock, len = sizeof(struct sockaddr_in), one = 1;
   struct sockaddr_in addr;
 
-  nsock = accept(sock, (struct sockaddr *)&addr, (socklen_t*)&len);
+  nsock = accept(sock, (struct sockaddr *)&addr, (socklen_t *)&len);
   if (nsock == -1) return;
 
-  ioctl(nsock, FIONBIO, (u_long*)&one);   // non-blocking mode
+  ioctl(nsock, FIONBIO, (u_long *)&one);  // non-blocking mode
 
-  for (nr = 1; nr < MAXCHAT; nr++) if (!chat[nr].sock) break;
-  if (nr == MAXCHAT) { close(nsock); return; }
+  for (nr = 1; nr < MAXCHAT; nr++)
+    if (!chat[nr].sock) break;
+  if (nr == MAXCHAT) {
+    close(nsock);
+    return;
+  }
 
   bzero(chat + nr, sizeof(struct chat));
 
@@ -163,20 +158,19 @@ void new_chat(int sock)
 
   printf("accepted new client %d (%d)\n", nr, maxfile);
 
-  csend(nr, (char*)&maxfile, (int)sizeof(maxfile));
-  csend(nr, (char*)file, sizeof(file[0])*maxfile);
+  csend(nr, (char *)&maxfile, (int)sizeof(maxfile));
+  csend(nr, (char *)file, sizeof(file[0]) * maxfile);
 }
 
-
-void rec_chat(int nr)
-{
+void rec_chat(int nr) {
   int len;
 
-  len = recv(chat[nr].sock, (char*)chat[nr].inbuf + chat[nr].in_len, INBUFSIZE - chat[nr].in_len, 0);
+  len = recv(chat[nr].sock, (char *)chat[nr].inbuf + chat[nr].in_len,
+             INBUFSIZE - chat[nr].in_len, 0);
   printf("received %d bytes from client %d\n", len, nr);
 
   if (len < 1) {  // receive failure
-    //if (errno!=EWOULDBLOCK) {
+    // if (errno!=EWOULDBLOCK) {
     printf("receive error on %d\n", nr);
     kick_chat(nr);
     //}
@@ -185,8 +179,7 @@ void rec_chat(int nr)
   chat[nr].in_len += len;
 }
 
-void send_block(int nr)
-{
+void send_block(int nr) {
   char buf[BLOCKSIZE];
   int ret;
 
@@ -198,11 +191,9 @@ void send_block(int nr)
     chat[nr].handle = -1;
     printf("finished download file for %d\n", nr);
   }
-
 }
 
-void parse_cmd(int nr)
-{
+void parse_cmd(int nr) {
   char buf1[128], buf2[128];
 
   printf("parse cmd called for %d, len=%d\n", nr, chat[nr].in_len);
@@ -213,7 +204,8 @@ void parse_cmd(int nr)
       kick_chat(nr);
       return;
     }
-    strncpy(buf1, chat[nr].inbuf, 16); buf1[15] = 0;
+    strncpy(buf1, chat[nr].inbuf, 16);
+    buf1[15] = 0;
     sprintf(buf2, "client/%s", buf1);
     chat[nr].handle = open(buf2, O_RDONLY);
 
@@ -225,7 +217,8 @@ void parse_cmd(int nr)
     printf("client %d requested file %s.\n", nr, buf2);
 
     chat[nr].in_len -= 16;
-    if (chat[nr].in_len) memmove(chat[nr].inbuf, chat[nr].inbuf + 16, chat[nr].in_len);
+    if (chat[nr].in_len)
+      memmove(chat[nr].inbuf, chat[nr].inbuf + 16, chat[nr].in_len);
 
     if (chat[nr].iptr == chat[nr].optr) send_block(nr);
   }
@@ -233,8 +226,7 @@ void parse_cmd(int nr)
   printf("parse cmd called for %d, len=%d (exit)\n", nr, chat[nr].in_len);
 }
 
-void do_reload(void)
-{
+void do_reload(void) {
   DIR *dir;
   struct dirent *de;
   struct stat st;
@@ -251,7 +243,8 @@ void do_reload(void)
 
       if (stat(name, &st)) continue;
 
-      size = st.st_size; tsize += size;
+      size = st.st_size;
+      tsize += size;
       change = st.st_mtime;
 
       handle = open(name, O_RDONLY);
@@ -268,7 +261,8 @@ void do_reload(void)
       }
       close(handle);
 
-      printf("found file %s, size %d, change %d, sum %d\n", de->d_name, size, change, sum);
+      printf("found file %s, size %d, change %d, sum %d\n", de->d_name, size,
+             change, sum);
 
       strcpy(file[nr].name, de->d_name);
       file[nr].size = size;
@@ -290,8 +284,7 @@ void do_reload(void)
   }
 }
 
-int main(void)
-{
+int main(void) {
   int sock, one = 1, fmax, cnt, n, last_sent_check = 0, now;
   fd_set in_fd, out_fd;
   struct sockaddr_in addr;
@@ -306,13 +299,13 @@ int main(void)
   signal(SIGINT, sig_leave);
   signal(SIGTERM, sig_leave);
 
-  chat = (struct chat*)calloc(MAXCHAT, sizeof(struct chat));
-  file = (struct file*)calloc(MAXFILE, sizeof(struct file));
+  chat = (struct chat *)calloc(MAXCHAT, sizeof(struct chat));
+  file = (struct file *)calloc(MAXFILE, sizeof(struct file));
 
   sock = socket(PF_INET, SOCK_STREAM, 0);
   if (sock == -1) return 0;
 
-  ioctl(sock, FIONBIO, (u_long*)&one);    // non-blocking mode
+  ioctl(sock, FIONBIO, (u_long *)&one);  // non-blocking mode
   setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(int));
 
   addr.sin_family = AF_INET;
@@ -331,15 +324,20 @@ int main(void)
     // slow it down to 500KBit/s
     now = time(NULL);
     diff = sent_bytes - last_sent_bytes;
-    if (diff > 1024 * 50) { sleep(1); last_sent_bytes = min(sent_bytes, last_sent_bytes + 1024 * 50); }
-    else if (last_sent_check < now) {
+    if (diff > 1024 * 50) {
+      sleep(1);
+      last_sent_bytes = min(sent_bytes, last_sent_bytes + 1024 * 50);
+    } else if (last_sent_check < now) {
       last_sent_bytes = sent_bytes;
       last_sent_check = now;
     }
 
-    FD_ZERO(&in_fd); FD_ZERO(&out_fd); fmax = 0;
+    FD_ZERO(&in_fd);
+    FD_ZERO(&out_fd);
+    fmax = 0;
 
-    FD_SET(sock, &in_fd); if (sock > fmax) fmax = sock;
+    FD_SET(sock, &in_fd);
+    if (sock > fmax) fmax = sock;
 
     for (n = 1; n < MAXCHAT; n++) {
       if (chat[n].sock) {
@@ -349,7 +347,7 @@ int main(void)
         }
         if (chat[n].handle != -1 && chat[n].iptr == chat[n].optr) send_block(n);
 
-        //printf("handle=%d, len=%d\n",chat[n].handle,chat[n].in_len);
+        // printf("handle=%d, len=%d\n",chat[n].handle,chat[n].in_len);
         if (chat[n].handle == -1 && chat[n].in_len) parse_cmd(n);
 
         if (chat[n].iptr != chat[n].optr) {

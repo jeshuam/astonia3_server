@@ -11,18 +11,20 @@
 
 // defining NULL ourselves saves including stdio
 #ifndef NULL
-#define NULL (void*)0
+#define NULL (void *)0
 #endif
 
 #ifndef ARRAYSIZE
-#define ARRAYSIZE(n)  (sizeof(n)/sizeof(n[0]))
+#define ARRAYSIZE(n) (sizeof(n) / sizeof(n[0]))
 #endif
 
-// character ID: an (almost) unique ID for NPCs and players. it is persistant over login/logout
-#define charID(cn)  ((ch[cn].ID) ? (ch[cn].ID|0x80000000) : (ch[cn].serial&0x7fffffff))
-#define charID_ID(ID) (ID|0x80000000)
+// character ID: an (almost) unique ID for NPCs and players. it is persistant
+// over login/logout
+#define charID(cn) \
+  ((ch[cn].ID) ? (ch[cn].ID | 0x80000000) : (ch[cn].serial & 0x7fffffff))
+#define charID_ID(ID) (ID | 0x80000000)
 
-#if __GNUC_MINOR__==8
+#if __GNUC_MINOR__ == 8
 unsigned long long atoll(char *string);
 #endif
 int endcmp(const char *a, const char *b);
@@ -41,7 +43,7 @@ int die(int cnt, int sides);
 int exp2level(int val);
 int level2exp(int level);
 void give_exp(int cn, int val);
-void give_exp_bonus(int cn, int val); // include learning clan bonus
+void give_exp_bonus(int cn, int val);  // include learning clan bonus
 const char *hisname(int cn);
 const char *Hisname(int cn);
 const char *hename(int cn);
@@ -83,14 +85,13 @@ int is_visible(int cn, int co);
 int get_pk_relation(int cn, int co);
 
 // costs to follow market stuff
-struct cost_data
-{
+struct cost_data {
   int date[20];
   int amount[20];
 
   int created;
-  long long earned; // total amount earned
-  int sold;   // number of sales
+  long long earned;  // total amount earned
+  int sold;          // number of sales
 };
 
 void add_cost(int cost, struct cost_data *dat);
@@ -146,7 +147,3 @@ void shutdown_bg(int t, int down);
 void give_money(int cn, int val, const char *reason);
 void sanitize_item(struct item *in, int cn);
 int count_enhancements(int in);
-
-
-
-

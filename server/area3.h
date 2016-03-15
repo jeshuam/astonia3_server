@@ -14,8 +14,7 @@ Added RCS tags
 
 */
 
-struct area3_ppd
-{
+struct area3_ppd {
   int seymour_state;
   int kelly_state;
   int kelly_found_cnt;
@@ -31,4 +30,3 @@ struct area3_ppd
   int william_state;
   int hermit_state;
 };
-

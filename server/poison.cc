@@ -23,11 +23,9 @@ Added RCS tags
 #include "consistency.h"
 #include "poison.h"
 
+#define POISONDURATION (TICKS * 60 * 60 * 2)
 
-#define POISONDURATION	(TICKS*60*60*2)
-
-void poison_someone(int cn, int pwr, int type)
-{
+void poison_someone(int cn, int pwr, int type) {
   int fre, in, endtime;
 
   if (type < 0 || type > 3) return;
@@ -58,8 +56,7 @@ void poison_someone(int cn, int pwr, int type)
   log_char(cn, LOG_SYSTEM, 0, "You have been poisoned.");
 }
 
-void poison_callback(int cn, int in, int pos, int cserial, int iserial)
-{
+void poison_callback(int cn, int in, int pos, int cserial, int iserial) {
   int pwr, tick;
 
   // char alive and the right one?
@@ -77,29 +74,33 @@ void poison_callback(int cn, int in, int pos, int cserial, int iserial)
   if (pwr < 1) pwr = 1;
 
   switch (it[in].driver) {
-  case IDR_POISON0:
-  case IDR_POISON1:
-  case IDR_POISON2:
-  case IDR_POISON3:	if (!tick) {
-      if (it[in].mod_value[0] > -1000) it[in].mod_value[0]--;
-      update_char(cn);
-    }
-    hurt(cn, POWERSCALE / 3, 0, 1, 0, 50);
-    break;
+    case IDR_POISON0:
+    case IDR_POISON1:
+    case IDR_POISON2:
+    case IDR_POISON3:
+      if (!tick) {
+        if (it[in].mod_value[0] > -1000) it[in].mod_value[0]--;
+        update_char(cn);
+      }
+      hurt(cn, POWERSCALE / 3, 0, 1, 0, 50);
+      break;
   }
-  if (tick == 0) tick = 9;
-  else tick--;
+  if (tick == 0)
+    tick = 9;
+  else
+    tick--;
   *(unsigned short*)(it[in].drdata + 10) = tick;
 
-  set_timer(ticker + TICKS * 2 / pwr, poison_callback, cn, in, pos, ch[cn].serial, it[in].serial);
+  set_timer(ticker + TICKS * 2 / pwr, poison_callback, cn, in, pos,
+            ch[cn].serial, it[in].serial);
 }
 
-int remove_all_poison(int cn)
-{
+int remove_all_poison(int cn) {
   int n, in, flag = 0;
 
   for (n = 12; n < 30; n++) {
-    if ((in = ch[cn].item[n]) && it[in].driver >= IDR_POISON0 && it[in].driver <= IDR_POISON3) {
+    if ((in = ch[cn].item[n]) && it[in].driver >= IDR_POISON0 &&
+        it[in].driver <= IDR_POISON3) {
       ch[cn].item[n] = 0;
       free_item(in);
       flag = 1;
@@ -111,8 +112,7 @@ int remove_all_poison(int cn)
   return flag;
 }
 
-int remove_poison(int cn, int type)
-{
+int remove_poison(int cn, int type) {
   int n, in, flag = 0;
 
   if (type < 0 || type > 3) return 0;

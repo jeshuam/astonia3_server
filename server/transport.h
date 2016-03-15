@@ -1,7 +1,5 @@
 #pragma once
 
-struct transport_ppd
-{
+struct transport_ppd {
   unsigned long long seen;
 };
-

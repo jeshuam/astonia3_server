@@ -17,10 +17,11 @@ Added RCS tags
 
 */
 
-void ilog(const char *format, ...) __attribute__ ((format(printf, 1, 2)));
-void elog(const char *format, ...) __attribute__ ((format(printf, 1, 2)));
-void xlog(const char *format, ...) __attribute__ ((format(printf, 1, 2)));
-void charlog(int cn, const char *format, ...) __attribute__ ((format(printf, 2, 3)));
+void ilog(const char *format, ...) __attribute__((format(printf, 1, 2)));
+void elog(const char *format, ...) __attribute__((format(printf, 1, 2)));
+void xlog(const char *format, ...) __attribute__((format(printf, 1, 2)));
+void charlog(int cn, const char *format, ...)
+    __attribute__((format(printf, 2, 3)));
 int init_log(void);
 void exit_log(void);
 void elog_item(int in);

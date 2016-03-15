@@ -37,19 +37,14 @@ Added RCS tags
 
 struct player **player;
 
-void *my_zlib_malloc(void *dummy, unsigned int cnt, unsigned int size)
-{
+void *my_zlib_malloc(void *dummy, unsigned int cnt, unsigned int size) {
   return xmalloc(cnt * size, IM_ZLIB);
 }
 
-void my_zlib_free(void *dummy, void *ptr)
-{
-  return xfree(ptr);
-}
+void my_zlib_free(void *dummy, void *ptr) { return xfree(ptr); }
 
 // close connection to player nr
-void exit_player(int nr)
-{
+void exit_player(int nr) {
   online--;
   close(player[nr]->sock);
   deflateEnd(&player[nr]->zs);
@@ -58,10 +53,10 @@ void exit_player(int nr)
   mem_usage -= sizeof(struct player);
 }
 
-/* Process a new connection by finding, initializing and connecting a player entry to a new socket */
-static void new_player(int sock)
-{
-  int n, nsock; //,one=1; //,zero=0;
+/* Process a new connection by finding, initializing and connecting a player
+ * entry to a new socket */
+static void new_player(int sock) {
+  int n, nsock;  //,one=1; //,zero=0;
   socklen_t len = sizeof(struct sockaddr_in);
   u_long one = 1;
   struct sockaddr_in addr;
@@ -70,25 +65,40 @@ static void new_player(int sock)
   nsock = accept(sock, (struct sockaddr *)&addr, &len);
   if (nsock == -1) return;
 
-  ioctl(nsock, FIONBIO, (u_long*)&one);   // non-blocking mode
+  ioctl(nsock, FIONBIO, (u_long *)&one);  // non-blocking mode
 
-  //setsockopt(nsock,IPPROTO_TCP,TCP_NODELAY,(const char *)&one,sizeof(int));
-  //setsockopt(nsock,SOL_SOCKET,SO_LINGER,(const char *)&zero,sizeof(int));
-  //setsockopt(nsock,SOL_SOCKET,SO_KEEPALIVE,(const char *)&one,sizeof(int));
+  // setsockopt(nsock,IPPROTO_TCP,TCP_NODELAY,(const char *)&one,sizeof(int));
+  // setsockopt(nsock,SOL_SOCKET,SO_LINGER,(const char *)&zero,sizeof(int));
+  // setsockopt(nsock,SOL_SOCKET,SO_KEEPALIVE,(const char *)&one,sizeof(int));
 
-  for (n = 1; n < MAXPLAYER; n++) if (!player[n]) break;
-  if (n == MAXPLAYER) { close(nsock); return; }
+  for (n = 1; n < MAXPLAYER; n++)
+    if (!player[n]) break;
+  if (n == MAXPLAYER) {
+    close(nsock);
+    return;
+  }
 
-  player[n] = (struct player*)xcalloc(sizeof(struct player), IM_PLAYER); mem_usage += sizeof(struct player);
-  if (player[n] == NULL) { close(nsock); return; }
+  player[n] = (struct player *)xcalloc(sizeof(struct player), IM_PLAYER);
+  mem_usage += sizeof(struct player);
+  if (player[n] == NULL) {
+    close(nsock);
+    return;
+  }
 
-  //bzero(player+n,sizeof(player[0]));
+  // bzero(player+n,sizeof(player[0]));
 
   player[n]->zs.zalloc = my_zlib_malloc;
   player[n]->zs.zfree = my_zlib_free;
 
-  //if (deflateInit(&player[n]->zs,1)) { close(nsock); xfree(player[n]); player[n]=NULL; mem_usage-=sizeof(struct player); return; }
-  if (deflateInit2(&player[n]->zs, 1, Z_DEFLATED, 14, 7, Z_DEFAULT_STRATEGY)) { close(nsock); xfree(player[n]); player[n] = NULL; mem_usage -= sizeof(struct player); return; }
+  // if (deflateInit(&player[n]->zs,1)) { close(nsock); xfree(player[n]);
+  // player[n]=NULL; mem_usage-=sizeof(struct player); return; }
+  if (deflateInit2(&player[n]->zs, 1, Z_DEFLATED, 14, 7, Z_DEFAULT_STRATEGY)) {
+    close(nsock);
+    xfree(player[n]);
+    player[n] = NULL;
+    mem_usage -= sizeof(struct player);
+    return;
+  }
 
   player[n]->sock = nsock;
   player[n]->addr = addr.sin_addr.s_addr;
@@ -100,17 +110,17 @@ static void new_player(int sock)
   psend(n,buf,5); */
 
   buf[0] = SV_REALTIME;
-  *(unsigned int*)(buf + 1) = realtime;
+  *(unsigned int *)(buf + 1) = realtime;
   psend(n, buf, 5);
 
   online++;
   if (!player[n]) return;
 
-  //xlog("new player at %d (%d.%d.%d.%d)",n,(player[n]->addr>>0)&255,(player[n]->addr>>8)&255,(player[n]->addr>>16)&255,(player[n]->addr>>24)&255);
+  // xlog("new player at %d
+  // (%d.%d.%d.%d)",n,(player[n]->addr>>0)&255,(player[n]->addr>>8)&255,(player[n]->addr>>16)&255,(player[n]->addr>>24)&255);
 }
 
-static void send_player(int nr)
-{
+static void send_player(int nr) {
   int ret, len;
   unsigned long long prof;
 
@@ -120,11 +130,14 @@ static void send_player(int nr)
     len = player[nr]->iptr - player[nr]->optr;
   }
 
-  //xlog("rem: iptr=%d, optr=%d, len=%d",player[nr]->iptr,player[nr]->optr,len);
+  // xlog("rem: iptr=%d, optr=%d,
+  // len=%d",player[nr]->iptr,player[nr]->optr,len);
 
-  prof = prof_start(11); ret = send(player[nr]->sock, player[nr]->obuf + player[nr]->optr, len, 0); prof_stop(11, prof);
-  if (ret == -1) { // send failure
-    //xlog("send failure, kicking player %d",nr);
+  prof = prof_start(11);
+  ret = send(player[nr]->sock, player[nr]->obuf + player[nr]->optr, len, 0);
+  prof_stop(11, prof);
+  if (ret == -1) {  // send failure
+    // xlog("send failure, kicking player %d",nr);
     kick_player(nr, NULL);
     return;
   }
@@ -137,8 +150,7 @@ static void send_player(int nr)
   sent_bytes += ret;
 }
 
-static int csend(int nr, unsigned char *buf, int len)
-{
+static int csend(int nr, unsigned char *buf, int len) {
   int size;
 
   if (!player[nr]) return -1;
@@ -152,28 +164,31 @@ static int csend(int nr, unsigned char *buf, int len)
     size = min(size, len);
     memcpy(player[nr]->obuf + player[nr]->iptr, buf, size);
 
-    player[nr]->iptr += size; if (player[nr]->iptr == OBUFSIZE) player[nr]->iptr = 0;
-    buf += size; len -= size;
+    player[nr]->iptr += size;
+    if (player[nr]->iptr == OBUFSIZE) player[nr]->iptr = 0;
+    buf += size;
+    len -= size;
 
     if (player[nr]->iptr == player[nr]->optr) {
-      //xlog("send buffer overflow, kicking player %d",nr);
+      // xlog("send buffer overflow, kicking player %d",nr);
       kick_player(nr, NULL);
       return -1;
     }
-    //xlog("add: iptr=%d, optr=%d, len=%d, size=%d",player[nr]->iptr,player[nr]->optr,len,size);
+    // xlog("add: iptr=%d, optr=%d, len=%d,
+    // size=%d",player[nr]->iptr,player[nr]->optr,len,size);
   }
   return 0;
 }
 
-static void rec_player(int nr)
-{
+static void rec_player(int nr) {
   int len;
 
-  len = recv(player[nr]->sock, (char*)player[nr]->inbuf + player[nr]->in_len, 256 - player[nr]->in_len, 0);
+  len = recv(player[nr]->sock, (char *)player[nr]->inbuf + player[nr]->in_len,
+             256 - player[nr]->in_len, 0);
 
   if (len < 1) {  // receive failure
     if (errno != EWOULDBLOCK) {
-      //xlog("receive failure, kicking player %d",nr);
+      // xlog("receive failure, kicking player %d",nr);
       kick_player(nr, NULL);
     }
     return;
@@ -186,8 +201,7 @@ static void rec_player(int nr)
 
 static int io_sock;
 
-void io_loop(void)
-{
+void io_loop(void) {
   int n, fmax = 0, tmp;
   fd_set in_fd, out_fd;
   struct timeval tv;
@@ -197,7 +211,9 @@ void io_loop(void)
   if (ticker % 8) return;
 
   while (panic++ < 100) {
-    FD_ZERO(&in_fd); FD_ZERO(&out_fd); fmax = 0;
+    FD_ZERO(&in_fd);
+    FD_ZERO(&out_fd);
+    fmax = 0;
 
     FD_SET(io_sock, &in_fd);
     if (io_sock > fmax) fmax = io_sock;
@@ -228,13 +244,21 @@ void io_loop(void)
 
     for (n = 1; n < MAXPLAYER; n++) {
       if (!player[n]) continue;
-      if (FD_ISSET(player[n]->sock, &in_fd)) { prof = prof_start(9); rec_player(n); prof_stop(9, prof); }
-      if (!player[n]) continue; // yuck - rec_player might have kicked the player
-      if (FD_ISSET(player[n]->sock, &out_fd)) { prof = prof_start(10); send_player(n); prof_stop(10, prof); }
+      if (FD_ISSET(player[n]->sock, &in_fd)) {
+        prof = prof_start(9);
+        rec_player(n);
+        prof_stop(9, prof);
+      }
+      if (!player[n])
+        continue;  // yuck - rec_player might have kicked the player
+      if (FD_ISSET(player[n]->sock, &out_fd)) {
+        prof = prof_start(10);
+        send_player(n);
+        prof_stop(10, prof);
+      }
     }
   }
 }
-
 
 /*unsigned int get_interface2(int sock)
 {
@@ -253,11 +277,14 @@ void io_loop(void)
 
   for (n=0; n<16; n++) {
     //xlog("buf[%d]=%d (%c)",n,buf[n],buf[n]);
-                addr=htonl(((struct sockaddr_in *)&ifc.ifc_ifcu.ifcu_req[n].ifr_ifru.ifru_addr)->sin_addr.s_addr);
+                addr=htonl(((struct sockaddr_in
+*)&ifc.ifc_ifcu.ifcu_req[n].ifr_ifru.ifru_addr)->sin_addr.s_addr);
                 if (addr) {
-      xlog("interface %s: %d.%d.%d.%d",ifc.ifc_ifcu.ifcu_req[n].ifr_ifrn.ifrn_name,(addr>>24)&255,(addr>>16)&255,(addr>>8)&255,(addr>>0)&255);
+      xlog("interface %s:
+%d.%d.%d.%d",ifc.ifc_ifcu.ifcu_req[n].ifr_ifrn.ifrn_name,(addr>>24)&255,(addr>>16)&255,(addr>>8)&255,(addr>>0)&255);
     }
-    if (addr && addr!=((127<<24)+(1<<0)) && (!server_net || server_net==(addr>>24))) return addr;
+    if (addr && addr!=((127<<24)+(1<<0)) && (!server_net ||
+server_net==(addr>>24))) return addr;
   }
   return 0;
 }*/
@@ -273,30 +300,34 @@ void io_loop(void)
 
   for (n=0; he->h_addr_list[n]; n++) {
     addr=htonl(*(unsigned int*)(he->h_addr_list[n]));
-    xlog("%s: %d.%d.%d.%d",hostname,(addr>>24)&255,(addr>>16)&255,(addr>>8)&255,(addr>>0)&255);
-    //if (addr && addr!=((127<<24)+(1<<0)) && (!server_net || server_net==(addr>>24))) return addr;
+    xlog("%s:
+%d.%d.%d.%d",hostname,(addr>>24)&255,(addr>>16)&255,(addr>>8)&255,(addr>>0)&255);
+    //if (addr && addr!=((127<<24)+(1<<0)) && (!server_net ||
+server_net==(addr>>24))) return addr;
   }
   return 0;
 }*/
 
-int init_io(void)
-{
+int init_io(void) {
   int sock, port;
   u_long one = 1;
   struct sockaddr_in addr;
 
-  player = (struct player**)xcalloc(sizeof(struct player*)*MAXPLAYER, IM_BASE);
+  player =
+      (struct player **)xcalloc(sizeof(struct player *) * MAXPLAYER, IM_BASE);
   if (!player) return 0;
 
-  xlog("Allocated players: %.2fM (%lu*%d)", sizeof(struct player*)*MAXPLAYER / 1024.0 / 1024.0, sizeof(struct player*), MAXPLAYER);
-  mem_usage += sizeof(struct player*)*MAXPLAYER;
+  xlog("Allocated players: %.2fM (%lu*%d)",
+       sizeof(struct player *) * MAXPLAYER / 1024.0 / 1024.0,
+       sizeof(struct player *), MAXPLAYER);
+  mem_usage += sizeof(struct player *) * MAXPLAYER;
 
   xlog("Size of player data: %lu bytes", sizeof(struct player));
 
   sock = socket(PF_INET, SOCK_STREAM, 0);
   if (sock == -1) return 0;
 
-  ioctl(sock, FIONBIO, (u_long*)&one);    // non-blocking mode
+  ioctl(sock, FIONBIO, (u_long *)&one);  // non-blocking mode
   setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(int));
 
   for (port = 5556; port < 5600; port++) {
@@ -315,22 +346,21 @@ int init_io(void)
     elog("could not find interface (net=%d)",server_net);
     return 0;
   }*/
-  server_addr = ((212 << 24) | (202 << 16) | (240 << 8) | (67 << 0)) + serverID - 1;
+  server_addr =
+      ((212 << 24) | (202 << 16) | (240 << 8) | (67 << 0)) + serverID - 1;
 
   server_port = port;
 
-  xlog("IO Init done: ID=%d (%d.%d.%d.%d:%d)", serverID, (server_addr >> 24) & 255, (server_addr >> 16) & 255, (server_addr >> 8) & 255, (server_addr >> 0) & 255, server_port);
+  xlog("IO Init done: ID=%d (%d.%d.%d.%d:%d)", serverID,
+       (server_addr >> 24) & 255, (server_addr >> 16) & 255,
+       (server_addr >> 8) & 255, (server_addr >> 0) & 255, server_port);
 
   return 1;
 }
 
-void exit_io(void)
-{
-  close(io_sock);
-}
+void exit_io(void) { close(io_sock); }
 
-void psend(int nr, char *buf, int len)
-{
+void psend(int nr, char *buf, int len) {
   if (!player[nr]) return;
 
   if (player[nr]->tptr + len >= OBUFSIZE) {
@@ -343,8 +373,7 @@ void psend(int nr, char *buf, int len)
 }
 
 // careful here, any csend might clear player[n]!
-void pflush(void)
-{
+void pflush(void) {
   int n, ilen, olen, csize, ret, olow, ohigh;
   unsigned char obuf[OBUFSIZE];
   unsigned long long prof;
@@ -361,7 +390,9 @@ void pflush(void)
       player[n]->zs.next_out = obuf;
       player[n]->zs.avail_out = OBUFSIZE;
 
-      prof = prof_start(12); ret = deflate(&player[n]->zs, Z_SYNC_FLUSH); prof_stop(12, prof);
+      prof = prof_start(12);
+      ret = deflate(&player[n]->zs, Z_SYNC_FLUSH);
+      prof_stop(12, prof);
       if (ret != Z_OK) {
         elog("compression failure #1, kicking player %d", n);
         kick_player(n, NULL);
@@ -382,11 +413,11 @@ void pflush(void)
         ohigh = (olen >> 8) | 0x80;
         olow = olen & 255;
 
-        csend(n, (unsigned char*)(&ohigh), 1);
-        csend(n, (unsigned char*)(&olow), 1);
+        csend(n, (unsigned char *)(&ohigh), 1);
+        csend(n, (unsigned char *)(&olow), 1);
       } else {
         ohigh = olen | (0x40 | 0x80);
-        csend(n, (unsigned char*)(&ohigh), 1);
+        csend(n, (unsigned char *)(&ohigh), 1);
       }
       csend(n, obuf, csize);
     } else {
@@ -398,18 +429,17 @@ void pflush(void)
         ohigh = olen >> 8;
         olow = olen & 255;
 
-        csend(n, (unsigned char*)(&ohigh), 1);
-        csend(n, (unsigned char*)(&olow), 1);
+        csend(n, (unsigned char *)(&ohigh), 1);
+        csend(n, (unsigned char *)(&olow), 1);
       } else {
         ohigh = olen | 0x40;
-        csend(n, (unsigned char*)(&ohigh), 1);
+        csend(n, (unsigned char *)(&ohigh), 1);
       }
       if (ilen && player[n]) csend(n, player[n]->tbuf, ilen);
     }
 
-    //xlog("ilen=%d, olen=%d",ilen,olen);
+    // xlog("ilen=%d, olen=%d",ilen,olen);
 
     if (player[n]) player[n]->tptr = 0;
   }
 }
-

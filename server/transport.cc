@@ -57,107 +57,109 @@
 #include "transport.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);	// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);  // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case 0:		return ch_driver(nr, obj, ret, lastact);
-  case 1: 	return it_driver(nr, obj, ret);
-  case 2:		return ch_died_driver(nr, obj, ret);
-  default: 	return 0;
+    case 0:
+      return ch_driver(nr, obj, ret, lastact);
+    case 1:
+      return it_driver(nr, obj, ret);
+    case 2:
+      return ch_died_driver(nr, obj, ret);
+    default:
+      return 0;
   }
 }
 
-struct trans
-{
+struct trans {
   char name[80];
   int x, y, a;
 };
 
-static struct trans trans[] =
-{
-  {"Cameron", 139, 75, 1},				//00
-  {"Cameron", 139, 75, 1},				//01
-  {"Aston", 129, 201, 3},				//02
-  {"Tribe of the Isara", 239, 249, 6},		//03
-  {"Tribe of the Cerasa", 92, 164, 6},		//04
-  {"Maze of the Cerasa", 49, 135, 6},		//05
-  {"Defense Tunnels of the Cerasa", 14, 114, 6},	//06
-  {"Zalina Entrance", 5, 4, 6},			//07
-  {"Tribe of the Zalina", 172, 36, 6},		//08
-  {"Teufelheim", 225, 249, 34},			//09
-  {"*empty*", 0, 0, 0},				//10
-  {"*empty*", 0, 0, 0},				//11
-  {"Ice 1", 93, 102, 10},				//12
-  {"Ice 2", 11, 113, 10},				//13
-  {"Ice 3", 241, 87, 10},				//14
-  {"Ice 4", 213, 156, 11},				//15
-  {"Ice 5", 189, 80, 11},				//16
-  {"Nomad Plains", 16, 124, 19},			//17
-  {"*empty*", 0, 0, 0},				//18
-  {"*empty*", 0, 0, 0},				//19
-  {"Forest", 181, 117, 16},				//20
-  {"Exkordon", 65, 106, 17},				//21
-  {"Brannington", 202, 226, 29},			//22
-  {"Grimroot", 210, 246, 31},			//23
-  {"Caligar", 230, 62, 36},				//24
-  {"Arkhata", 28, 20, 37},				//25
+static struct trans trans[] = {
+    {"Cameron", 139, 75, 1},  // 00
+    {"Cameron", 139, 75, 1},  // 01
+    {"Aston", 129, 201, 3},  // 02
+    {"Tribe of the Isara", 239, 249, 6},  // 03
+    {"Tribe of the Cerasa", 92, 164, 6},  // 04
+    {"Maze of the Cerasa", 49, 135, 6},  // 05
+    {"Defense Tunnels of the Cerasa", 14, 114, 6},  // 06
+    {"Zalina Entrance", 5, 4, 6},  // 07
+    {"Tribe of the Zalina", 172, 36, 6},  // 08
+    {"Teufelheim", 225, 249, 34},  // 09
+    {"*empty*", 0, 0, 0},  // 10
+    {"*empty*", 0, 0, 0},  // 11
+    {"Ice 1", 93, 102, 10},  // 12
+    {"Ice 2", 11, 113, 10},  // 13
+    {"Ice 3", 241, 87, 10},  // 14
+    {"Ice 4", 213, 156, 11},  // 15
+    {"Ice 5", 189, 80, 11},  // 16
+    {"Nomad Plains", 16, 124, 19},  // 17
+    {"*empty*", 0, 0, 0},  // 18
+    {"*empty*", 0, 0, 0},  // 19
+    {"Forest", 181, 117, 16},  // 20
+    {"Exkordon", 65, 106, 17},  // 21
+    {"Brannington", 202, 226, 29},  // 22
+    {"Grimroot", 210, 246, 31},  // 23
+    {"Caligar", 230, 62, 36},  // 24
+    {"Arkhata", 28, 20, 37},  // 25
 };
 
-static struct trans clan[] = {
-  {"Clan1", 28, 18, 3},
-  {"Clan2", 59, 18, 3},
-  {"Clan3", 90, 18, 3},
-  {"Clan4", 121, 18, 3},
-  {"Clan5", 152, 18, 3},
-  {"Clan6", 183, 18, 3},
-  {"Clan7", 214, 18, 3},
-  {"Clan8", 245, 18, 3},
-  {"Clan9", 28, 38, 3},
-  {"Clan10", 59, 38, 3},
-  {"Clan11", 90, 38, 3},
-  {"Clan12", 121, 38, 3},
-  {"Clan13", 152, 38, 3},
-  {"Clan14", 183, 38, 3},
-  {"Clan15", 214, 38, 3},
-  {"Clan16", 245, 38, 3},
-  {"Clan17", 28, 58, 3},
-  {"Clan18", 59, 58, 3},
-  {"Clan19", 90, 58, 3},
-  {"Clan20", 121, 58, 3},
-  {"Clan21", 152, 58, 3},
-  {"Clan22", 183, 58, 3},
-  {"Clan23", 28, 78, 3},
-  {"Clan24", 59, 78, 3},
-  {"Clan25", 90, 78, 3},
-  {"Clan26", 121, 78, 3},
-  {"Clan27", 152, 78, 3},
-  {"Clan28", 183, 78, 3},
-  {"Clan29", 28, 251, 3},
-  {"Clan30", 59, 251, 3},
-  {"Clan31", 90, 251, 3},
-  {"Clan32", 28, 231, 3}
-};
+static struct trans clan[] = {{"Clan1", 28, 18, 3},
+                              {"Clan2", 59, 18, 3},
+                              {"Clan3", 90, 18, 3},
+                              {"Clan4", 121, 18, 3},
+                              {"Clan5", 152, 18, 3},
+                              {"Clan6", 183, 18, 3},
+                              {"Clan7", 214, 18, 3},
+                              {"Clan8", 245, 18, 3},
+                              {"Clan9", 28, 38, 3},
+                              {"Clan10", 59, 38, 3},
+                              {"Clan11", 90, 38, 3},
+                              {"Clan12", 121, 38, 3},
+                              {"Clan13", 152, 38, 3},
+                              {"Clan14", 183, 38, 3},
+                              {"Clan15", 214, 38, 3},
+                              {"Clan16", 245, 38, 3},
+                              {"Clan17", 28, 58, 3},
+                              {"Clan18", 59, 58, 3},
+                              {"Clan19", 90, 58, 3},
+                              {"Clan20", 121, 58, 3},
+                              {"Clan21", 152, 58, 3},
+                              {"Clan22", 183, 58, 3},
+                              {"Clan23", 28, 78, 3},
+                              {"Clan24", 59, 78, 3},
+                              {"Clan25", 90, 78, 3},
+                              {"Clan26", 121, 78, 3},
+                              {"Clan27", 152, 78, 3},
+                              {"Clan28", 183, 78, 3},
+                              {"Clan29", 28, 251, 3},
+                              {"Clan30", 59, 251, 3},
+                              {"Clan31", 90, 251, 3},
+                              {"Clan32", 28, 231, 3}};
 
-void transport_driver(int in, int cn)
-{
+void transport_driver(int in, int cn) {
   int x, y, a, oldx, oldy, nr, mirror, oldmirror;
   unsigned long long bit;
   struct transport_ppd *dat;
   char buf[16];
 
-  if (!cn) return;	// always make sure its not an automatic call if you don't handle it
+  if (!cn)
+    return;  // always make sure its not an automatic call if you don't handle
+             // it
 
-  dat = (struct transport_ppd*)set_data(cn, DRD_TRANSPORT_PPD, sizeof(struct transport_ppd));
-  if (!dat) return;	// oops...
+  dat = (struct transport_ppd *)set_data(cn, DRD_TRANSPORT_PPD,
+                                         sizeof(struct transport_ppd));
+  if (!dat) return;  // oops...
 
   // mark new transports as seen
   nr = it[in].drdata[0];
-  if (nr != 255) {	// not clan exit
+  if (nr != 255) {  // not clan exit
     if (nr < 0 || nr >= ARRAYSIZE(trans)) {
       elog("illegal transport nr %d from item %d (%s) #1", nr, in, it[in].name);
       log_char(cn, LOG_SYSTEM, 0, "Nothing happens - BUG (%d,#1).", nr);
@@ -166,7 +168,8 @@ void transport_driver(int in, int cn)
 
     bit = 1 << nr;
     if (!(dat->seen & bit)) {
-      log_char(cn, LOG_SYSTEM, 0, "You have reached a new transportation point.");
+      log_char(cn, LOG_SYSTEM, 0,
+               "You have reached a new transportation point.");
       dat->seen |= bit;
     }
   }
@@ -176,7 +179,7 @@ void transport_driver(int in, int cn)
 
     buf[0] = SV_TELEPORT;
 
-    *(unsigned long long*)(buf + 1) = dat->seen;
+    *(unsigned long long *)(buf + 1) = dat->seen;
 
     buf[9] = 0;
     for (n = 0; n < 8; n++) {
@@ -219,7 +222,9 @@ void transport_driver(int in, int cn)
   } else if (nr < 64) {
     bit = 1 << nr;
     if (!(dat->seen & bit)) {
-      log_char(cn, LOG_SYSTEM, 0, "You've never been to %s before. You cannot go there.", trans[nr].name);
+      log_char(cn, LOG_SYSTEM, 0,
+               "You've never been to %s before. You cannot go there.",
+               trans[nr].name);
       return;
     }
 
@@ -229,7 +234,7 @@ void transport_driver(int in, int cn)
     }
 
     if (nr < 0 || nr >= ARRAYSIZE(trans)) {
-      //elog("illegal transport nr %d #2",nr);
+      // elog("illegal transport nr %d #2",nr);
       log_char(cn, LOG_SYSTEM, 0, "Nothing happens - BUG (%d,#2).", nr);
       return;
     }
@@ -249,18 +254,21 @@ void transport_driver(int in, int cn)
 
   oldmirror = ch[cn].mirror;
   ch[cn].mirror = mirror;
-  if ((ch[cn].flags & CF_PLAYER) && a && (a != areaID || get_mirror(a, ch[cn].mirror) != areaM)) {
+  if ((ch[cn].flags & CF_PLAYER) && a &&
+      (a != areaID || get_mirror(a, ch[cn].mirror) != areaM)) {
     if (!change_area(cn, a, x, y)) {
-      log_char(cn, LOG_SYSTEM, 0, "Nothing happens - target area server is down.");
+      log_char(cn, LOG_SYSTEM, 0,
+               "Nothing happens - target area server is down.");
       ch[cn].mirror = oldmirror;
     }
     return;
   }
   buf[0] = SV_MIRROR;
-  *(unsigned int*)(buf + 1) = ch[cn].mirror;
+  *(unsigned int *)(buf + 1) = ch[cn].mirror;
   psend(ch[cn].player, buf, 5);
 
-  oldx = ch[cn].x; oldy = ch[cn].y;
+  oldx = ch[cn].x;
+  oldy = ch[cn].y;
   remove_char(cn);
 
   if (!drop_char(cn, x, y, 0)) {
@@ -269,46 +277,27 @@ void transport_driver(int in, int cn)
   }
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-  default:	return 0;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  case IDR_TRANSPORT:	transport_driver(in, cn); return 1;
+    case IDR_TRANSPORT:
+      transport_driver(in, cn);
+      return 1;
 
-  default:	return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  default:	return 0;
+    default:
+      return 0;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

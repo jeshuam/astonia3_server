@@ -14,14 +14,15 @@ Added RCS tags
 
 */
 
-struct punishment
-{
+struct punishment {
   int level;
   int exp;
   int karma;
   char reason[80];
 };
 
-int punish(int pID, struct character *co, int level, char *reason, int *plock, int *pkick);
+int punish(int pID, struct character *co, int level, char *reason, int *plock,
+           int *pkick);
 int unpunish(int pID, struct character *co, int ID, int *plock, int *pkick);
-void list_punishment(int rID, struct punishment *pun, int cID, int date, int ID);
+void list_punishment(int rID, struct punishment *pun, int cID, int date,
+                     int ID);

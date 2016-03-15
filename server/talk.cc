@@ -32,15 +32,19 @@ Added RCS tags
 #include "talk.h"
 #include "database.h"
 
-// this is the low level "send text to character" routine ALL other functions MUST use
+// this is the low level "send text to character" routine ALL other functions
+// MUST use
 // make sure you use log_char(cn,type,"%s",text) if text is NOT a format string.
-int log_char(int cn, int type, int dat1, const char *format, ...)
-{
+int log_char(int cn, int type, int dat1, const char *format, ...) {
   va_list args;
   char buf[1024];
   int len, nr, n;
 
-  if (cn < 1 || cn >= MAXCHARS) { elog("log_char(): got illegal character %d", cn); btrace("illegal cn"); return 0; }
+  if (cn < 1 || cn >= MAXCHARS) {
+    elog("log_char(): got illegal character %d", cn);
+    btrace("illegal cn");
+    return 0;
+  }
 
   if (type == LOG_INFO && !char_see_char(cn, dat1)) return 0;
 
@@ -52,7 +56,8 @@ int log_char(int cn, int type, int dat1, const char *format, ...)
 
   // make sure the text is legal - we don't want any control characters in it!
   for (n = 0; n < len; n++)
-    if (!isprint(buf[n]) && (unsigned char)buf[n] != 176 && buf[n] > 31) buf[n] = ' ';
+    if (!isprint(buf[n]) && (unsigned char)buf[n] != 176 && buf[n] > 31)
+      buf[n] = ' ';
 
   if (ch[cn].flags & CF_PLAYER) {
     nr = ch[cn].player;
@@ -64,8 +69,8 @@ int log_char(int cn, int type, int dat1, const char *format, ...)
   return len;
 }
 
-int log_area(int xc, int yc, int type, int dat1, int maxdist, const char *format, ...)
-{
+int log_area(int xc, int yc, int type, int dat1, int maxdist,
+             const char *format, ...) {
   int x, y, xs, xe, ys, ye, cn, len;
   char buf[1024];
   va_list args;
@@ -84,9 +89,13 @@ int log_area(int xc, int yc, int type, int dat1, int maxdist, const char *format
   for (y = ys; y <= ye; y += 8) {
     for (x = xs; x <= xe; x += 8) {
       for (cn = getfirst_char_sector(x, y); cn; cn = ch[cn].sec_next) {
-        if (ch[cn].x >= xs && ch[cn].x <= xe && ch[cn].y >= ys && ch[cn].y <= ye) {
-          if (type == LOG_TALK && !sector_hear(xc, yc, ch[cn].x, ch[cn].y)) continue;
-          if (type == LOG_SHOUT && !sector_hear_shout(xc, yc, ch[cn].x, ch[cn].y)) continue;
+        if (ch[cn].x >= xs && ch[cn].x <= xe && ch[cn].y >= ys &&
+            ch[cn].y <= ye) {
+          if (type == LOG_TALK && !sector_hear(xc, yc, ch[cn].x, ch[cn].y))
+            continue;
+          if (type == LOG_SHOUT &&
+              !sector_hear_shout(xc, yc, ch[cn].x, ch[cn].y))
+            continue;
 
           log_char(cn, type, dat1, "%s", buf);
         }
@@ -97,8 +106,7 @@ int log_area(int xc, int yc, int type, int dat1, int maxdist, const char *format
   return len;
 }
 
-int sound_area(int xc, int yc, int type)
-{
+int sound_area(int xc, int yc, int type) {
   int x, y, xs, xe, ys, ye, cn;
   int distx, disty, dist;
 
@@ -110,8 +118,10 @@ int sound_area(int xc, int yc, int type)
   for (y = ys; y <= ye; y += 8) {
     for (x = xs; x <= xe; x += 8) {
       for (cn = getfirst_char_sector(x, y); cn; cn = ch[cn].sec_next) {
-        if (ch[cn].x >= xs && ch[cn].x <= xe && ch[cn].y >= ys && ch[cn].y <= ye) {
-          if (type == LOG_TALK && !sector_hear(xc, yc, ch[cn].x, ch[cn].y)) continue;
+        if (ch[cn].x >= xs && ch[cn].x <= xe && ch[cn].y >= ys &&
+            ch[cn].y <= ye) {
+          if (type == LOG_TALK && !sector_hear(xc, yc, ch[cn].x, ch[cn].y))
+            continue;
 
           distx = ch[cn].x - xc;
           disty = ch[cn].y - yc;
@@ -126,18 +136,17 @@ int sound_area(int xc, int yc, int type)
   return 1;
 }
 
-#define HOLLERDIST  (DIST*3)
-#define SHOUTDIST   (DIST*2)
-#define SAYDIST   (DIST)
-#define EMOTEDIST   (DIST/2)
-#define QUIETSAYDIST  (DIST/3)
-#define WHISPERDIST   (DIST/4)
+#define HOLLERDIST (DIST * 3)
+#define SHOUTDIST (DIST * 2)
+#define SAYDIST (DIST)
+#define EMOTEDIST (DIST / 2)
+#define QUIETSAYDIST (DIST / 3)
+#define WHISPERDIST (DIST / 4)
 
-#define HOLLERCOST  (12*POWERSCALE)
-#define SHOUTCOST (6*POWERSCALE)
+#define HOLLERCOST (12 * POWERSCALE)
+#define SHOUTCOST (6 * POWERSCALE)
 
-int holler(int cn, const char*format, ...)
-{
+int holler(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -161,11 +170,11 @@ int holler(int cn, const char*format, ...)
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "hollers: \"%s\"", buf);
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_SHOUT, cn, HOLLERDIST, "%s hollers: \"%s\"", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_SHOUT, cn, HOLLERDIST,
+                  "%s hollers: \"%s\"", ch[cn].name, buf);
 }
 
-int shout(int cn, const char*format, ...)
-{
+int shout(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -189,11 +198,11 @@ int shout(int cn, const char*format, ...)
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "shouts: \"%s\"", buf);
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_SHOUT, cn, SHOUTDIST, "%s shouts: \"%s\"", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_SHOUT, cn, SHOUTDIST,
+                  "%s shouts: \"%s\"", ch[cn].name, buf);
 }
 
-int say(int cn, const char*format, ...)
-{
+int say(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -204,16 +213,19 @@ int say(int cn, const char*format, ...)
 
   if (len == 1020) return 0;
 
-  //if (strchr(buf,'"')) return 0;
+  // if (strchr(buf,'"')) return 0;
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "says: \"%s\"", buf);
 
-  if (ch[cn].flags & CF_PLAYER) return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, SAYDIST, "%s says: \"%s\"", ch[cn].name, buf);
-  else return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, SAYDIST, "%s says: \"%s\"", ch[cn].name, buf);
+  if (ch[cn].flags & CF_PLAYER)
+    return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, SAYDIST,
+                    "%s says: \"%s\"", ch[cn].name, buf);
+  else
+    return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, SAYDIST,
+                    "%s says: \"%s\"", ch[cn].name, buf);
 }
 
-int emote(int cn, const char*format, ...)
-{
+int emote(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -228,11 +240,11 @@ int emote(int cn, const char*format, ...)
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "emotes: \"%s\"", buf);
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_INFO, cn, EMOTEDIST, "%s %s.", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_INFO, cn, EMOTEDIST, "%s %s.",
+                  ch[cn].name, buf);
 }
 
-int quiet_say(int cn, const char*format, ...)
-{
+int quiet_say(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -245,11 +257,11 @@ int quiet_say(int cn, const char*format, ...)
 
   if (strchr(buf, '"')) return 0;
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, QUIETSAYDIST, "%s says: \"%s\"", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, QUIETSAYDIST,
+                  "%s says: \"%s\"", ch[cn].name, buf);
 }
 
-int whisper(int cn, const char*format, ...)
-{
+int whisper(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -264,11 +276,11 @@ int whisper(int cn, const char*format, ...)
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "whispers: \"%s\"", buf);
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, WHISPERDIST, "%s whispers: \"%s\"", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, WHISPERDIST,
+                  "%s whispers: \"%s\"", ch[cn].name, buf);
 }
 
-int murmur(int cn, const char*format, ...)
-{
+int murmur(int cn, const char *format, ...) {
   char buf[1024];
   va_list args;
   int len;
@@ -283,5 +295,6 @@ int murmur(int cn, const char*format, ...)
 
   if (ch[cn].flags & CF_PLAYER) dlog(cn, 0, "murmers: \"%s\"", buf);
 
-  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, WHISPERDIST, "%s murmurs: \"%s\"", ch[cn].name, buf);
+  return log_area(ch[cn].x, ch[cn].y, LOG_TALK, cn, WHISPERDIST,
+                  "%s murmurs: \"%s\"", ch[cn].name, buf);
 }

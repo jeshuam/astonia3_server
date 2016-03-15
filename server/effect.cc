@@ -43,14 +43,16 @@ int used_effects, efserial = 1;
 
 // get new effect from free list
 // and add it to used list
-int alloc_effect(int type)
-{
+int alloc_effect(int type) {
   int fn;
   struct effect *tmp;
 
   // get free effect
   tmp = feffect;
-  if (!tmp) { elog("alloc_effect: MAXEFFECT reached!"); return 0; }
+  if (!tmp) {
+    elog("alloc_effect: MAXEFFECT reached!");
+    return 0;
+  }
   feffect = tmp->next;
   fn = tmp - ef;
 
@@ -73,8 +75,7 @@ int alloc_effect(int type)
 
 // release (delete) effect to free list
 // and remove it from used list
-void free_effect(int fn)
-{
+void free_effect(int fn) {
   struct effect *next, *prev;
 
   if (!ef[fn].type) {
@@ -86,8 +87,10 @@ void free_effect(int fn)
   prev = ef[fn].prev;
   next = ef[fn].next;
 
-  if (prev) prev->next = next;
-  else ueffect = next;
+  if (prev)
+    prev->next = next;
+  else
+    ueffect = next;
 
   if (next) next->prev = prev;
 
@@ -104,16 +107,14 @@ void free_effect(int fn)
 }
 
 // get first effect in used list
-int getfirst_effect(void)
-{
+int getfirst_effect(void) {
   if (!ueffect) return 0;
   return ueffect - ef;
 }
 
 // get next effect in used list
 // (following a getfirst)
-int getnext_effect(int fn)
-{
+int getnext_effect(int fn) {
   struct effect *tmp;
 
   if (!(tmp = ef[fn].next)) return 0;
@@ -124,8 +125,7 @@ int getnext_effect(int fn)
 // *********** basic effect helpers ***********************
 
 // add a marker on the map on x,y which links back to effect fn
-int set_effect_map(int fn, int x, int y)
-{
+int set_effect_map(int fn, int x, int y) {
   int m, n;
 
   if (fn < 1 || fn >= MAXEFFECT) return 0;
@@ -155,8 +155,7 @@ int set_effect_map(int fn, int x, int y)
 }
 
 // remove link to effect fn from map tile m
-int remove_effect_map(int fn, int m)
-{
+int remove_effect_map(int fn, int m) {
   int n;
 
   if (m < 0 || m >= MAXMAP * MAXMAP) return 0;
@@ -175,8 +174,7 @@ int remove_effect_map(int fn, int m)
   return 1;
 }
 
-int add_effect_char(int fn, int cn)
-{
+int add_effect_char(int fn, int cn) {
   int n;
 
   if (fn < 1 || fn >= MAXEFFECT) return 0;
@@ -192,14 +190,15 @@ int add_effect_char(int fn, int cn)
   ch[cn].ef[n] = fn;
   ef[fn].efcn = cn;
 
-  if (ef[fn].light) update_char(cn);
-  else set_sector(ch[cn].x, ch[cn].y);
+  if (ef[fn].light)
+    update_char(cn);
+  else
+    set_sector(ch[cn].x, ch[cn].y);
 
   return 1;
 }
 
-int remove_effect_char(int fn)
-{
+int remove_effect_char(int fn) {
   int n, cn;
 
   cn = ef[fn].efcn;
@@ -214,14 +213,15 @@ int remove_effect_char(int fn)
   ch[cn].ef[n] = 0;
   ef[fn].efcn = 0;
 
-  if (ef[fn].light) update_char(cn);
-  else set_sector(ch[cn].x, ch[cn].y);
+  if (ef[fn].light)
+    update_char(cn);
+  else
+    set_sector(ch[cn].x, ch[cn].y);
 
   return 1;
 }
 
-int destroy_effect_type(int cn, int type)
-{
+int destroy_effect_type(int cn, int type) {
   int n, fn = 0, flag = 0;
 
   if (cn < 1 || cn >= MAXCHARS) return 0;
@@ -235,8 +235,10 @@ int destroy_effect_type(int cn, int type)
     }
   }
   if (flag) {
-    if (ef[fn].light) update_char(cn);
-    else set_sector(ch[cn].x, ch[cn].y);
+    if (ef[fn].light)
+      update_char(cn);
+    else
+      set_sector(ch[cn].x, ch[cn].y);
     return 1;
   }
 
@@ -245,8 +247,7 @@ int destroy_effect_type(int cn, int type)
 
 // completely remove effect fn from
 // the map
-int remove_effect(int fn)
-{
+int remove_effect(int fn) {
   int n;
 
   if (fn < 1 || fn >= MAXEFFECT) return 0;
@@ -263,8 +264,7 @@ int remove_effect(int fn)
   return 1;
 }
 
-int effect_changed(int fn)
-{
+int effect_changed(int fn) {
   int n;
 
   if (fn < 1 || fn >= MAXEFFECT) return 0;
@@ -279,8 +279,7 @@ int effect_changed(int fn)
 
 // ****** Fireball and helpers ***********
 
-static void ef_fireball_set(int fn, int x, int y)
-{
+static void ef_fireball_set(int fn, int x, int y) {
   int m, co, cn, dam;
 
   if (fn < 1 || fn >= MAXEFFECT) return;
@@ -289,19 +288,18 @@ static void ef_fireball_set(int fn, int x, int y)
   m = x + y * MAXMAP;
 
   if ((co = map[m].ch)) {
-
     cn = ef[fn].cn;
 
-    if (ch[co].flags & CF_EDEMON) { // earth demons shoot back
-      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1);
+    if (ch[co].flags & CF_EDEMON) {  // earth demons shoot back
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
     }
     dam = fireball_damage(cn, co, ef[fn].strength);
     hurt(co, dam, cn, 10, 50, 70);
   }
 }
 
-int checkhit_fireball(int x, int y)
-{
+int checkhit_fireball(int x, int y) {
   int m;
 
   m = x + y * MAXMAP;
@@ -311,30 +309,31 @@ int checkhit_fireball(int x, int y)
   return 0;
 }
 
-static int ef_fireball_reflect(int cn, int str, int fn)
-{
+static int ef_fireball_reflect(int cn, int str, int fn) {
   int in, n, co;
 
-  if (!(co = ef[fn].cn) || !ch[co].flags || ch[co].serial != ef[fn].sercn) return 0;
+  if (!(co = ef[fn].cn) || !ch[co].flags || ch[co].serial != ef[fn].sercn)
+    return 0;
 
   for (n = 0; n < 12; n++) {
     if ((in = ch[cn].item[n]) && it[in].ID == IID_REFLECT_FIREBALL) {
-      if (*(unsigned int*)(it[in].drdata) <= str) {
+      if (*(unsigned int *)(it[in].drdata) <= str) {
         log_char(cn, LOG_SYSTEM, 0, "Your %s was destroyed.", it[in].name);
-        if (ch[cn].flags & CF_PLAYER) dlog(cn, in, "dropped because it was used up");
+        if (ch[cn].flags & CF_PLAYER)
+          dlog(cn, in, "dropped because it was used up");
         remove_item_char(in);
         destroy_item(in);
       }
-      *(unsigned int*)(it[in].drdata) -= str;
-      sprintf(it[in].description, "%d units left.", *(unsigned int*)(it[in].drdata));
+      *(unsigned int *)(it[in].drdata) -= str;
+      sprintf(it[in].description, "%d units left.",
+              *(unsigned int *)(it[in].drdata));
       return 1;
     }
   }
   return 0;
 }
 
-static void ef_fireball_explode(int fn, int x, int y)
-{
+static void ef_fireball_explode(int fn, int x, int y) {
   int cn, co, fn2;
 
   // would we hit someone we're not allowed to hit?
@@ -343,54 +342,142 @@ static void ef_fireball_explode(int fn, int x, int y)
   remove_effect(fn);
 
   if ((co = checkhit_fireball(x, y))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y, 5) && (co = checkhit_fireball(x + 1, y))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y, 5) &&
+      (co = checkhit_fireball(x + 1, y))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y, 5) && (co = checkhit_fireball(x - 1, y))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y, 5) &&
+      (co = checkhit_fireball(x - 1, y))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y + 1, 5) && (co = checkhit_fireball(x, y + 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y + 1, 5) &&
+      (co = checkhit_fireball(x, y + 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y - 1, 5) && (co = checkhit_fireball(x, y - 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y - 1, 5) &&
+      (co = checkhit_fireball(x, y - 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
 
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y + 1, 5) && (co = checkhit_fireball(x + 1, y + 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y + 1, 5) &&
+      (co = checkhit_fireball(x + 1, y + 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y - 1, 5) && (co = checkhit_fireball(x + 1, y - 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y - 1, 5) &&
+      (co = checkhit_fireball(x + 1, y - 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y + 1, 5) && (co = checkhit_fireball(x - 1, y + 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y + 1, 5) &&
+      (co = checkhit_fireball(x - 1, y + 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y - 1, 5) && (co = checkhit_fireball(x - 1, y - 1))) {
-    if (!can_attack(cn, co)) { free_effect(fn); return; }
-    if (ef_fireball_reflect(co, ef[fn].strength, fn)) { create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y, ef[fn].strength - 1); free_effect(fn); return; }
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y - 1, 5) &&
+      (co = checkhit_fireball(x - 1, y - 1))) {
+    if (!can_attack(cn, co)) {
+      free_effect(fn);
+      return;
+    }
+    if (ef_fireball_reflect(co, ef[fn].strength, fn)) {
+      create_fireball(co, ch[co].x, ch[co].y, ch[cn].x, ch[cn].y,
+                      ef[fn].strength - 1);
+      free_effect(fn);
+      return;
+    }
   }
 
   // nope, blast away!
   ef_fireball_set(fn, x, y);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y, 5)) ef_fireball_set(fn, x + 1, y);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y, 5)) ef_fireball_set(fn, x - 1, y);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y + 1, 5)) ef_fireball_set(fn, x, y + 1);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y - 1, 5)) ef_fireball_set(fn, x, y - 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y, 5))
+    ef_fireball_set(fn, x + 1, y);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y, 5))
+    ef_fireball_set(fn, x - 1, y);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y + 1, 5))
+    ef_fireball_set(fn, x, y + 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x, y - 1, 5))
+    ef_fireball_set(fn, x, y - 1);
 
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y + 1, 5)) ef_fireball_set(fn, x + 1, y + 1);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y - 1, 5)) ef_fireball_set(fn, x + 1, y - 1);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y + 1, 5)) ef_fireball_set(fn, x - 1, y + 1);
-  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y - 1, 5)) ef_fireball_set(fn, x - 1, y - 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y + 1, 5))
+    ef_fireball_set(fn, x + 1, y + 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x + 1, y - 1, 5))
+    ef_fireball_set(fn, x + 1, y - 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y + 1, 5))
+    ef_fireball_set(fn, x - 1, y + 1);
+  if (los_can_see(0, ef[fn].lx, ef[fn].ly, x - 1, y - 1, 5))
+    ef_fireball_set(fn, x - 1, y - 1);
 
   free_effect(fn);
 
@@ -400,8 +487,7 @@ static void ef_fireball_explode(int fn, int x, int y)
   sound_area(ef[fn].lx, ef[fn].ly, 6);
 }
 
-int fire_map_block(int m)
-{
+int fire_map_block(int m) {
   if (map[m].flags & MF_TMOVEBLOCK) return 1;
   if (map[m].flags & MF_FIRETHRU) return 0;
   if (map[m].flags & MF_MOVEBLOCK) return 1;
@@ -409,8 +495,7 @@ int fire_map_block(int m)
   return 0;
 }
 
-int ball_map_block(int m)
-{
+int ball_map_block(int m) {
   if (map[m].flags & MF_TMOVEBLOCK) return 1;
   if (map[m].flags & MF_FIRETHRU) return 0;
   if (map[m].flags & MF_MOVEBLOCK) return 1;
@@ -418,19 +503,18 @@ int ball_map_block(int m)
   return 0;
 }
 
-static int fire_char(int m, int cn)
-{
+static int fire_char(int m, int cn) {
   if (map[m].ch == cn) return 1;
   if (ch[cn].tox + ch[cn].toy * MAXMAP == m) return 1;
 
   return 0;
 }
-static void ef_fireball(int fn)
-{
+static void ef_fireball(int fn) {
   int m, dx, dy, n, x, y, cn, remo = 0;
 
   cn = ef[fn].cn;
-  if (cn && (!ch[cn].flags || ch[cn].serial != ef[fn].sercn)) remo = 1; // different char
+  if (cn && (!ch[cn].flags || ch[cn].serial != ef[fn].sercn))
+    remo = 1;  // different char
 
   // maximum age for a fireball is TICKS, which makes its range 24 tiles
   if (remo || ticker >= ef[fn].stop) {
@@ -454,9 +538,13 @@ static void ef_fireball(int fn)
 
   // line algorithm with a step of 0.5 tiles
   // this is needed to avoid jumping over obstacles
-  if (abs(dx) > abs(dy)) { dy = dy * 512 / abs(dx); dx = dx * 512 / abs(dx); }
-  else { dx = dx * 512 / abs(dy); dy = dy * 512 / abs(dy); }
-
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 512 / abs(dx);
+    dx = dx * 512 / abs(dx);
+  } else {
+    dx = dx * 512 / abs(dy);
+    dy = dy * 512 / abs(dy);
+  }
 
   // two steps per tick, making the speed one tile per tick
   for (n = 0; n < 2; n++) {
@@ -481,8 +569,8 @@ static void ef_fireball(int fn)
 }
 
 // helper for NCPs: would we hit using fireball?
-int ishit_fireball(int cn, int frx, int fry, int tox, int toy, int (*isenemy)(int, int))
-{
+int ishit_fireball(int cn, int frx, int fry, int tox, int toy,
+                   int (*isenemy)(int, int)) {
   int dx, dy, x, y, co, n, cx, cy, m, enemy = 0;
 
   x = frx * 1024 + 512;
@@ -494,12 +582,16 @@ int ishit_fireball(int cn, int frx, int fry, int tox, int toy, int (*isenemy)(in
   if (abs(dx) < 2 && abs(dy) < 2) return 0;
 
   // line algorithm with a step of 0.5 tiles
-  if (abs(dx) > abs(dy)) { dy = dy * 512 / abs(dx); dx = dx * 512 / abs(dx); }
-  else { dx = dx * 512 / abs(dy); dy = dy * 512 / abs(dy); }
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 512 / abs(dx);
+    dx = dx * 512 / abs(dx);
+  } else {
+    dx = dx * 512 / abs(dy);
+    dy = dy * 512 / abs(dy);
+  }
 
   // 48 steps is whole range
   for (n = 0; n < 48; n++) {
-
     cx = x / 1024;
     cy = y / 1024;
 
@@ -507,40 +599,58 @@ int ishit_fireball(int cn, int frx, int fry, int tox, int toy, int (*isenemy)(in
 
     if ((fire_map_block(m)) && map[m].ch != cn) {
       if ((co = checkhit_fireball(cx, cy))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx + 1, cy))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx, cy + 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx - 1, cy))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx, cy - 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx + 1, cy + 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx - 1, cy + 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx + 1, cy - 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
       if ((co = checkhit_fireball(cx - 1, cy - 1))) {
-        if (isenemy(cn, co)) enemy++;
-        else return 0;
+        if (isenemy(cn, co))
+          enemy++;
+        else
+          return 0;
       }
 
       return enemy;
@@ -553,8 +663,7 @@ int ishit_fireball(int cn, int frx, int fry, int tox, int toy, int (*isenemy)(in
   return 0;
 }
 
-int create_fireball(int cn, int frx, int fry, int tox, int toy, int str)
-{
+int create_fireball(int cn, int frx, int fry, int tox, int toy, int str) {
   int n, dx, dy;
 
   n = alloc_effect(EF_FIREBALL);
@@ -583,8 +692,7 @@ int create_fireball(int cn, int frx, int fry, int tox, int toy, int str)
 
 // --------------- lightning ball and helpers ----------------------
 
-static void ef_strike(int fn)
-{
+static void ef_strike(int fn) {
   if (ticker >= ef[fn].stop) {
     remove_effect(fn);
     free_effect(fn);
@@ -592,16 +700,14 @@ static void ef_strike(int fn)
   }
 }
 
-static void add_strike(int xc, int yc, int x, int y, int str, int cn, int cc, int cnt)
-{
+static void add_strike(int xc, int yc, int x, int y, int str, int cn, int cc,
+                       int cnt) {
   int n, dam, cnt_multi, fn;
 
   for (n = 0; n < 4; n++) {
-    if ((fn = ch[cn].ef[n]) &&
-        ef[fn].type == EF_STRIKE &&
-        ef[fn].x == xc &&
-        ef[fn].y == yc &&
-        ef[fn].strength == str) break;
+    if ((fn = ch[cn].ef[n]) && ef[fn].type == EF_STRIKE && ef[fn].x == xc &&
+        ef[fn].y == yc && ef[fn].strength == str)
+      break;
   }
   if (n == 4) {
     fn = alloc_effect(EF_STRIKE);
@@ -624,30 +730,52 @@ static void add_strike(int xc, int yc, int x, int y, int str, int cn, int cc, in
   if (cnt > 10) cnt = 10;
 
   switch (cnt) {
-  case 1:   cnt_multi = 100; break;
-  case 2:   cnt_multi = 95; break;
-  case 3:   cnt_multi = 90; break;
-  case 4:   cnt_multi = 85; break;
-  case 5:   cnt_multi = 80; break;
-  case 6:   cnt_multi = 75; break;
-  case 7:   cnt_multi = 70; break;
-  case 8:   cnt_multi = 65; break;
-  case 9:   cnt_multi = 60; break;
-  default:  cnt_multi = 55; break;
+    case 1:
+      cnt_multi = 100;
+      break;
+    case 2:
+      cnt_multi = 95;
+      break;
+    case 3:
+      cnt_multi = 90;
+      break;
+    case 4:
+      cnt_multi = 85;
+      break;
+    case 5:
+      cnt_multi = 80;
+      break;
+    case 6:
+      cnt_multi = 75;
+      break;
+    case 7:
+      cnt_multi = 70;
+      break;
+    case 8:
+      cnt_multi = 65;
+      break;
+    case 9:
+      cnt_multi = 60;
+      break;
+    default:
+      cnt_multi = 55;
+      break;
   }
 
   if ((ticker & 3) == 0) {
     dam = strike_damage(cc, cn, str) * cnt_multi / (25 * TICKS * 2);
-    if (ch[cn].flags & CF_EDEMON) { // earth demons dont suffer as much damage
-      dam -= min(dam / 4, (dam * max(0, ch[cn].value[1][V_DEMON] - ch[cc].value[1][V_DEMON])) / 10);
+    if (ch[cn].flags & CF_EDEMON) {  // earth demons dont suffer as much damage
+      dam -= min(dam / 4, (dam * max(0, ch[cn].value[1][V_DEMON] -
+                                            ch[cc].value[1][V_DEMON])) /
+                              10);
     }
     hurt(cn, dam, cc, TICKS * 2 * 10 / 4, 30, 85);
-    //say(cn,"hit by strike, str=%d (%d), cnt=%d, damage=%d (%.2f)",str,immunity_reduction(cc,cn,str),cnt,dam,(double)dam/1000*TICKS*2);
+    // say(cn,"hit by strike, str=%d (%d), cnt=%d, damage=%d
+    // (%.2f)",str,immunity_reduction(cc,cn,str),cnt,dam,(double)dam/1000*TICKS*2);
   }
 }
 
-static void check_strike_near(int fn, int xc, int yc)
-{
+static void check_strike_near(int fn, int xc, int yc) {
   int x, y, xs, ys, xe, ye, co, cn, tmp, cnt = 0;
 
   xs = max(1, xc - 5);
@@ -666,7 +794,8 @@ static void check_strike_near(int fn, int xc, int yc)
         // not through walls
         if (!(tmp = los_can_see(0, xc, yc, x, y, 5))) continue;
 
-        add_strike(xc, yc, x, y, ef[fn].strength, co, ef[fn].cn, ef[fn].number_of_enemies);
+        add_strike(xc, yc, x, y, ef[fn].strength, co, ef[fn].cn,
+                   ef[fn].number_of_enemies);
         if (cnt == 0 && (ticker & 7) == 0) {
           sound_area(ch[cn].x, ch[cn].y, 30);
         }
@@ -677,12 +806,12 @@ static void check_strike_near(int fn, int xc, int yc)
   ef[fn].number_of_enemies = cnt;
 }
 
-static void ef_ball(int fn)
-{
+static void ef_ball(int fn) {
   int m, dx, dy, x, y, cn, remo = 0, oldx, oldy;
 
   cn = ef[fn].cn;
-  if (cn && (!ch[cn].flags || ch[cn].serial != ef[fn].sercn)) remo = 1; // different char
+  if (cn && (!ch[cn].flags || ch[cn].serial != ef[fn].sercn))
+    remo = 1;  // different char
 
   // maximum age for a lightning ball is TICKS*5
   if (remo || ticker >= ef[fn].stop) {
@@ -704,8 +833,13 @@ static void ef_ball(int fn)
   }
 
   // line algorithm with a step of 0.125 tiles
-  if (abs(dx) > abs(dy)) { dy = dy * 128 / abs(dx); dx = dx * 128 / abs(dx); }
-  else { dx = dx * 128 / abs(dy); dy = dy * 128 / abs(dy); }
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 128 / abs(dx);
+    dx = dx * 128 / abs(dx);
+  } else {
+    dx = dx * 128 / abs(dy);
+    dy = dy * 128 / abs(dy);
+  }
 
   ef[fn].x += dx;
   ef[fn].y += dy;
@@ -725,13 +859,13 @@ static void ef_ball(int fn)
   if (oldx != x || oldy != y) {
     remove_effect(fn);
     set_effect_map(fn, x, y);
-  } else set_sector(x, y);
+  } else
+    set_sector(x, y);
 
   check_strike_near(fn, x, y);
 }
 
-int calc_steps_ball(int cn, int frx, int fry, int tox, int toy)
-{
+int calc_steps_ball(int cn, int frx, int fry, int tox, int toy) {
   int m, dx, dy, x, y, n;
 
   dx = (tox - frx);
@@ -743,8 +877,13 @@ int calc_steps_ball(int cn, int frx, int fry, int tox, int toy)
   if (dx == 0 && dy == 0) return 0;
 
   // line algorithm with a step of 0.5 tiles
-  if (abs(dx) > abs(dy)) { dy = dy * 512 / abs(dx); dx = dx * 512 / abs(dx); }
-  else { dx = dx * 512 / abs(dy); dy = dy * 512 / abs(dy); }
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 512 / abs(dx);
+    dx = dx * 512 / abs(dx);
+  } else {
+    dx = dx * 512 / abs(dy);
+    dy = dy * 512 / abs(dy);
+  }
 
   for (n = 0; n < TICKS * 5 / 4; n++) {
     x += dx;
@@ -761,8 +900,7 @@ int calc_steps_ball(int cn, int frx, int fry, int tox, int toy)
   return n;
 }
 
-int create_ball(int cn, int frx, int fry, int tox, int toy, int str)
-{
+int create_ball(int cn, int frx, int fry, int tox, int toy, int str) {
   int n;
 
   n = alloc_effect(EF_BALL);
@@ -788,13 +926,14 @@ int create_ball(int cn, int frx, int fry, int tox, int toy, int str)
 
 //---------------- lightning flash ---------------------------------
 
-static void ef_flash(int fn)
-{
+static void ef_flash(int fn) {
   int cn;
 
   cn = ef[fn].cn;
-  if (ch[cn].serial != ef[fn].sercn) cn = 0;      // different char
-  else if (ch[cn].flags & (CF_DEAD)) cn = 0;      // dead or unconscious char
+  if (ch[cn].serial != ef[fn].sercn)
+    cn = 0;  // different char
+  else if (ch[cn].flags & (CF_DEAD))
+    cn = 0;  // dead or unconscious char
 
   // maximum age for a flash is TICKS*2
   if (!cn || ticker >= ef[fn].stop) {
@@ -810,11 +949,10 @@ static void ef_flash(int fn)
 
   set_effect_map(fn,ch[cn].x,ch[cn].y);*/
   check_strike_near(fn, ch[cn].x, ch[cn].y);
-  //set_sector(ch[cn].x,ch[cn].y);
+  // set_sector(ch[cn].x,ch[cn].y);
 }
 
-int create_flash(int cn, int str, int duration)
-{
+int create_flash(int cn, int str, int duration) {
   int fn;
 
   fn = alloc_effect(EF_FLASH);
@@ -836,8 +974,7 @@ int create_flash(int cn, int str, int duration)
 
 //---------------- explosion ---------------------------------
 
-static void ef_explode(int fn)
-{
+static void ef_explode(int fn) {
   if (ticker >= ef[fn].stop) {
     remove_effect(fn);
     free_effect(fn);
@@ -845,13 +982,9 @@ static void ef_explode(int fn)
   }
 }
 
-int add_explosion(int fn, int x, int y)
-{
-  return set_effect_map(fn, x, y);
-}
+int add_explosion(int fn, int x, int y) { return set_effect_map(fn, x, y); }
 
-int create_explosion(int maxage, int base)
-{
+int create_explosion(int maxage, int base) {
   int n;
 
   n = alloc_effect(EF_EXPLODE);
@@ -869,8 +1002,7 @@ int create_explosion(int maxage, int base)
   return n;
 }
 
-int create_mist(int x, int y)
-{
+int create_mist(int x, int y) {
   int n;
 
   n = alloc_effect(EF_MIST);
@@ -886,8 +1018,7 @@ int create_mist(int x, int y)
   return set_effect_map(n, x, y);
 }
 
-static void ef_show(int fn)
-{
+static void ef_show(int fn) {
   if (ticker >= ef[fn].stop) {
     remove_effect(fn);
     free_effect(fn);
@@ -895,14 +1026,13 @@ static void ef_show(int fn)
   }
 }
 
-static void ef_earthrain(int fn)
-{
+static void ef_earthrain(int fn) {
   int n, cn, m, dam, per;
 
   for (n = 0; n < ef[fn].field_cnt; n++) {
     m = ef[fn].m[n];
     if (!(cn = map[m].ch)) continue;
-    //if (!can_attack(ef[fn].cn,cn)) continue;
+    // if (!can_attack(ef[fn].cn,cn)) continue;
     if (!(ch[cn].flags & CF_PLAYER)) continue;
 
     dam = edemon_reduction(cn, ef[fn].strength) * 150;
@@ -910,7 +1040,9 @@ static void ef_earthrain(int fn)
 
     per = 50 - min(50, edemon_reduction(cn, ef[fn].strength));
 
-    if (!RANDOM(10)) hurt(cn, dam, 0, 8, per, per + 25); //hurt(cn,dam,ef[fn].cn,8,per,per+25);
+    if (!RANDOM(10))
+      hurt(cn, dam, 0, 8, per,
+           per + 25);  // hurt(cn,dam,ef[fn].cn,8,per,per+25);
   }
   if (ticker >= ef[fn].stop) {
     remove_effect(fn);
@@ -919,8 +1051,7 @@ static void ef_earthrain(int fn)
   }
 }
 
-static int add_earthrain_map(int fn, int x, int y)
-{
+static int add_earthrain_map(int fn, int x, int y) {
   int n, fn2, m;
 
   m = x + y * MAXMAP;
@@ -931,15 +1062,14 @@ static int add_earthrain_map(int fn, int x, int y)
   return set_effect_map(fn, x, y);
 }
 
-int create_earthrain(int cn, int x, int y, int strength)
-{
+int create_earthrain(int cn, int x, int y, int strength) {
   int n;
 
   n = alloc_effect(EF_EARTHRAIN);
   if (!n) return 0;
 
   ef[n].light = 10;
-  ef[n].cn = 0; //ef[n].cn=cn;
+  ef[n].cn = 0;  // ef[n].cn=cn;
   ef[n].sercn = 0;
   ef[n].field_cnt = 0;
   ef[n].stop = ticker + TICKS * 60;
@@ -948,22 +1078,32 @@ int create_earthrain(int cn, int x, int y, int strength)
 
   set_effect_map(n, x, y);
 
-  if (!(map[x + y * MAXMAP + 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x + 1, y);
-  if (!(map[x + y * MAXMAP - 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x - 1, y);
-  if (!(map[x + y * MAXMAP + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x, y + 1);
-  if (!(map[x + y * MAXMAP - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x, y - 1);
+  if (!(map[x + y * MAXMAP + 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x + 1, y);
+  if (!(map[x + y * MAXMAP - 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x - 1, y);
+  if (!(map[x + y * MAXMAP + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x, y + 1);
+  if (!(map[x + y * MAXMAP - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x, y - 1);
 
-  if (!(map[x + y * MAXMAP + 1 + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x + 1, y + 1);
-  if (!(map[x + y * MAXMAP - 1 + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x - 1, y + 1);
-  if (!(map[x + y * MAXMAP + 1 - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x + 1, y - 1);
-  if (!(map[x + y * MAXMAP - 1 - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthrain_map(n, x - 1, y - 1);
-
+  if (!(map[x + y * MAXMAP + 1 + MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x + 1, y + 1);
+  if (!(map[x + y * MAXMAP - 1 + MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x - 1, y + 1);
+  if (!(map[x + y * MAXMAP + 1 - MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x + 1, y - 1);
+  if (!(map[x + y * MAXMAP - 1 - MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthrain_map(n, x - 1, y - 1);
 
   return 1;
 }
 
-static void ef_earthmud(int fn)
-{
+static void ef_earthmud(int fn) {
   if (ticker >= ef[fn].stop) {
     remove_effect(fn);
     free_effect(fn);
@@ -971,8 +1111,7 @@ static void ef_earthmud(int fn)
   }
 }
 
-static int add_earthmud_map(int fn, int x, int y)
-{
+static int add_earthmud_map(int fn, int x, int y) {
   int n, fn2, m;
 
   m = x + y * MAXMAP;
@@ -983,8 +1122,7 @@ static int add_earthmud_map(int fn, int x, int y)
   return set_effect_map(fn, x, y);
 }
 
-int create_earthmud(int cn, int x, int y, int strength)
-{
+int create_earthmud(int cn, int x, int y, int strength) {
   int n;
 
   n = alloc_effect(EF_EARTHMUD);
@@ -1000,37 +1138,48 @@ int create_earthmud(int cn, int x, int y, int strength)
 
   set_effect_map(n, x, y);
 
-  if (!(map[x + y * MAXMAP + 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x + 1, y);
-  if (!(map[x + y * MAXMAP - 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x - 1, y);
-  if (!(map[x + y * MAXMAP + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x, y + 1);
-  if (!(map[x + y * MAXMAP - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x, y - 1);
+  if (!(map[x + y * MAXMAP + 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x + 1, y);
+  if (!(map[x + y * MAXMAP - 1].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x - 1, y);
+  if (!(map[x + y * MAXMAP + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x, y + 1);
+  if (!(map[x + y * MAXMAP - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x, y - 1);
 
-  if (!(map[x + y * MAXMAP + 1 + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x + 1, y + 1);
-  if (!(map[x + y * MAXMAP - 1 + MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x - 1, y + 1);
-  if (!(map[x + y * MAXMAP + 1 - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x + 1, y - 1);
-  if (!(map[x + y * MAXMAP - 1 - MAXMAP].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK))) add_earthmud_map(n, x - 1, y - 1);
-
+  if (!(map[x + y * MAXMAP + 1 + MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x + 1, y + 1);
+  if (!(map[x + y * MAXMAP - 1 + MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x - 1, y + 1);
+  if (!(map[x + y * MAXMAP + 1 - MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x + 1, y - 1);
+  if (!(map[x + y * MAXMAP - 1 - MAXMAP].flags &
+        (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)))
+    add_earthmud_map(n, x - 1, y - 1);
 
   return 1;
 }
 
-
-static void ef_burn(int fn)
-{
+static void ef_burn(int fn) {
   int cn;
 
   cn = ef[fn].cn;
-  if (!cn || !(ch[cn].flags) || ch[cn].serial != ef[fn].sercn || ticker >= ef[fn].stop) {
+  if (!cn || !(ch[cn].flags) || ch[cn].serial != ef[fn].sercn ||
+      ticker >= ef[fn].stop) {
     remove_effect(fn);
     free_effect(fn);
     return;
   }
 
-  if (ef[fn].strength) hurt(cn, POWERSCALE / 6 + ef[fn].strength, 0, 30, 50, 75);
+  if (ef[fn].strength)
+    hurt(cn, POWERSCALE / 6 + ef[fn].strength, 0, 30, 50, 75);
 }
 
-int create_show_effect(int type, int cn, int start, int stop, int light, int strength)
-{
+int create_show_effect(int type, int cn, int start, int stop, int light,
+                       int strength) {
   int fn;
 
   fn = alloc_effect(type);
@@ -1050,8 +1199,8 @@ int create_show_effect(int type, int cn, int start, int stop, int light, int str
   return fn;
 }
 
-int create_map_effect(int type, int x, int y, int start, int stop, int light, int strength)
-{
+int create_map_effect(int type, int x, int y, int start, int stop, int light,
+                      int strength) {
   int fn;
 
   fn = alloc_effect(type);
@@ -1070,8 +1219,7 @@ int create_map_effect(int type, int x, int y, int start, int stop, int light, in
 
 // ------------- end of magic shield -----------------
 
-void destroy_chareffects(int cn)
-{
+void destroy_chareffects(int cn) {
   int n, fn;
 
   for (n = 0; n < 4; n++) {
@@ -1084,8 +1232,7 @@ void destroy_chareffects(int cn)
 
 // ------ edemon ball --------------
 
-int edemonball_map_block(int m)
-{
+int edemonball_map_block(int m) {
   if (map[m].ch || (map[m].it && (map[m].flags & MF_TMOVEBLOCK))) return 1;
   if (map[m].flags & MF_FIRETHRU) return 0;
   if (map[m].flags & MF_MOVEBLOCK) return 1;
@@ -1093,8 +1240,7 @@ int edemonball_map_block(int m)
   return 0;
 }
 
-static void ef_edemonball_explode(int fn, int x, int y)
-{
+static void ef_edemonball_explode(int fn, int x, int y) {
   int m, co, cn, dam, n, in, sprite, base;
 
   if (fn < 1 || fn >= MAXEFFECT) return;
@@ -1109,28 +1255,30 @@ static void ef_edemonball_explode(int fn, int x, int y)
 
   m = x + y * MAXMAP;
 
-  if ((co = map[m].ch) && can_attack(cn, co) && !(base == 2 && (ch[co].flags & (CF_PLAYER | CF_PLAYERLIKE)))) {
-
+  if ((co = map[m].ch) && can_attack(cn, co) &&
+      !(base == 2 && (ch[co].flags & (CF_PLAYER | CF_PLAYERLIKE)))) {
     cn = ef[fn].cn;
     dam = ef[fn].strength;
 
     for (n = 29; n < INVENTORYSIZE; n++) {
-
-      if (n > 29) in = ch[co].item[n];
-      else in = ch[co].citem;
+      if (n > 29)
+        in = ch[co].item[n];
+      else
+        in = ch[co].citem;
 
       if (in && base == 0 && it[in].ID == IID_AREA6_GREENCRYSTAL) {
-
         if (dam > it[in].drdata[0]) {
-
           dam -= it[in].drdata[0];
 
-          if (n > 29) ch[co].item[n] = 0;
-          else ch[co].citem = 0;
+          if (n > 29)
+            ch[co].item[n] = 0;
+          else
+            ch[co].citem = 0;
 
           ch[co].flags |= CF_ITEMS;
 
-          if (ch[cn].flags & CF_PLAYER) dlog(cn, in, "dropped as shield against edemonball");
+          if (ch[cn].flags & CF_PLAYER)
+            dlog(cn, in, "dropped as shield against edemonball");
           log_char(co, LOG_SYSTEM, 0, "Your %s was destroyed.", it[in].name);
 
           destroy_item(in);
@@ -1151,7 +1299,6 @@ static void ef_edemonball_explode(int fn, int x, int y)
     }
 
     hurt(co, dam * POWERSCALE, 0, 6, 75, 50);
-
   }
 
   fn = create_explosion(8, 50450 + base);
@@ -1159,12 +1306,11 @@ static void ef_edemonball_explode(int fn, int x, int y)
   sound_area(x, y, 6);
 }
 
-static void ef_edemonball(int fn)
-{
+static void ef_edemonball(int fn) {
   int m, dx, dy, x, y, cn, remo = 0;
 
   cn = ef[fn].cn;
-  if (cn && ch[cn].serial != ef[fn].sercn) remo = 1;      // different char
+  if (cn && ch[cn].serial != ef[fn].sercn) remo = 1;  // different char
 
   // maximum age for a fireball is TICKS, which makes its range 24 tiles
   if (remo || ticker >= ef[fn].stop) {
@@ -1188,8 +1334,13 @@ static void ef_edemonball(int fn)
 
   // line algorithm with a step of 0.5 tiles
   // this is needed to avoid jumping over obstacles
-  if (abs(dx) > abs(dy)) { dy = dy * 256 / abs(dx); dx = dx * 256 / abs(dx); }
-  else { dx = dx * 256 / abs(dy); dy = dy * 256 / abs(dy); }
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 256 / abs(dx);
+    dx = dx * 256 / abs(dx);
+  } else {
+    dx = dx * 256 / abs(dy);
+    dy = dy * 256 / abs(dy);
+  }
 
   ef[fn].lx = ef[fn].x / 1024;
   ef[fn].ly = ef[fn].y / 1024;
@@ -1200,8 +1351,10 @@ static void ef_edemonball(int fn)
   m = (x / 1024) + (y / 1024) * MAXMAP;
 
   if ((edemonball_map_block(m)) && (ef[fn].cn == 0 || map[m].ch != ef[fn].cn)) {
-    if (map[m].ch) ef_edemonball_explode(fn, x / 1024, y / 1024);
-    else ef_edemonball_explode(fn, ef[fn].x / 1024, ef[fn].y / 1024);
+    if (map[m].ch)
+      ef_edemonball_explode(fn, x / 1024, y / 1024);
+    else
+      ef_edemonball_explode(fn, ef[fn].x / 1024, ef[fn].y / 1024);
     return;
   }
 
@@ -1214,8 +1367,8 @@ static void ef_edemonball(int fn)
   set_effect_map(fn, x, y);
 }
 
-int create_edemonball(int cn, int frx, int fry, int tox, int toy, int str, int base)
-{
+int create_edemonball(int cn, int frx, int fry, int tox, int toy, int str,
+                      int base) {
   int n, dx, dy;
 
   n = alloc_effect(EF_EDEMONBALL);
@@ -1243,8 +1396,7 @@ int create_edemonball(int cn, int frx, int fry, int tox, int toy, int str, int b
   return n;
 }
 
-void create_pulse(int x, int y, int str)
-{
+void create_pulse(int x, int y, int str) {
   int n;
 
   n = alloc_effect(EF_PULSE);
@@ -1257,11 +1409,9 @@ void create_pulse(int x, int y, int str)
   set_effect_map(n, x, y);
 
   return;
-
 }
 
-void tick_effect(void)
-{
+void tick_effect(void) {
   int n, next;
   /*static int cnt=0;
 
@@ -1269,53 +1419,103 @@ void tick_effect(void)
   cnt=0;*/
 
   for (n = getfirst_effect(); n; n = next) {
-
     next = getnext_effect(n);
 
     switch (ef[n].type) {
-    case EF_NONE:   break;
-    case EF_FIREBALL: ef_fireball(n); break;
-    case EF_MAGICSHIELD:  ef_show(n); break;
-    case EF_BALL:   ef_ball(n); break;
-    case EF_STRIKE:   ef_strike(n); break;
-    case EF_FLASH:    ef_flash(n); break;
-    case EF_EXPLODE:  ef_explode(n); break;
-    case EF_WARCRY:   ef_show(n); break;
-    case EF_BLESS:    ef_show(n); break;
-    case EF_FREEZE:   ef_show(n); break;
-    case EF_HEAL:   ef_show(n); break;
-    case EF_BURN:   ef_burn(n); break;
-    case EF_MIST:   ef_show(n); break;
-    case EF_POTION:   ef_show(n); break;
-    case EF_EARTHRAIN:  ef_earthrain(n); break;
-    case EF_EARTHMUD: ef_earthmud(n); break;
-    case EF_EDEMONBALL: ef_edemonball(n); break;
-    case EF_CURSE:    ef_show(n); break;
-    case EF_CAP:    ef_show(n); break;
-    case EF_LAG:    ef_show(n); break;
-    case EF_PULSE:    ef_show(n); break;
-    case EF_PULSEBACK:  ef_show(n); break;
-    case EF_FIRERING: ef_show(n); break;
-    case EF_BUBBLE:   ef_show(n); break;
+      case EF_NONE:
+        break;
+      case EF_FIREBALL:
+        ef_fireball(n);
+        break;
+      case EF_MAGICSHIELD:
+        ef_show(n);
+        break;
+      case EF_BALL:
+        ef_ball(n);
+        break;
+      case EF_STRIKE:
+        ef_strike(n);
+        break;
+      case EF_FLASH:
+        ef_flash(n);
+        break;
+      case EF_EXPLODE:
+        ef_explode(n);
+        break;
+      case EF_WARCRY:
+        ef_show(n);
+        break;
+      case EF_BLESS:
+        ef_show(n);
+        break;
+      case EF_FREEZE:
+        ef_show(n);
+        break;
+      case EF_HEAL:
+        ef_show(n);
+        break;
+      case EF_BURN:
+        ef_burn(n);
+        break;
+      case EF_MIST:
+        ef_show(n);
+        break;
+      case EF_POTION:
+        ef_show(n);
+        break;
+      case EF_EARTHRAIN:
+        ef_earthrain(n);
+        break;
+      case EF_EARTHMUD:
+        ef_earthmud(n);
+        break;
+      case EF_EDEMONBALL:
+        ef_edemonball(n);
+        break;
+      case EF_CURSE:
+        ef_show(n);
+        break;
+      case EF_CAP:
+        ef_show(n);
+        break;
+      case EF_LAG:
+        ef_show(n);
+        break;
+      case EF_PULSE:
+        ef_show(n);
+        break;
+      case EF_PULSEBACK:
+        ef_show(n);
+        break;
+      case EF_FIRERING:
+        ef_show(n);
+        break;
+      case EF_BUBBLE:
+        ef_show(n);
+        break;
 
-    default:  elog("unknown effect type %d for ef %d", ef[n].type, n);
+      default:
+        elog("unknown effect type %d for ef %d", ef[n].type, n);
     }
   }
 }
 
-int init_effect(void)
-{
+int init_effect(void) {
   int n;
 
-  ef = (struct effect*)xcalloc(sizeof(struct effect) * MAXEFFECT, IM_BASE);
+  ef = (struct effect *)xcalloc(sizeof(struct effect) * MAXEFFECT, IM_BASE);
   if (!ef) return 0;
-  xlog("Allocated effects: %.2fM (%lu*%d)", sizeof(struct effect)*MAXEFFECT / 1024.0 / 1024.0, sizeof(struct effect), MAXEFFECT);
+  xlog("Allocated effects: %.2fM (%lu*%d)",
+       sizeof(struct effect) * MAXEFFECT / 1024.0 / 1024.0,
+       sizeof(struct effect), MAXEFFECT);
   mem_usage += sizeof(struct effect) * MAXEFFECT;
 
-  for (n = 1; n < MAXEFFECT; n++) { ef[n].type = 42; free_effect(n); }
+  for (n = 1; n < MAXEFFECT; n++) {
+    ef[n].type = 42;
+    free_effect(n);
+  }
 
   used_effects = 0;
 
   return 1;
-
 }

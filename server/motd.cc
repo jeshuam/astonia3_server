@@ -35,8 +35,7 @@ Added RCS tags
 static int motd_time;
 static char *motd = NULL;
 
-int read_motd(void)
-{
+int read_motd(void) {
   struct stat st;
   int handle, len;
 
@@ -46,12 +45,16 @@ int read_motd(void)
   }
   if (st.st_mtime > motd_time) {
     handle = open("motd.txt", O_RDONLY);
-    if (handle == -1) { elog("Error opening motd"); return 0; }
+    if (handle == -1) {
+      elog("Error opening motd");
+      return 0;
+    }
 
     len = lseek(handle, 0, SEEK_END);
     lseek(handle, 0, SEEK_SET);
-    motd = (char*)xrealloc(motd, len + 1, IM_BASE);
-    read(handle, motd, len); motd[len] = 0;
+    motd = (char *)xrealloc(motd, len + 1, IM_BASE);
+    read(handle, motd, len);
+    motd[len] = 0;
     close(handle);
 
     xlog("Read MotD");
@@ -61,21 +64,21 @@ int read_motd(void)
   return 1;
 }
 
-void show_motd(int nr)
-{
+void show_motd(int nr) {
   char buf[1024], *a, *b;
 
   for (a = motd, b = buf; *a; a++) {
     if (*a == '\n') {
-      *b = 0; b = buf;
+      *b = 0;
+      b = buf;
       log_player(nr, LOG_SYSTEM, "%s", buf);
-    } else *b++ = *a;
+    } else
+      *b++ = *a;
   }
 }
 
 #ifdef STAFF
-void check_staff_stop(void)
-{
+void check_staff_stop(void) {
   struct stat st;
 
   if (areaID == 27 && !stat("./zones/27/stop", &st)) {
@@ -89,8 +92,7 @@ void check_staff_stop(void)
     }
   }
 }
-int check_staff_start(void)
-{
+int check_staff_start(void) {
   struct stat st;
 
   if (areaID != 27) return 1;

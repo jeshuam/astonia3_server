@@ -22,10 +22,9 @@ Added RCS tags
 #include "database.h"
 #include "lookup.h"
 
-#define MAXLOOK	1024
+#define MAXLOOK 1024
 
-struct lookup
-{
+struct lookup {
   char name[40];
   int ID;
   int created;
@@ -40,8 +39,7 @@ static pthread_mutex_t mutex;
 // if realname!=NULL, it is set to the database representation
 // of the name just looked up (use to get propper capitalization).
 // returns 0 for unknown, -1 for no player with that name and >0 for ID
-int lookup_name(char *name, char *realname)
-{
+int lookup_name(char *name, char *realname) {
   int n;
   unsigned int ID;
   char *ptr;
@@ -57,7 +55,8 @@ int lookup_name(char *name, char *realname)
   if (multi) pthread_mutex_lock(&mutex);
 
   for (n = 0; n < MAXLOOK; n++) {
-    if (lookup[n].created + TICKS * 60 * 60 < ticker) continue;	// dont use entries older than one hour
+    if (lookup[n].created + TICKS * 60 * 60 < ticker)
+      continue;  // dont use entries older than one hour
 
     if (!strcasecmp(lookup[n].name, name)) break;
   }
@@ -80,14 +79,14 @@ int lookup_name(char *name, char *realname)
 // will set name to "*resolving*" and return value to 0 for unknown,
 // name to player name and return value to 1 for known
 // or will return -1 for no player with that ID
-int lookup_ID(char *name, int ID)
-{
+int lookup_ID(char *name, int ID) {
   int n, res;
 
   if (multi) pthread_mutex_lock(&mutex);
 
   for (n = 0; n < MAXLOOK; n++) {
-    if (lookup[n].created + TICKS * 60 * 60 < ticker) continue;	// dont use entries older than one hour
+    if (lookup[n].created + TICKS * 60 * 60 < ticker)
+      continue;  // dont use entries older than one hour
     if (lookup[n].ID == ID) break;
   }
   if (n == MAXLOOK) {
@@ -114,8 +113,7 @@ int lookup_ID(char *name, int ID)
   return res;
 }
 
-void lookup_add_cache(unsigned int ID, char *name)
-{
+void lookup_add_cache(unsigned int ID, char *name) {
   int n;
 
   if (multi) pthread_mutex_lock(&mutex);
@@ -128,15 +126,16 @@ void lookup_add_cache(unsigned int ID, char *name)
   lookup[n].ID = ID;
   lookup[n].created = ticker;
 
-  if (name) strcpy(lookup[n].name, name);
-  else lookup[n].name[0] = 0;
+  if (name)
+    strcpy(lookup[n].name, name);
+  else
+    lookup[n].name[0] = 0;
 
   if (multi) pthread_mutex_unlock(&mutex);
 }
 
-int init_lookup(void)
-{
-  lookup = (struct lookup*)xcalloc(sizeof(struct lookup) * MAXLOOK, IM_BASE);
+int init_lookup(void) {
+  lookup = (struct lookup *)xcalloc(sizeof(struct lookup) * MAXLOOK, IM_BASE);
   if (!lookup) return 0;
 
   if (multi) pthread_mutex_init(&mutex, NULL);

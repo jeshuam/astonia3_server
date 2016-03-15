@@ -70,427 +70,429 @@ Added RCS tags
 */
 
 int warrior_tab[] = {
-  0,
-  1,      //level 1 (1)
-  2,      //level 2 (3)
-  3,      //level 3 (3)
-  4,      //level 4 (4)
-  5,      //level 5 (5)
-  7,      //level 6 (6)
-  9,      //level 7 (7)
-  10,     //level 8 (8)
-  11,     //level 9 (9)
-  13,     //level 10 (10)
-  15,     //level 11 (11)
-  16,     //level 12 (12)
-  18,     //level 13 (13)
-  19,     //level 14 (14)
-  20,     //level 15 (15)
-  21,     //level 16 (16)
-  22,     //level 17 (17)
-  24,     //level 18 (18)
-  25,     //level 19 (19)
-  27,     //level 20 (20)
-  28,     //level 21 (21)
-  29,     //level 22 (22)
-  30,     //level 23 (23)
-  31,     //level 24 (24)
-  33,     //level 25 (25)
-  34,     //level 26 (26)
-  35,     //level 27 (27)
-  37,     //level 28 (28)
-  38,     //level 29 (29)
-  39,     //level 30 (30)
-  40,     //level 31 (31)
-  41,     //level 32 (32)
-  43,     //level 33 (33)
-  44,     //level 34 (34)
-  45,     //level 35 (35)
-  46,     //level 36 (36)
-  48,     //level 37 (37)
-  49,     //level 38 (38)
-  50,     //level 39 (39)
-  51,     //level 40 (40)
-  52,     //level 41 (41)
-  53,     //level 42 (42)
-  55,     //level 43 (43)
-  56,     //level 44 (44)
-  57,     //level 45 (45)
-  58,     //level 46 (46)
-  60,     //level 47 (48)
-  61,     //level 48 (48)
-  62,     //level 49 (49)
-  63,     //level 50 (50)
-  64,     //level 51 (51)
-  65,     //level 52 (52)
-  66,     //level 53 (53)
-  68,     //level 54 (54)
-  69,     //level 55 (55)
-  70,     //level 56 (56)
-  71,     //level 57 (57)
-  72,     //level 58 (58)
-  73,     //level 59 (59)
-  74,     //level 60 (60)
-  76,     //level 61 (61)
-  77,     //level 62 (62)
-  78,     //level 63 (63)
-  79,     //level 64 (64)
-  80,     //level 65 (65)
-  81,     //level 66 (66)
-  82,     //level 67 (67)
-  83,     //level 68 (68)
-  84,     //level 69 (69)
-  86,     //level 70 (70)
-  87,     //level 71 (71)
-  88,     //level 72 (72)
-  89,     //level 73 (73)
-  90,     //level 74 (74)
-  91,     //level 75 (75)
-  92,     //level 76 (76)
-  93,     //level 77 (77)
-  94,     //level 78 (78)
-  96,     //level 79 (79)
-  97,     //level 80 (80)
-  98,     //level 81 (81)
-  99,     //level 82 (82)
-  100,    //level 83 (83)
-  101,    //level 84 (84)
-  102,    //level 85 (85)
-  103,    //level 86 (86)
-  104,    //level 87 (87)
-  105,    //level 88 (88)
-  106,    //level 89 (89)
-  108,    //level 90 (90)
-  109,    //level 91 (91)
-  110,    //level 92 (92)
-  111,    //level 93 (93)
-  112,    //level 94 (94)
-  113,    //level 95 (95)
-  114,    //level 96 (96)
-  115,    //level 97 (97)
-  116,    //level 98 (98)
-  117,    //level 99 (99)
-  118,    //level 100 (100)
-  120,    //level 101 (102)
-  121,    //level 102 (103)
-  122,    //level 103 (104)
-  123,    //level 104 (104)
-  124,    //level 105 (105)
-  125,    //level 106 (106)
-  126,    //level 107 (107)
-  128,    //level 108 (108)
-  129,    //level 109 (109)
-  131,    //level 110 (110)
-  133,    //level 111 (111)
-  135,    //level 112 (112)
-  138,    //level 113 (113)
-  140,    //level 114 (114)
-  143,    //level 115 (115)
-  146,    //level 116 (116)
-  151,    //level 117 (117)
-  155,    //level 118 (118)
-  161,    //level 119 (119)
-  167,    //level 120 (120)
-  171     //level 121 (121)
+    0,
+    1,  // level 1 (1)
+    2,  // level 2 (3)
+    3,  // level 3 (3)
+    4,  // level 4 (4)
+    5,  // level 5 (5)
+    7,  // level 6 (6)
+    9,  // level 7 (7)
+    10,  // level 8 (8)
+    11,  // level 9 (9)
+    13,  // level 10 (10)
+    15,  // level 11 (11)
+    16,  // level 12 (12)
+    18,  // level 13 (13)
+    19,  // level 14 (14)
+    20,  // level 15 (15)
+    21,  // level 16 (16)
+    22,  // level 17 (17)
+    24,  // level 18 (18)
+    25,  // level 19 (19)
+    27,  // level 20 (20)
+    28,  // level 21 (21)
+    29,  // level 22 (22)
+    30,  // level 23 (23)
+    31,  // level 24 (24)
+    33,  // level 25 (25)
+    34,  // level 26 (26)
+    35,  // level 27 (27)
+    37,  // level 28 (28)
+    38,  // level 29 (29)
+    39,  // level 30 (30)
+    40,  // level 31 (31)
+    41,  // level 32 (32)
+    43,  // level 33 (33)
+    44,  // level 34 (34)
+    45,  // level 35 (35)
+    46,  // level 36 (36)
+    48,  // level 37 (37)
+    49,  // level 38 (38)
+    50,  // level 39 (39)
+    51,  // level 40 (40)
+    52,  // level 41 (41)
+    53,  // level 42 (42)
+    55,  // level 43 (43)
+    56,  // level 44 (44)
+    57,  // level 45 (45)
+    58,  // level 46 (46)
+    60,  // level 47 (48)
+    61,  // level 48 (48)
+    62,  // level 49 (49)
+    63,  // level 50 (50)
+    64,  // level 51 (51)
+    65,  // level 52 (52)
+    66,  // level 53 (53)
+    68,  // level 54 (54)
+    69,  // level 55 (55)
+    70,  // level 56 (56)
+    71,  // level 57 (57)
+    72,  // level 58 (58)
+    73,  // level 59 (59)
+    74,  // level 60 (60)
+    76,  // level 61 (61)
+    77,  // level 62 (62)
+    78,  // level 63 (63)
+    79,  // level 64 (64)
+    80,  // level 65 (65)
+    81,  // level 66 (66)
+    82,  // level 67 (67)
+    83,  // level 68 (68)
+    84,  // level 69 (69)
+    86,  // level 70 (70)
+    87,  // level 71 (71)
+    88,  // level 72 (72)
+    89,  // level 73 (73)
+    90,  // level 74 (74)
+    91,  // level 75 (75)
+    92,  // level 76 (76)
+    93,  // level 77 (77)
+    94,  // level 78 (78)
+    96,  // level 79 (79)
+    97,  // level 80 (80)
+    98,  // level 81 (81)
+    99,  // level 82 (82)
+    100,  // level 83 (83)
+    101,  // level 84 (84)
+    102,  // level 85 (85)
+    103,  // level 86 (86)
+    104,  // level 87 (87)
+    105,  // level 88 (88)
+    106,  // level 89 (89)
+    108,  // level 90 (90)
+    109,  // level 91 (91)
+    110,  // level 92 (92)
+    111,  // level 93 (93)
+    112,  // level 94 (94)
+    113,  // level 95 (95)
+    114,  // level 96 (96)
+    115,  // level 97 (97)
+    116,  // level 98 (98)
+    117,  // level 99 (99)
+    118,  // level 100 (100)
+    120,  // level 101 (102)
+    121,  // level 102 (103)
+    122,  // level 103 (104)
+    123,  // level 104 (104)
+    124,  // level 105 (105)
+    125,  // level 106 (106)
+    126,  // level 107 (107)
+    128,  // level 108 (108)
+    129,  // level 109 (109)
+    131,  // level 110 (110)
+    133,  // level 111 (111)
+    135,  // level 112 (112)
+    138,  // level 113 (113)
+    140,  // level 114 (114)
+    143,  // level 115 (115)
+    146,  // level 116 (116)
+    151,  // level 117 (117)
+    155,  // level 118 (118)
+    161,  // level 119 (119)
+    167,  // level 120 (120)
+    171  // level 121 (121)
 };
 
 int mage_tab[] = {
-  0,
-  1,      //level 1 (1)
-  2,      //level 2 (3)
-  3,      //level 3 (4)
-  4,      //level 4 (4)
-  5,      //level 5 (5)
-  6,      //level 6 (6)
-  8,      //level 7 (7)
-  10,     //level 8 (8)
-  11,     //level 9 (9)
-  13,     //level 10 (10)
-  14,     //level 11 (11)
-  15,     //level 12 (12)
-  17,     //level 13 (13)
-  18,     //level 14 (14)
-  20,     //level 15 (16)
-  21,     //level 16 (16)
-  22,     //level 17 (17)
-  23,     //level 18 (18)
-  24,     //level 19 (19)
-  25,     //level 20 (20)
-  27,     //level 21 (21)
-  28,     //level 22 (22)
-  29,     //level 23 (23)
-  30,     //level 24 (24)
-  31,     //level 25 (25)
-  33,     //level 26 (26)
-  34,     //level 27 (27)
-  35,     //level 28 (28)
-  36,     //level 29 (29)
-  37,     //level 30 (30)
-  38,     //level 31 (31)
-  40,     //level 32 (32)
-  41,     //level 33 (33)
-  42,     //level 34 (34)
-  43,     //level 35 (35)
-  44,     //level 36 (36)
-  45,     //level 37 (37)
-  47,     //level 38 (38)
-  48,     //level 39 (39)
-  49,     //level 40 (40)
-  50,     //level 41 (41)
-  51,     //level 42 (42)
-  52,     //level 43 (43)
-  53,     //level 44 (44)
-  55,     //level 45 (45)
-  56,     //level 46 (46)
-  57,     //level 47 (47)
-  58,     //level 48 (48)
-  59,     //level 49 (49)
-  60,     //level 50 (50)
-  61,     //level 51 (51)
-  63,     //level 52 (52)
-  64,     //level 53 (53)
-  65,     //level 54 (54)
-  66,     //level 55 (55)
-  67,     //level 56 (56)
-  68,     //level 57 (57)
-  69,     //level 58 (58)
-  70,     //level 59 (59)
-  72,     //level 60 (60)
-  73,     //level 61 (61)
-  74,     //level 62 (62)
-  75,     //level 63 (63)
-  76,     //level 64 (64)
-  77,     //level 65 (65)
-  78,     //level 66 (66)
-  79,     //level 67 (67)
-  80,     //level 68 (68)
-  82,     //level 69 (69)
-  83,     //level 70 (70)
-  84,     //level 71 (71)
-  85,     //level 72 (72)
-  86,     //level 73 (73)
-  87,     //level 74 (74)
-  88,     //level 75 (75)
-  89,     //level 76 (76)
-  90,     //level 77 (77)
-  91,     //level 78 (78)
-  93,     //level 79 (79)
-  94,     //level 80 (80)
-  95,     //level 81 (81)
-  96,     //level 82 (82)
-  97,     //level 83 (83)
-  98,     //level 84 (84)
-  99,     //level 85 (85)
-  100,    //level 86 (86)
-  101,    //level 87 (87)
-  102,    //level 88 (88)
-  103,    //level 89 (89)
-  104,    //level 90 (90)
-  106,    //level 91 (91)
-  107,    //level 92 (92)
-  108,    //level 93 (93)
-  109,    //level 94 (94)
-  110,    //level 95 (95)
-  111,    //level 96 (96)
-  112,    //level 97 (97)
-  113,    //level 98 (98)
-  114,    //level 99 (99)
-  115,    //level 100 (100)
-  116,    //level 101 (101)
-  117,    //level 102 (102)
-  118,    //level 103 (103)
-  120,    //level 104 (104)
-  121,    //level 105 (105)
-  122,    //level 106 (106)
-  123,    //level 107 (107)
-  124,    //level 108 (108)
-  125,    //level 109 (109)
-  126,    //level 110 (110)
-  129,    //level 111 (111)
-  131,    //level 112 (112)
-  133,    //level 113 (113)
-  135,    //level 114 (114)
-  141,    //level 115 (115)
-  146,    //level 116 (116)
-  151,    //level 117 (117)
-  155,    //level 118 (118)
-  161,    //level 119 (119)
-  167,    //level 120 (120)
-  174     //level 121 (121)
+    0,
+    1,  // level 1 (1)
+    2,  // level 2 (3)
+    3,  // level 3 (4)
+    4,  // level 4 (4)
+    5,  // level 5 (5)
+    6,  // level 6 (6)
+    8,  // level 7 (7)
+    10,  // level 8 (8)
+    11,  // level 9 (9)
+    13,  // level 10 (10)
+    14,  // level 11 (11)
+    15,  // level 12 (12)
+    17,  // level 13 (13)
+    18,  // level 14 (14)
+    20,  // level 15 (16)
+    21,  // level 16 (16)
+    22,  // level 17 (17)
+    23,  // level 18 (18)
+    24,  // level 19 (19)
+    25,  // level 20 (20)
+    27,  // level 21 (21)
+    28,  // level 22 (22)
+    29,  // level 23 (23)
+    30,  // level 24 (24)
+    31,  // level 25 (25)
+    33,  // level 26 (26)
+    34,  // level 27 (27)
+    35,  // level 28 (28)
+    36,  // level 29 (29)
+    37,  // level 30 (30)
+    38,  // level 31 (31)
+    40,  // level 32 (32)
+    41,  // level 33 (33)
+    42,  // level 34 (34)
+    43,  // level 35 (35)
+    44,  // level 36 (36)
+    45,  // level 37 (37)
+    47,  // level 38 (38)
+    48,  // level 39 (39)
+    49,  // level 40 (40)
+    50,  // level 41 (41)
+    51,  // level 42 (42)
+    52,  // level 43 (43)
+    53,  // level 44 (44)
+    55,  // level 45 (45)
+    56,  // level 46 (46)
+    57,  // level 47 (47)
+    58,  // level 48 (48)
+    59,  // level 49 (49)
+    60,  // level 50 (50)
+    61,  // level 51 (51)
+    63,  // level 52 (52)
+    64,  // level 53 (53)
+    65,  // level 54 (54)
+    66,  // level 55 (55)
+    67,  // level 56 (56)
+    68,  // level 57 (57)
+    69,  // level 58 (58)
+    70,  // level 59 (59)
+    72,  // level 60 (60)
+    73,  // level 61 (61)
+    74,  // level 62 (62)
+    75,  // level 63 (63)
+    76,  // level 64 (64)
+    77,  // level 65 (65)
+    78,  // level 66 (66)
+    79,  // level 67 (67)
+    80,  // level 68 (68)
+    82,  // level 69 (69)
+    83,  // level 70 (70)
+    84,  // level 71 (71)
+    85,  // level 72 (72)
+    86,  // level 73 (73)
+    87,  // level 74 (74)
+    88,  // level 75 (75)
+    89,  // level 76 (76)
+    90,  // level 77 (77)
+    91,  // level 78 (78)
+    93,  // level 79 (79)
+    94,  // level 80 (80)
+    95,  // level 81 (81)
+    96,  // level 82 (82)
+    97,  // level 83 (83)
+    98,  // level 84 (84)
+    99,  // level 85 (85)
+    100,  // level 86 (86)
+    101,  // level 87 (87)
+    102,  // level 88 (88)
+    103,  // level 89 (89)
+    104,  // level 90 (90)
+    106,  // level 91 (91)
+    107,  // level 92 (92)
+    108,  // level 93 (93)
+    109,  // level 94 (94)
+    110,  // level 95 (95)
+    111,  // level 96 (96)
+    112,  // level 97 (97)
+    113,  // level 98 (98)
+    114,  // level 99 (99)
+    115,  // level 100 (100)
+    116,  // level 101 (101)
+    117,  // level 102 (102)
+    118,  // level 103 (103)
+    120,  // level 104 (104)
+    121,  // level 105 (105)
+    122,  // level 106 (106)
+    123,  // level 107 (107)
+    124,  // level 108 (108)
+    125,  // level 109 (109)
+    126,  // level 110 (110)
+    129,  // level 111 (111)
+    131,  // level 112 (112)
+    133,  // level 113 (113)
+    135,  // level 114 (114)
+    141,  // level 115 (115)
+    146,  // level 116 (116)
+    151,  // level 117 (117)
+    155,  // level 118 (118)
+    161,  // level 119 (119)
+    167,  // level 120 (120)
+    174  // level 121 (121)
 };
 
 int seyan_tab[] = {
-  0,
-  1,      //level 1 (1)
-  2,      //level 2 (3)
-  3,      //level 3 (4)
-  4,      //level 4 (5)
-  5,      //level 5 (6)
-  6,      //level 6 (6)
-  7,      //level 7 (7)
-  8,      //level 8 (8)
-  9,      //level 9 (9)
-  10,     //level 10 (10)
-  12,     //level 11 (11)
-  13,     //level 12 (12)
-  15,     //level 13 (13)
-  16,     //level 14 (14)
-  18,     //level 15 (15)
-  19,     //level 16 (16)
-  20,     //level 17 (18)
-  21,     //level 18 (18)
-  22,     //level 19 (19)
-  23,     //level 20 (20)
-  24,     //level 21 (21)
-  26,     //level 22 (22)
-  27,     //level 23 (23)
-  28,     //level 24 (24)
-  29,     //level 25 (25)
-  30,     //level 26 (26)
-  31,     //level 27 (27)
-  32,     //level 28 (28)
-  34,     //level 29 (29)
-  35,     //level 30 (30)
-  36,     //level 31 (31)
-  37,     //level 32 (32)
-  39,     //level 33 (33)
-  40,     //level 34 (35)
-  41,     //level 35 (35)
-  42,     //level 36 (36)
-  43,     //level 37 (37)
-  44,     //level 38 (38)
-  45,     //level 39 (39)
-  46,     //level 40 (40)
-  48,     //level 41 (41)
-  49,     //level 42 (42)
-  50,     //level 43 (43)
-  51,     //level 44 (44)
-  52,     //level 45 (45)
-  53,     //level 46 (46)
-  54,     //level 47 (47)
-  55,     //level 48 (48)
-  57,     //level 49 (49)
-  58,     //level 50 (50)
-  59,     //level 51 (51)
-  60,     //level 52 (52)
-  61,     //level 53 (53)
-  62,     //level 54 (54)
-  63,     //level 55 (55)
-  64,     //level 56 (56)
-  65,     //level 57 (57)
-  67,     //level 58 (58)
-  68,     //level 59 (59)
-  69,     //level 60 (60)
-  70,     //level 61 (62)
-  71,     //level 62 (62)
-  72,     //level 63 (63)
-  73,     //level 64 (64)
-  74,     //level 65 (65)
-  75,     //level 66 (66)
-  76,     //level 67 (67)
-  77,     //level 68 (68)
-  78,     //level 69 (69)
-  79,     //level 70 (70)
-  80,     //level 71 (71)
-  81,     //level 72 (72)
-  82,     //level 73 (73)
-  83,     //level 74 (74)
-  84,     //level 75 (75)
-  85,     //level 76 (76)
-  87,     //level 77 (77)
-  88,     //level 78 (78)
-  89,     //level 79 (79)
-  90,     //level 80 (81)
-  91,     //level 81 (82)
-  92,     //level 82 (83)
-  93,     //level 83 (83)
-  94,     //level 84 (84)
-  95,     //level 85 (85)
-  96,     //level 86 (86)
-  97,     //level 87 (87)
-  98,     //level 88 (88)
-  99,     //level 89 (89)
-  100,    //level 90 (91)
-  101,    //level 91 (92)
-  102,    //level 92 (92)
-  103,    //level 93 (93)
-  104,    //level 94 (94)
-  105,    //level 95 (95)
-  106,    //level 96 (96)
-  107,    //level 97 (97)
-  108,    //level 98 (98)
-  110,    //level 99 (99)
-  111,    //level 100 (100)
-  113,    //level 101 (101)
-  115,    //level 102 (102)
-  118,    //level 103 (103)
-  121,    //level 104 (104)
-  124,    //level 105 (105)
-  126,    //level 106 (106)
-  129,    //level 107 (107)
-  132,    //level 108 (108)
-  134,    //level 109 (109)
-  136,    //level 110 (110)
-  139,    //level 111 (111)
-  141,    //level 112 (112)
-  144,    //level 113 (113)
-  146,    //level 114 (114)
-  148,    //level 115 (115)
-  150,    //level 116 (116)
-  153,    //level 117 (117)
-  155,    //level 118 (118)
-  157     //level 119 (119)
+    0,
+    1,  // level 1 (1)
+    2,  // level 2 (3)
+    3,  // level 3 (4)
+    4,  // level 4 (5)
+    5,  // level 5 (6)
+    6,  // level 6 (6)
+    7,  // level 7 (7)
+    8,  // level 8 (8)
+    9,  // level 9 (9)
+    10,  // level 10 (10)
+    12,  // level 11 (11)
+    13,  // level 12 (12)
+    15,  // level 13 (13)
+    16,  // level 14 (14)
+    18,  // level 15 (15)
+    19,  // level 16 (16)
+    20,  // level 17 (18)
+    21,  // level 18 (18)
+    22,  // level 19 (19)
+    23,  // level 20 (20)
+    24,  // level 21 (21)
+    26,  // level 22 (22)
+    27,  // level 23 (23)
+    28,  // level 24 (24)
+    29,  // level 25 (25)
+    30,  // level 26 (26)
+    31,  // level 27 (27)
+    32,  // level 28 (28)
+    34,  // level 29 (29)
+    35,  // level 30 (30)
+    36,  // level 31 (31)
+    37,  // level 32 (32)
+    39,  // level 33 (33)
+    40,  // level 34 (35)
+    41,  // level 35 (35)
+    42,  // level 36 (36)
+    43,  // level 37 (37)
+    44,  // level 38 (38)
+    45,  // level 39 (39)
+    46,  // level 40 (40)
+    48,  // level 41 (41)
+    49,  // level 42 (42)
+    50,  // level 43 (43)
+    51,  // level 44 (44)
+    52,  // level 45 (45)
+    53,  // level 46 (46)
+    54,  // level 47 (47)
+    55,  // level 48 (48)
+    57,  // level 49 (49)
+    58,  // level 50 (50)
+    59,  // level 51 (51)
+    60,  // level 52 (52)
+    61,  // level 53 (53)
+    62,  // level 54 (54)
+    63,  // level 55 (55)
+    64,  // level 56 (56)
+    65,  // level 57 (57)
+    67,  // level 58 (58)
+    68,  // level 59 (59)
+    69,  // level 60 (60)
+    70,  // level 61 (62)
+    71,  // level 62 (62)
+    72,  // level 63 (63)
+    73,  // level 64 (64)
+    74,  // level 65 (65)
+    75,  // level 66 (66)
+    76,  // level 67 (67)
+    77,  // level 68 (68)
+    78,  // level 69 (69)
+    79,  // level 70 (70)
+    80,  // level 71 (71)
+    81,  // level 72 (72)
+    82,  // level 73 (73)
+    83,  // level 74 (74)
+    84,  // level 75 (75)
+    85,  // level 76 (76)
+    87,  // level 77 (77)
+    88,  // level 78 (78)
+    89,  // level 79 (79)
+    90,  // level 80 (81)
+    91,  // level 81 (82)
+    92,  // level 82 (83)
+    93,  // level 83 (83)
+    94,  // level 84 (84)
+    95,  // level 85 (85)
+    96,  // level 86 (86)
+    97,  // level 87 (87)
+    98,  // level 88 (88)
+    99,  // level 89 (89)
+    100,  // level 90 (91)
+    101,  // level 91 (92)
+    102,  // level 92 (92)
+    103,  // level 93 (93)
+    104,  // level 94 (94)
+    105,  // level 95 (95)
+    106,  // level 96 (96)
+    107,  // level 97 (97)
+    108,  // level 98 (98)
+    110,  // level 99 (99)
+    111,  // level 100 (100)
+    113,  // level 101 (101)
+    115,  // level 102 (102)
+    118,  // level 103 (103)
+    121,  // level 104 (104)
+    124,  // level 105 (105)
+    126,  // level 106 (106)
+    129,  // level 107 (107)
+    132,  // level 108 (108)
+    134,  // level 109 (109)
+    136,  // level 110 (110)
+    139,  // level 111 (111)
+    141,  // level 112 (112)
+    144,  // level 113 (113)
+    146,  // level 114 (114)
+    148,  // level 115 (115)
+    150,  // level 116 (116)
+    153,  // level 117 (117)
+    155,  // level 118 (118)
+    157  // level 119 (119)
 };
 
 extern struct clan clan[];
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);      // character driver (decides next action)
-int it_driver(int nr, int in, int cn);          // item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);       // called when a character dies
-int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);  // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
+int ch_respawn_driver(int nr,
+                      int cn);  // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM:    return it_driver(nr, obj, ret);
-  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
-  default:  return 0;
+    case CDT_DRIVER:
+      return ch_driver(nr, obj, ret, lastact);
+    case CDT_ITEM:
+      return it_driver(nr, obj, ret);
+    case CDT_DEAD:
+      return ch_died_driver(nr, obj, ret);
+    case CDT_RESPAWN:
+      return ch_respawn_driver(nr, obj);
+    default:
+      return 0;
   }
 }
 
 //-----------------------
 
-struct qa
-{
+struct qa {
   const char *word[20];
   const char *answer;
   int answer_code;
 };
 
 struct qa qa[] = {
-  {{"how", "are", "you", NULL}, "I'm fine!", 0},
-  {{"hello", NULL}, "Hello, %s!", 0},
-  {{"hi", NULL}, "Hi, %s!", 0},
-  {{"greetings", NULL}, "Greetings, %s!", 0},
-  {{"hail", NULL}, "And hail to you, %s!", 0},
-  {{"what's", "up", NULL}, "Everything that isn't nailed down.", 0},
-  {{"what", "is", "up", NULL}, "Everything that isn't nailed down.", 0},
-  {{"help", NULL}, NULL, 2},
-  {{"list", NULL}, NULL, 3}
-};
+    {{"how", "are", "you", NULL}, "I'm fine!", 0},
+    {{"hello", NULL}, "Hello, %s!", 0},
+    {{"hi", NULL}, "Hi, %s!", 0},
+    {{"greetings", NULL}, "Greetings, %s!", 0},
+    {{"hail", NULL}, "And hail to you, %s!", 0},
+    {{"what's", "up", NULL}, "Everything that isn't nailed down.", 0},
+    {{"what", "is", "up", NULL}, "Everything that isn't nailed down.", 0},
+    {{"help", NULL}, NULL, 2},
+    {{"list", NULL}, NULL, 3}};
 
-void lowerstrcpy(char *dst, char *src)
-{
+void lowerstrcpy(char *dst, char *src) {
   while (*src) *dst++ = tolower(*src++);
   *dst = 0;
 }
 
-int analyse_text_driver(int cn, int type, char *text, int co)
-{
+int analyse_text_driver(int cn, int type, char *text, int co) {
   char word[256];
   char wordlist[20][256];
   int n, w, q, name = 0;
@@ -503,7 +505,7 @@ int analyse_text_driver(int cn, int type, char *text, int co)
 
   if (!(ch[co].flags & (CF_PLAYER | CF_PLAYERLIKE))) return 0;
 
-  //if (char_dist(cn,co)>16) return 0;
+  // if (char_dist(cn,co)>16) return 0;
 
   if (!char_see_char(cn, co)) return 0;
 
@@ -517,47 +519,52 @@ int analyse_text_driver(int cn, int type, char *text, int co)
   n = w = 0;
   while (*text) {
     switch (*text) {
-    case ' ':
-    case ',':
-    case ':':
-    case '?':
-    case '!':
-    case '"':
-    case '.':       if (n) {
-        word[n] = 0;
-        lowerstrcpy(wordlist[w], word);
-        if (strcasecmp(wordlist[w], ch[cn].name)) { if (w < 20) w++; }
-        else name = 1;
-      }
-      n = 0; text++;
-      break;
-    default:  word[n++] = *text++;
-      if (n > 250) return 0;
-      break;
+      case ' ':
+      case ',':
+      case ':':
+      case '?':
+      case '!':
+      case '"':
+      case '.':
+        if (n) {
+          word[n] = 0;
+          lowerstrcpy(wordlist[w], word);
+          if (strcasecmp(wordlist[w], ch[cn].name)) {
+            if (w < 20) w++;
+          } else
+            name = 1;
+        }
+        n = 0;
+        text++;
+        break;
+      default:
+        word[n++] = *text++;
+        if (n > 250) return 0;
+        break;
     }
   }
 
   if (w) {
     for (q = 0; q < sizeof(qa) / sizeof(struct qa); q++) {
       for (n = 0; n < w && qa[q].word[n]; n++) {
-        //say(cn,"word = '%s'",wordlist[n]);
+        // say(cn,"word = '%s'",wordlist[n]);
         if (strcmp(wordlist[n], qa[q].word[n])) break;
       }
       if (n == w && !qa[q].word[n]) {
-        if (qa[q].answer) say(cn, qa[q].answer, ch[co].name, ch[cn].name);
-        else return qa[q].answer_code;
+        if (qa[q].answer)
+          say(cn, qa[q].answer, ch[co].name, ch[cn].name);
+        else
+          return qa[q].answer_code;
 
         return 1;
       }
     }
   }
 
-
   return 0;
 }
 
-struct cell
-{
+struct cell {
   int t, l;
   int v;
 
@@ -567,8 +574,7 @@ struct cell
 static int xsize = 20, ysize = 20, maze_base = 0, maze_level = 0, maze_clan = 0;
 static int xoff = 2, yoff = 2;
 
-int build_warrior(int x, int y, int level)
-{
+int build_warrior(int x, int y, int level) {
   int cn, n, val, base, in;
 
   cn = create_char("warrior", 0);
@@ -585,42 +591,84 @@ int build_warrior(int x, int y, int level)
     if (!ch[cn].value[1][n]) continue;
 
     switch (n) {
-    case V_HP:    val = max(10, base - 20); break;
-    case V_ENDURANCE: val = max(10, base - 30); break;
+      case V_HP:
+        val = max(10, base - 20);
+        break;
+      case V_ENDURANCE:
+        val = max(10, base - 30);
+        break;
 
-    case V_PROFESSION:  if (level > 19) val = max(1, base - 7);
-      else val = 0;
-      break;
+      case V_PROFESSION:
+        if (level > 19)
+          val = max(1, base - 7);
+        else
+          val = 0;
+        break;
 
-    case V_WIS:   val = max(10, base - 15); break;
-    case V_INT:   val = max(10, base); break;
-    case V_AGI:   val = max(10, base - 5); break;
-    case V_STR:   val = max(10, base); break;
+      case V_WIS:
+        val = max(10, base - 15);
+        break;
+      case V_INT:
+        val = max(10, base);
+        break;
+      case V_AGI:
+        val = max(10, base - 5);
+        break;
+      case V_STR:
+        val = max(10, base);
+        break;
 
-    case V_HAND:    val = max(1, base); break;
-    case V_ARMORSKILL:  val = max(1, (base / 10) * 10); break;
-    case V_ATTACK:    val = max(1, base); break;
-    case V_PARRY:   val = max(1, base); break;
-    case V_IMMUNITY:  val = max(1, base); break;
+      case V_HAND:
+        val = max(1, base);
+        break;
+      case V_ARMORSKILL:
+        val = max(1, (base / 10) * 10);
+        break;
+      case V_ATTACK:
+        val = max(1, base);
+        break;
+      case V_PARRY:
+        val = max(1, base);
+        break;
+      case V_IMMUNITY:
+        val = max(1, base);
+        break;
 
-    case V_TACTICS:   val = max(1, base - 5); break;
-    case V_SURROUND:  val = max(1, base - 50); break;
-    case V_BODYCONTROL: val = max(1, base - 20); break;
-    case V_SPEEDSKILL:  val = max(1, base - 20); break;
-    case V_PERCEPT:   val = max(1, base - 10); break;
+      case V_TACTICS:
+        val = max(1, base - 5);
+        break;
+      case V_SURROUND:
+        val = max(1, base - 50);
+        break;
+      case V_BODYCONTROL:
+        val = max(1, base - 20);
+        break;
+      case V_SPEEDSKILL:
+        val = max(1, base - 20);
+        break;
+      case V_PERCEPT:
+        val = max(1, base - 10);
+        break;
 
-    case V_RAGE:    if (ch[cn].flags & CF_ARCH) val = max(1, base - 20);
-      else val = 0;
-      break;
+      case V_RAGE:
+        if (ch[cn].flags & CF_ARCH)
+          val = max(1, base - 20);
+        else
+          val = 0;
+        break;
 
-    default:    val = max(1, base - 50); break;
+      default:
+        val = max(1, base - 50);
+        break;
     }
 
     val = min(val, 125);
     ch[cn].value[1][n] = val;
   }
-  if (maze_clan < 17) ch[cn].sprite = 266 + maze_clan;
-  else ch[cn].sprite = 516 + maze_clan - 16;
+  if (maze_clan < 17)
+    ch[cn].sprite = 266 + maze_clan;
+  else
+    ch[cn].sprite = 516 + maze_clan - 16;
 
   ch[cn].x = ch[cn].tmpx = x;
   ch[cn].y = ch[cn].tmpy = y;
@@ -632,24 +680,35 @@ int build_warrior(int x, int y, int level)
   ch[cn].exp = ch[cn].exp_used = calc_exp(cn);
   ch[cn].level = exp2level(ch[cn].exp);
 
-  if (ch[cn].value[1][V_PROFESSION] > 0) ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
-  if (ch[cn].value[1][V_PROFESSION] > 30) ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] = min(30, ch[cn].value[1][V_PROFESSION] - 30);
+  if (ch[cn].value[1][V_PROFESSION] > 0)
+    ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
+  if (ch[cn].value[1][V_PROFESSION] > 30)
+    ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] =
+        min(30, ch[cn].value[1][V_PROFESSION] - 30);
 
   // create special equipment bonus to equal that of the average player
   in = create_item("equip1");
-  for (n = 0; n < 5; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;;
-  ch[cn].item[12] = in; it[in].carried = cn;
+  for (n = 0; n < 5; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ;
+  ch[cn].item[12] = in;
+  it[in].carried = cn;
 
   in = create_item("equip2");
-  for (n = 0; n < 4; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;;
-  ch[cn].item[13] = in; it[in].carried = cn;
+  for (n = 0; n < 4; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ;
+  ch[cn].item[13] = in;
+  it[in].carried = cn;
 
   in = create_item("armor_spell");
-  ch[cn].item[14] = in; it[in].carried = cn;
+  ch[cn].item[14] = in;
+  it[in].carried = cn;
   it[in].mod_value[0] = max(13, min(113, ch[cn].value[1][V_ARMORSKILL])) * 20;
 
   in = create_item("weapon_spell");
-  ch[cn].item[15] = in; it[in].carried = cn;
+  ch[cn].item[15] = in;
+  it[in].carried = cn;
   it[in].mod_value[0] = max(13, min(113, ch[cn].value[1][V_HAND]));
 
   update_char(cn);
@@ -668,17 +727,19 @@ int build_warrior(int x, int y, int level)
   xlog("Intuition: %3d/%3d",ch[cn].value[1][V_INT],ch[cn].value[0][V_INT]);
   xlog("Agility:   %3d/%3d",ch[cn].value[1][V_AGI],ch[cn].value[0][V_AGI]);
   xlog("Strength:  %3d/%3d",ch[cn].value[1][V_STR],ch[cn].value[0][V_STR]);
-  xlog("Twohanded: %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
-  xlog("Attack:    %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
+  xlog("Twohanded:
+  %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
+  xlog("Attack: %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
   xlog("Parry:     %3d/%3d",ch[cn].value[1][V_PARRY],ch[cn].value[0][V_PARRY]);
-  xlog("Tactics:   %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
-  xlog("Immunity:  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
+  xlog("Tactics:
+  %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
+  xlog("Immunity:
+  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
 
   return ch[cn].level;
 }
 
-int build_mage(int x, int y, int level)
-{
+int build_mage(int x, int y, int level) {
   int cn, n, val, base, in;
 
   cn = create_char("mage", 0);
@@ -695,39 +756,80 @@ int build_mage(int x, int y, int level)
     if (!ch[cn].value[1][n]) continue;
 
     switch (n) {
-    case V_HP:    val = max(10, base - 40); break;
-    case V_MANA:    val = max(10, base - 10); break;
-    case V_ENDURANCE: val = max(10, base - 30); break;
+      case V_HP:
+        val = max(10, base - 40);
+        break;
+      case V_MANA:
+        val = max(10, base - 10);
+        break;
+      case V_ENDURANCE:
+        val = max(10, base - 30);
+        break;
 
-    case V_PROFESSION:  if (level > 19) val = max(1, base - 7);
-      else val = 0;
-      break;
+      case V_PROFESSION:
+        if (level > 19)
+          val = max(1, base - 7);
+        else
+          val = 0;
+        break;
 
-    case V_WIS:   val = max(10, base); break;
-    case V_INT:   val = max(10, base); break;
-    case V_AGI:   val = max(10, base); break;
-    case V_STR:   val = max(10, base); break;
+      case V_WIS:
+        val = max(10, base);
+        break;
+      case V_INT:
+        val = max(10, base);
+        break;
+      case V_AGI:
+        val = max(10, base);
+        break;
+      case V_STR:
+        val = max(10, base);
+        break;
 
-    case V_HAND:    val = max(1, base); break;
-    case V_MAGICSHIELD: val = max(1, base); break;
-    case V_FLASH:   val = max(1, base); break;
-    case V_BLESS:   val = max(1, base); break;
-    case V_IMMUNITY:  val = max(1, base); break;
+      case V_HAND:
+        val = max(1, base);
+        break;
+      case V_MAGICSHIELD:
+        val = max(1, base);
+        break;
+      case V_FLASH:
+        val = max(1, base);
+        break;
+      case V_BLESS:
+        val = max(1, base);
+        break;
+      case V_IMMUNITY:
+        val = max(1, base);
+        break;
 
-    case V_FREEZE:    val = max(1, base - 10); break;
-    case V_HEAL:    val = max(1, base - 10); break;
-    case V_FIREBALL:  val = max(1, base - 10); break;
-    case V_PERCEPT:   val = max(1, base - 10); break;
-    case V_DURATION:  val = max(1, base - 10); break;
+      case V_FREEZE:
+        val = max(1, base - 10);
+        break;
+      case V_HEAL:
+        val = max(1, base - 10);
+        break;
+      case V_FIREBALL:
+        val = max(1, base - 10);
+        break;
+      case V_PERCEPT:
+        val = max(1, base - 10);
+        break;
+      case V_DURATION:
+        val = max(1, base - 10);
+        break;
 
-    default:    val = max(1, base - 50); break;
+      default:
+        val = max(1, base - 50);
+        break;
     }
 
     val = min(val, 125);
     ch[cn].value[1][n] = val;
   }
-  if (maze_clan < 17) ch[cn].sprite = 282 + maze_clan;
-  else ch[cn].sprite = 532 + maze_clan - 16;
+  if (maze_clan < 17)
+    ch[cn].sprite = 282 + maze_clan;
+  else
+    ch[cn].sprite = 532 + maze_clan - 16;
 
   ch[cn].x = ch[cn].tmpx = x;
   ch[cn].y = ch[cn].tmpy = y;
@@ -739,20 +841,30 @@ int build_mage(int x, int y, int level)
   ch[cn].exp = ch[cn].exp_used = calc_exp(cn);
   ch[cn].level = exp2level(ch[cn].exp);
 
-  if (ch[cn].value[1][V_PROFESSION] > 0) ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
-  if (ch[cn].value[1][V_PROFESSION] > 30) ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] = min(30, ch[cn].value[1][V_PROFESSION] - 30);
+  if (ch[cn].value[1][V_PROFESSION] > 0)
+    ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
+  if (ch[cn].value[1][V_PROFESSION] > 30)
+    ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] =
+        min(30, ch[cn].value[1][V_PROFESSION] - 30);
 
   // create special equipment bonus to equal that of the average player
   in = create_item("equip1b");
-  for (n = 0; n < 5; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;;
-  ch[cn].item[12] = in; it[in].carried = cn;
+  for (n = 0; n < 5; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ;
+  ch[cn].item[12] = in;
+  it[in].carried = cn;
 
   in = create_item("equip2b");
-  for (n = 0; n < 4; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;;
-  ch[cn].item[13] = in; it[in].carried = cn;
+  for (n = 0; n < 4; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ;
+  ch[cn].item[13] = in;
+  it[in].carried = cn;
 
   in = create_item("weapon_spell");
-  ch[cn].item[15] = in; it[in].carried = cn;
+  ch[cn].item[15] = in;
+  it[in].carried = cn;
   it[in].mod_value[0] = max(13, min(113, ch[cn].value[1][V_HAND]));
 
   update_char(cn);
@@ -771,17 +883,19 @@ int build_mage(int x, int y, int level)
   xlog("Intuition: %3d/%3d",ch[cn].value[1][V_INT],ch[cn].value[0][V_INT]);
   xlog("Agility:   %3d/%3d",ch[cn].value[1][V_AGI],ch[cn].value[0][V_AGI]);
   xlog("Strength:  %3d/%3d",ch[cn].value[1][V_STR],ch[cn].value[0][V_STR]);
-  xlog("Twohanded: %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
-  xlog("Attack:    %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
+  xlog("Twohanded:
+  %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
+  xlog("Attack: %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
   xlog("Parry:     %3d/%3d",ch[cn].value[1][V_PARRY],ch[cn].value[0][V_PARRY]);
-  xlog("Tactics:   %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
-  xlog("Immunity:  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
+  xlog("Tactics:
+  %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
+  xlog("Immunity:
+  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
 
   return ch[cn].level;
 }
 
-int build_seyan(int x, int y, int level)
-{
+int build_seyan(int x, int y, int level) {
   int cn, n, val, base, in;
 
   cn = create_char("seyan", 0);
@@ -795,39 +909,78 @@ int build_seyan(int x, int y, int level)
     if (!ch[cn].value[1][n]) continue;
 
     switch (n) {
-    case V_HP:    val = max(10, base - 40); break;
-    case V_MANA:    val = max(10, base - 30); break;
-    case V_ENDURANCE: val = max(10, base - 50); break;
+      case V_HP:
+        val = max(10, base - 40);
+        break;
+      case V_MANA:
+        val = max(10, base - 30);
+        break;
+      case V_ENDURANCE:
+        val = max(10, base - 50);
+        break;
 
-    case V_PROFESSION:  if (level > 19) val = max(1, base - 7);
-      else val = 0;
-      break;
+      case V_PROFESSION:
+        if (level > 19)
+          val = max(1, base - 7);
+        else
+          val = 0;
+        break;
 
-    case V_WIS:   val = max(10, base - 15); break;
-    case V_INT:   val = max(10, base); break;
-    case V_AGI:   val = max(10, base - 5); break;
-    case V_STR:   val = max(10, base); break;
+      case V_WIS:
+        val = max(10, base - 15);
+        break;
+      case V_INT:
+        val = max(10, base);
+        break;
+      case V_AGI:
+        val = max(10, base - 5);
+        break;
+      case V_STR:
+        val = max(10, base);
+        break;
 
-    case V_HAND:    val = max(1, base); break;
-    case V_ARMORSKILL:  val = max(1, (base / 10) * 10); break;
-    case V_ATTACK:    val = max(1, base); break;
-    case V_PARRY:   val = max(1, base); break;
-    case V_IMMUNITY:  val = max(1, base); break;
+      case V_HAND:
+        val = max(1, base);
+        break;
+      case V_ARMORSKILL:
+        val = max(1, (base / 10) * 10);
+        break;
+      case V_ATTACK:
+        val = max(1, base);
+        break;
+      case V_PARRY:
+        val = max(1, base);
+        break;
+      case V_IMMUNITY:
+        val = max(1, base);
+        break;
 
-    case V_BLESS:   val = max(1, base); break;
-    case V_FREEZE:    val = max(1, base); break;
+      case V_BLESS:
+        val = max(1, base);
+        break;
+      case V_FREEZE:
+        val = max(1, base);
+        break;
 
-    case V_TACTICS:   val = max(1, base - 5); break;
-    case V_PERCEPT:   val = max(1, base - 10); break;
+      case V_TACTICS:
+        val = max(1, base - 5);
+        break;
+      case V_PERCEPT:
+        val = max(1, base - 10);
+        break;
 
-    default:    val = max(1, base - 50); break;
+      default:
+        val = max(1, base - 50);
+        break;
     }
 
     val = min(val, 107);
     ch[cn].value[1][n] = val;
   }
-  if (maze_clan < 17) ch[cn].sprite = 266 + maze_clan;
-  else ch[cn].sprite = 516 + maze_clan - 16;
+  if (maze_clan < 17)
+    ch[cn].sprite = 266 + maze_clan;
+  else
+    ch[cn].sprite = 516 + maze_clan - 16;
 
   ch[cn].x = ch[cn].tmpx = x;
   ch[cn].y = ch[cn].tmpy = y;
@@ -839,24 +992,33 @@ int build_seyan(int x, int y, int level)
   ch[cn].exp = ch[cn].exp_used = calc_exp(cn);
   ch[cn].level = exp2level(ch[cn].exp);
 
-  if (ch[cn].value[1][V_PROFESSION] > 0) ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
-  if (ch[cn].value[1][V_PROFESSION] > 30) ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] = min(30, ch[cn].value[1][V_PROFESSION] - 30);
+  if (ch[cn].value[1][V_PROFESSION] > 0)
+    ch[cn].prof[P_CLAN] = min(30, ch[cn].value[1][V_PROFESSION]);
+  if (ch[cn].value[1][V_PROFESSION] > 30)
+    ch[cn].prof[RANDOM(2) ? P_LIGHT : P_DARK] =
+        min(30, ch[cn].value[1][V_PROFESSION] - 30);
 
   // create special equipment bonus to equal that of the average player
   in = create_item("equip1c");
-  for (n = 0; n < 5; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
-  ch[cn].item[12] = in; it[in].carried = cn;
+  for (n = 0; n < 5; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ch[cn].item[12] = in;
+  it[in].carried = cn;
 
   in = create_item("equip2c");
-  for (n = 0; n < 5; n++) it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
-  ch[cn].item[13] = in; it[in].carried = cn;
+  for (n = 0; n < 5; n++)
+    it[in].mod_value[n] = level2maxitem(level) * 1.1 + max(0, level - 63) / 2;
+  ch[cn].item[13] = in;
+  it[in].carried = cn;
 
   in = create_item("armor_spell");
-  ch[cn].item[14] = in; it[in].carried = cn;
+  ch[cn].item[14] = in;
+  it[in].carried = cn;
   it[in].mod_value[0] = max(13, min(113, ch[cn].value[1][V_ARMORSKILL])) * 20;
 
   in = create_item("weapon_spell");
-  ch[cn].item[15] = in; it[in].carried = cn;
+  ch[cn].item[15] = in;
+  it[in].carried = cn;
   it[in].mod_value[0] = max(13, min(113, ch[cn].value[1][V_HAND]));
 
   update_char(cn);
@@ -875,34 +1037,36 @@ int build_seyan(int x, int y, int level)
   xlog("Intuition: %3d/%3d",ch[cn].value[1][V_INT],ch[cn].value[0][V_INT]);
   xlog("Agility:   %3d/%3d",ch[cn].value[1][V_AGI],ch[cn].value[0][V_AGI]);
   xlog("Strength:  %3d/%3d",ch[cn].value[1][V_STR],ch[cn].value[0][V_STR]);
-  xlog("Twohanded: %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
-  xlog("Attack:    %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
+  xlog("Twohanded:
+  %3d/%3d",ch[cn].value[1][V_TWOHAND],ch[cn].value[0][V_TWOHAND]);
+  xlog("Attack: %3d/%3d",ch[cn].value[1][V_ATTACK],ch[cn].value[0][V_ATTACK]);
   xlog("Parry:     %3d/%3d",ch[cn].value[1][V_PARRY],ch[cn].value[0][V_PARRY]);
-  xlog("Tactics:   %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
-  xlog("Immunity:  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
+  xlog("Tactics:
+  %3d/%3d",ch[cn].value[1][V_TACTICS],ch[cn].value[0][V_TACTICS]);
+  xlog("Immunity:
+  %3d/%3d",ch[cn].value[1][V_IMMUNITY],ch[cn].value[0][V_IMMUNITY]);*/
 
   return ch[cn].level;
 }
 
-void build_wall(int x, int y)
-{
+void build_wall(int x, int y) {
   int m;
 
   m = x + y * MAXMAP;
 
-  map[m].flags = MF_INDOORS | MF_SIGHTBLOCK | MF_SOUNDBLOCK | MF_SHOUTBLOCK | MF_MOVEBLOCK;
+  map[m].flags =
+      MF_INDOORS | MF_SIGHTBLOCK | MF_SOUNDBLOCK | MF_SHOUTBLOCK | MF_MOVEBLOCK;
   map[m].fsprite = 59171 + ((x & 3) + (y & 3)) % 4;
   map[m].gsprite = 0;
 }
 
-void build_empty(int x, int y)
-{
+void build_empty(int x, int y) {
   int m, in;
 
   m = x + y * MAXMAP;
 
   if ((in = map[m].it)) {
-    //xlog("build_empty: destroying %s",it[in].name);
+    // xlog("build_empty: destroying %s",it[in].name);
     remove_item_map(in);
     destroy_item(in);
   }
@@ -914,8 +1078,7 @@ void build_empty(int x, int y)
   map[m].light = 0;
 }
 
-void build_remove(int x, int y)
-{
+void build_remove(int x, int y) {
   int m, cn, in, fn, n;
 
   m = x + y * MAXMAP;
@@ -938,14 +1101,13 @@ void build_remove(int x, int y)
   if ((in = map[m].it)) {
     if (it[in].flags & IF_PLAYERBODY) {
       remove_item_map(in);
-      if (!drop_item(in, 250, 245) &&
-          !drop_item(in, 250, 240) &&
-          !drop_item(in, 250, 235) &&
-          !drop_item(in, 250, 230))
-      { destroy_item(in); }
-      else set_expire_body(in, PLAYER_BODY_DECAY_TIME);
+      if (!drop_item(in, 250, 245) && !drop_item(in, 250, 240) &&
+          !drop_item(in, 250, 235) && !drop_item(in, 250, 230)) {
+        destroy_item(in);
+      } else
+        set_expire_body(in, PLAYER_BODY_DECAY_TIME);
     } else if (it[in].flags & IF_TAKE) {
-      //xlog("remove: destroying %s",it[in].name);
+      // xlog("remove: destroying %s",it[in].name);
       remove_item_map(in);
       destroy_item(in);
     }
@@ -959,53 +1121,55 @@ void build_remove(int x, int y)
   }
 }
 
-void build_teleport(int x, int y)
-{
+void build_teleport(int x, int y) {
   int in;
 
   in = create_item("teleport_trap");
 
-  *(unsigned short*)(it[in].drdata + 0) = xoff + 2;
-  *(unsigned short*)(it[in].drdata + 2) = yoff + 78;
-  *(unsigned short*)(it[in].drdata + 4) = maze_clan;
+  *(unsigned short *)(it[in].drdata + 0) = xoff + 2;
+  *(unsigned short *)(it[in].drdata + 2) = yoff + 78;
+  *(unsigned short *)(it[in].drdata + 4) = maze_clan;
 
   if (!set_item_map(in, x, y)) {
     destroy_item(in);
   }
 }
 
-void build_fake(int x, int y)
-{
+void build_fake(int x, int y) {
   int in;
 
   in = create_item("fake_wall");
 
-  *(unsigned short*)(it[in].drdata + 0) = maze_clan;
+  *(unsigned short *)(it[in].drdata + 0) = maze_clan;
 
   if (!set_item_map(in, x, y)) {
     destroy_item(in);
   }
 
-  //xlog("fake wall at %d,%d",x,y);
+  // xlog("fake wall at %d,%d",x,y);
 }
 
-void build_door(int x, int y, int keyid, int keys)
-{
+void build_door(int x, int y, int keyid, int keys) {
   int in;
 
   in = create_item("dungeon_door");
 
-  if (keys > 0) *(unsigned long*)(it[in].drdata + 0) = MAKE_ITEMID(DEV_ID_MAZE1, keyid); else *(unsigned long*)(it[in].drdata + 0) = 0;
-  if (keys > 1) *(unsigned long*)(it[in].drdata + 4) = MAKE_ITEMID(DEV_ID_MAZE2, keyid); else *(unsigned long*)(it[in].drdata + 4) = 0;
-  *(unsigned short*)(it[in].drdata + 8) = maze_clan;
+  if (keys > 0)
+    *(unsigned long *)(it[in].drdata + 0) = MAKE_ITEMID(DEV_ID_MAZE1, keyid);
+  else
+    *(unsigned long *)(it[in].drdata + 0) = 0;
+  if (keys > 1)
+    *(unsigned long *)(it[in].drdata + 4) = MAKE_ITEMID(DEV_ID_MAZE2, keyid);
+  else
+    *(unsigned long *)(it[in].drdata + 4) = 0;
+  *(unsigned short *)(it[in].drdata + 8) = maze_clan;
 
   if (!set_item_map(in, x, y)) {
     destroy_item(in);
   }
 }
 
-void build_key(int x, int y, int nr, int keyid)
-{
+void build_key(int x, int y, int nr, int keyid) {
   int in;
 
   in = create_item("maze_key_spawn");
@@ -1013,72 +1177,129 @@ void build_key(int x, int y, int nr, int keyid)
   it[in].drdata[0] = nr;
   it[in].drdata[1] = maze_clan;
   it[in].drdata[2] = 0;
-  *(unsigned long*)(it[in].drdata + 4) = keyid;
+  *(unsigned long *)(it[in].drdata + 4) = keyid;
 
   if (!set_item_map(in, x, y)) {
     destroy_item(in);
   }
 }
 
-void build_cell(int cx, int cy, struct cell *cell)
-{
+void build_cell(int cx, int cy, struct cell *cell) {
   build_wall(cx * 4 + xoff, cy * 4 + yoff);
   if (cell->t) {
     build_wall(cx * 4 + 1 + xoff, cy * 4 + yoff);
-    if (cell->special == 2) build_fake(cx * 4 + 2 + xoff, cy * 4 + yoff);
-    else build_wall(cx * 4 + 2 + xoff, cy * 4 + yoff);
+    if (cell->special == 2)
+      build_fake(cx * 4 + 2 + xoff, cy * 4 + yoff);
+    else
+      build_wall(cx * 4 + 2 + xoff, cy * 4 + yoff);
     build_wall(cx * 4 + 3 + xoff, cy * 4 + yoff);
   }
   if (cell->l) {
     build_wall(cx * 4 + xoff, cy * 4 + 1 + yoff);
-    if (cell->special == 1) build_fake(cx * 4 + xoff, cy * 4 + 2 + yoff);
-    else build_wall(cx * 4 + xoff, cy * 4 + 2 + yoff);
+    if (cell->special == 1)
+      build_fake(cx * 4 + xoff, cy * 4 + 2 + yoff);
+    else
+      build_wall(cx * 4 + xoff, cy * 4 + 2 + yoff);
     build_wall(cx * 4 + xoff, cy * 4 + 3 + yoff);
   }
 
   switch (cell->special) {
-  case 3:   build_key(cx * 4 + xoff + 2, cy * 4 + yoff + 2, 1, maze_base); break;
-  case 4:   build_key(cx * 4 + xoff + 2, cy * 4 + yoff + 2, 2, maze_base); break;
+    case 3:
+      build_key(cx * 4 + xoff + 2, cy * 4 + yoff + 2, 1, maze_base);
+      break;
+    case 4:
+      build_key(cx * 4 + xoff + 2, cy * 4 + yoff + 2, 2, maze_base);
+      break;
 
-  case 5:   build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level); break;
-  case 6:   build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level); break;
-  case 7:   build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level); break;
+    case 5:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level);
+      break;
+    case 6:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level);
+      break;
+    case 7:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level);
+      break;
 
-  case 8:   build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2); break;
-  case 9:   build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2); break;
-  case 10:  build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2); break;
+    case 8:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2);
+      break;
+    case 9:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2);
+      break;
+    case 10:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 2);
+      break;
 
-  case 11:  build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4); break;
-  case 12:  build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4); break;
-  case 13:  build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4); break;
+    case 11:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4);
+      break;
+    case 12:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4);
+      break;
+    case 13:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 4);
+      break;
 
-  case 14:  build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6); break;
-  case 15:  build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6); break;
-  case 16:  build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6); break;
+    case 14:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6);
+      break;
+    case 15:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6);
+      break;
+    case 16:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 6);
+      break;
 
-  case 17:  build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8); break;
-  case 18:  build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8); break;
-  case 19:  build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8); break;
+    case 17:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8);
+      break;
+    case 18:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8);
+      break;
+    case 19:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 8);
+      break;
 
-  case 20:  build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10); break;
-  case 21:  build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10); break;
-  case 22:  build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10); break;
+    case 20:
+      build_warrior(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10);
+      break;
+    case 21:
+      build_mage(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10);
+      break;
+    case 22:
+      build_seyan(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_level + 10);
+      break;
 
-  case 23:  build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 2); break;
-  case 24:  build_teleport(cx * 4 + xoff + 1, cy * 4 + yoff + 2); break;
-  case 25:  build_teleport(cx * 4 + xoff + 3, cy * 4 + yoff + 2); break;
-  case 26:  build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 1); break;
-  case 27:  build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 3); break;
+    case 23:
+      build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 2);
+      break;
+    case 24:
+      build_teleport(cx * 4 + xoff + 1, cy * 4 + yoff + 2);
+      break;
+    case 25:
+      build_teleport(cx * 4 + xoff + 3, cy * 4 + yoff + 2);
+      break;
+    case 26:
+      build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 1);
+      break;
+    case 27:
+      build_teleport(cx * 4 + xoff + 2, cy * 4 + yoff + 3);
+      break;
 
-  case 28:  build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 0); break;
-  case 29:  build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 1); break;
-  case 30:  build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 2); break;
-
+    case 28:
+      build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 0);
+      break;
+    case 29:
+      build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 1);
+      break;
+    case 30:
+      build_door(cx * 4 + xoff + 2, cy * 4 + yoff + 2, maze_base, 2);
+      break;
   }
 }
 
-int special_fill(struct cell *cell, int nr, int val)
-{
+int special_fill(struct cell *cell, int nr, int val) {
   int tmp, best = 999;
 
   if (cell[nr].special == 999) return val;
@@ -1086,20 +1307,24 @@ int special_fill(struct cell *cell, int nr, int val)
   if (cell[nr].special && cell[nr].special <= val) return 0;
 
   cell[nr].special = val;
-  if (!cell[nr].l && nr % xsize > 0) if ((tmp = special_fill(cell, nr - 1, val + 1))) best = min(tmp, best);
-  if (!cell[nr].t && nr / xsize > 0) if ((tmp = special_fill(cell, nr - xsize, val + 1))) best = min(tmp, best);
+  if (!cell[nr].l && nr % xsize > 0)
+    if ((tmp = special_fill(cell, nr - 1, val + 1))) best = min(tmp, best);
+  if (!cell[nr].t && nr / xsize > 0)
+    if ((tmp = special_fill(cell, nr - xsize, val + 1))) best = min(tmp, best);
 
-  if (nr % xsize < xsize - 1 && !cell[nr + 1].l) if ((tmp = special_fill(cell, nr + 1, val + 1))) best = min(tmp, best);
-  if (nr / xsize < ysize - 1 && !cell[nr + xsize].t) if ((tmp = special_fill(cell, nr + xsize, val + 1))) best = min(tmp, best);
+  if (nr % xsize < xsize - 1 && !cell[nr + 1].l)
+    if ((tmp = special_fill(cell, nr + 1, val + 1))) best = min(tmp, best);
+  if (nr / xsize < ysize - 1 && !cell[nr + xsize].t)
+    if ((tmp = special_fill(cell, nr + xsize, val + 1))) best = min(tmp, best);
 
   return best;
 }
 
-void build_maze(struct cell *cell)
-{
+void build_maze(struct cell *cell) {
   int *stack, n, m, visited = 0, ptr, opt;
 
-  stack = (int*)xcalloc(sizeof(int) * xsize * ysize, IM_TEMP); ptr = 0;
+  stack = (int *)xcalloc(sizeof(int) * xsize * ysize, IM_TEMP);
+  ptr = 0;
 
   for (m = 0; m < xsize * ysize; m++) {
     cell[m].t = 1;
@@ -1108,11 +1333,14 @@ void build_maze(struct cell *cell)
   stack[ptr++] = RANDOM(m);
 
   while (visited < xsize * ysize) {
-    if (ptr == 0) { elog("ran out of stack (%d of %d)", visited, xsize * ysize); break; }
+    if (ptr == 0) {
+      elog("ran out of stack (%d of %d)", visited, xsize * ysize);
+      break;
+    }
     n = stack[--ptr];
 
-repeat:
-    //xlog("processing cell at %d,%d",n%xsize,n/xsize);
+  repeat:
+    // xlog("processing cell at %d,%d",n%xsize,n/xsize);
 
     opt = 0;
     if (n % xsize > 0 && !cell[n - 1].v) opt++;
@@ -1130,39 +1358,47 @@ repeat:
     opt = RANDOM(opt);
 
     if (n % xsize > 0 && !cell[n - 1].v) {
-      if (opt) { opt--; }
-      else {
+      if (opt) {
+        opt--;
+      } else {
         cell[n].l = 0;
         n = n - 1;
-        cell[n].v = 1; visited++;
+        cell[n].v = 1;
+        visited++;
         goto repeat;
       }
     }
     if (n % xsize < xsize - 1 && !cell[n + 1].v) {
-      if (opt) { opt--; }
-      else {
+      if (opt) {
+        opt--;
+      } else {
         n = n + 1;
         cell[n].l = 0;
-        cell[n].v = 1; visited++;
+        cell[n].v = 1;
+        visited++;
         goto repeat;
       }
     }
 
     if (n / xsize > 0 && !cell[n - xsize].v) {
-      if (opt) { opt--; }
-      else {
+      if (opt) {
+        opt--;
+      } else {
         cell[n].t = 0;
         n = n - xsize;
-        cell[n].v = 1; visited++;
+        cell[n].v = 1;
+        visited++;
         goto repeat;
       }
     }
     if (n / xsize < ysize - 1 && !cell[n + xsize].v) {
-      if (opt) { opt--; }
-      else {
+      if (opt) {
+        opt--;
+      } else {
         n = n + xsize;
         cell[n].t = 0;
-        cell[n].v = 1; visited++;
+        cell[n].v = 1;
+        visited++;
         goto repeat;
       }
     }
@@ -1172,21 +1408,26 @@ repeat:
   xfree(stack);
 }
 
-void show_maze(struct cell *cell)
-{
+void show_maze(struct cell *cell) {
   int x, y;
 
   for (y = 0; y < xsize; y++) {
     for (x = 0; x < xsize; x++) {
-      if (cell[x + y * xsize].t && cell[x + y * xsize].l)        printf("!===");
-      else if (cell[x + y * xsize].t && !cell[x + y * xsize].l)  printf("====");
-      else if (!cell[x + y * xsize].t && cell[x + y * xsize].l)  printf("!   ");
-      else if (!cell[x + y * xsize].t && !cell[x + y * xsize].l) printf("    ");
+      if (cell[x + y * xsize].t && cell[x + y * xsize].l)
+        printf("!===");
+      else if (cell[x + y * xsize].t && !cell[x + y * xsize].l)
+        printf("====");
+      else if (!cell[x + y * xsize].t && cell[x + y * xsize].l)
+        printf("!   ");
+      else if (!cell[x + y * xsize].t && !cell[x + y * xsize].l)
+        printf("    ");
     }
     printf("!\n");
     for (x = 0; x < xsize; x++) {
-      if (cell[x + y * xsize].l)        printf("!%03d", cell[x + y * xsize].special);
-      else if (!cell[x + y * xsize].l)  printf(" %03d", cell[x + y * xsize].special);
+      if (cell[x + y * xsize].l)
+        printf("!%03d", cell[x + y * xsize].special);
+      else if (!cell[x + y * xsize].l)
+        printf(" %03d", cell[x + y * xsize].special);
     }
     printf("!\n");
   }
@@ -1194,22 +1435,25 @@ void show_maze(struct cell *cell)
   printf("!\n");
 }
 
-int create_maze(int base, int level, int do_fake, int keys, const int *warrior, const int *mage, const int *seyan, int teleport, int cnr, int show)
-{
+int create_maze(int base, int level, int do_fake, int keys, const int *warrior,
+                const int *mage, const int *seyan, int teleport, int cnr,
+                int show) {
   int n, m, path1, path2, path3, fake = 0, fakedir = 0, tmp, maxi, panic;
   struct cell *cell;
   int score;
 
-  maze_base = base; maze_level = level; maze_clan = cnr;
+  maze_base = base;
+  maze_level = level;
+  maze_clan = cnr;
   srand(base);
 
-  cell = (struct cell*)xcalloc(sizeof(struct cell) * xsize * ysize, IM_TEMP);
+  cell = (struct cell *)xcalloc(sizeof(struct cell) * xsize * ysize, IM_TEMP);
 
   build_maze(cell);
 
   // find path start->target
   special_fill(cell, xsize - 1, 1);
-  //xlog("cost start->target: %d",cell[xsize*ysize-1].special);
+  // xlog("cost start->target: %d",cell[xsize*ysize-1].special);
   path1 = cell[xsize * ysize - ysize].special;
 
   n = xsize * ysize - ysize;
@@ -1219,25 +1463,53 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
   while (m > 0) {
     cell[n].special = 999;
 
-    if (!cell[n].l && n % xsize > 0 && cell[n - 1].special == m - 1) { if (m == tmp) { fake = n; fakedir = 1; } n = n - 1; }
-    else if (!cell[n].t && n / xsize > 0 && cell[n - xsize].special == m - 1) { if (m == tmp) { fake = n; fakedir = 2; } n = n - xsize; }
-    else if (n % xsize < xsize - 1 && !cell[n + 1].l && cell[n + 1].special == m - 1) { n = n + 1; if (m == tmp) { fake = n; fakedir = 1; } }
-    else if (n / xsize < ysize - 1 && !cell[n + xsize].t && cell[n + xsize].special == m - 1) { n = n + xsize; if (m == tmp) { fake = n; fakedir = 2; } }
-    else break;
+    if (!cell[n].l && n % xsize > 0 && cell[n - 1].special == m - 1) {
+      if (m == tmp) {
+        fake = n;
+        fakedir = 1;
+      }
+      n = n - 1;
+    } else if (!cell[n].t && n / xsize > 0 &&
+               cell[n - xsize].special == m - 1) {
+      if (m == tmp) {
+        fake = n;
+        fakedir = 2;
+      }
+      n = n - xsize;
+    } else if (n % xsize < xsize - 1 && !cell[n + 1].l &&
+               cell[n + 1].special == m - 1) {
+      n = n + 1;
+      if (m == tmp) {
+        fake = n;
+        fakedir = 1;
+      }
+    } else if (n / xsize < ysize - 1 && !cell[n + xsize].t &&
+               cell[n + xsize].special == m - 1) {
+      n = n + xsize;
+      if (m == tmp) {
+        fake = n;
+        fakedir = 2;
+      }
+    } else
+      break;
     m--;
   }
 
   // delete all numbers but path
-  for (m = 0; m < xsize * ysize; m++) if (cell[m].special != 999) cell[m].special = 0;
+  for (m = 0; m < xsize * ysize; m++)
+    if (cell[m].special != 999) cell[m].special = 0;
 
   // find distance from path to key
-  path2 = special_fill(cell, 0, 1); for (m = 0; m < xsize * ysize; m++) if (cell[m].special != 999) cell[m].special = 0;
+  path2 = special_fill(cell, 0, 1);
+  for (m = 0; m < xsize * ysize; m++)
+    if (cell[m].special != 999) cell[m].special = 0;
 
   // find distance from path to key
-  path3 = special_fill(cell, xsize * ysize - 1, 1); for (m = 0; m < xsize * ysize; m++) cell[m].special = 0;
+  path3 = special_fill(cell, xsize * ysize - 1, 1);
+  for (m = 0; m < xsize * ysize; m++) cell[m].special = 0;
 
   score = (path1 + path2 + path3) + cbrt(path1 * path2 * path3) * 3;
-  //xlog("total difficulty rating (%d %d %d): %d",path1,path2,path3,score);
+  // xlog("total difficulty rating (%d %d %d): %d",path1,path2,path3,score);
 
   if (do_fake) {
     // build a wall where the fake will be:
@@ -1253,7 +1525,7 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
     for (m = 0; m < xsize * ysize; m++) cell[m].special = 0;
 
     cell[fake].special = fakedir;
-    //xlog("fake at %d,%d",(fake%xsize)*4+xoff,(fake/xsize)*4+yoff);
+    // xlog("fake at %d,%d",(fake%xsize)*4+xoff,(fake/xsize)*4+yoff);
   }
   if (keys > 0) cell[0].special = 3;
   if (keys > 1) cell[xsize * ysize - 1].special = 4;
@@ -1262,7 +1534,8 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
   if (keys == 1) cell[xsize - 1].special = 29;
   if (keys == 2) cell[xsize - 1].special = 30;
 
-  maxi = 50; panic = 200;
+  maxi = 50;
+  panic = 200;
   for (n = 5; n >= 0; n--) {
     int x, y;
 
@@ -1276,7 +1549,8 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
       if ((x < 5 && y > (ysize - 6))) continue;
 
       cell[m].special = 5 + n * 3;
-      tmp--; maxi--;
+      tmp--;
+      maxi--;
     }
     tmp = mage[n];
     while (tmp > 0 && maxi > 0 && panic-- > 0) {
@@ -1288,7 +1562,8 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
       if ((x < 5 && y > (ysize - 6))) continue;
 
       cell[m].special = 6 + n * 3;
-      tmp--; maxi--;
+      tmp--;
+      maxi--;
     }
     tmp = seyan[n];
     while (tmp > 0 && maxi > 0 && panic-- > 0) {
@@ -1300,23 +1575,26 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
       if ((x < 5 && y > (ysize - 6))) continue;
 
       cell[m].special = 7 + n * 3;
-      tmp--; maxi--;
+      tmp--;
+      maxi--;
     }
   }
 
-  //xlog("%d NPCs total",50-maxi);
+  // xlog("%d NPCs total",50-maxi);
 
   // teleport traps
   tmp = teleport;
   while (tmp > 0) {
     m = RANDOM(xsize * ysize);
-    if (m % xsize == 0 && m / xsize == ysize - 1) continue; // no trap at start point
+    if (m % xsize == 0 && m / xsize == ysize - 1)
+      continue;  // no trap at start point
     if (cell[m].special) continue;
     cell[m].special = RANDOM(5) + 23;
     tmp--;
   }
 
-  for (m = 0; m < xsize * ysize; m++) build_cell(m % xsize, m / xsize, cell + m);
+  for (m = 0; m < xsize * ysize; m++)
+    build_cell(m % xsize, m / xsize, cell + m);
 
   if (show) show_maze(cell);
 
@@ -1325,14 +1603,15 @@ int create_maze(int base, int level, int do_fake, int keys, const int *warrior, 
   return score;
 }
 
-void destroy_dungeon(int nr)
-{
+void destroy_dungeon(int nr) {
   int xf, yf, xt, yt, x, y;
 
   xlog("destroying dungeon %d", nr);
 
-  xf = (nr % 3) * 81 + 2; xt = xf + 80;
-  yf = (nr / 3) * 81 + 2; yt = yf + 80;
+  xf = (nr % 3) * 81 + 2;
+  xt = xf + 80;
+  yf = (nr / 3) * 81 + 2;
+  yt = yf + 80;
 
   for (x = xf; x < xt; x++) {
     for (y = yf; y < yt; y++) {
@@ -1347,10 +1626,9 @@ void destroy_dungeon(int nr)
   }
 }
 
-#define DUNGEONTIME (TICKS*60*60)
+#define DUNGEONTIME (TICKS * 60 * 60)
 
-struct master_data
-{
+struct master_data {
   int target[9];
   int level[9];
   int created[9];
@@ -1361,8 +1639,7 @@ struct master_data
   int memcleartimer;
 };
 
-void create_dungeon(int cn, int co, int target, struct master_data *dat)
-{
+void create_dungeon(int cn, int co, int target, struct master_data *dat) {
   int warrior[6] = {0, 0, 0, 0, 0, 0};
   int mage[6] = {0, 0, 0, 0, 0, 0};
   int seyan[6] = {0, 0, 0, 0, 0, 0};
@@ -1375,11 +1652,13 @@ void create_dungeon(int cn, int co, int target, struct master_data *dat)
   }
 
   if (ch[co].level > 56) {
-    say(cn, "You cannot create a clan catacomb, your level is too high (max 56).");
+    say(cn,
+        "You cannot create a clan catacomb, your level is too high (max 56).");
     return;
   }
 
-  if (!clan_can_attack_inside(get_char_clan(co), target) && !(ch[co].flags & CF_GOD)) {
+  if (!clan_can_attack_inside(get_char_clan(co), target) &&
+      !(ch[co].flags & CF_GOD)) {
     say(cn, "You are not at war with that clan.");
     return;
   }
@@ -1390,31 +1669,45 @@ void create_dungeon(int cn, int co, int target, struct master_data *dat)
   }
 
   if (cnt_jewels(get_char_clan(co)) < 12) {
-    say(cn, "Your clan does not have enough jewels to mount a raid (your clan needs to have at least 11 of them).");
+    say(cn,
+        "Your clan does not have enough jewels to mount a raid (your clan "
+        "needs to have at least 11 of them).");
     return;
   }
 
   for (n = 0; n < 9; n++) {
     if (dat->target[n] == target) {
-      say(cn, "This catacomb already exists, please use 'enter %d' instead.", n + 1);
+      say(cn, "This catacomb already exists, please use 'enter %d' instead.",
+          n + 1);
       return;
     }
     if (dat->created_by_clan[n] == get_char_clan(co)) {
-      say(cn, "Your clan has created a catacomb already, you may not create another one before the first one has collapsed.");
+      say(cn,
+          "Your clan has created a catacomb already, you may not create "
+          "another one before the first one has collapsed.");
       return;
     }
     if (dat->owner[n] == ch[co].ID) {
-      say(cn, "You have created a catacomb already, you may not create another one before the first one has collapsed.");
+      say(cn,
+          "You have created a catacomb already, you may not create another one "
+          "before the first one has collapsed.");
       return;
     }
   }
 
   for (n = 0; n < 9; n++) {
-    if (dat->created[n]) tmp = ticker - dat->created[n]; else tmp = max(DUNGEONTIME, ticker - dat->created[n]);
-    if (tmp > best) { best = tmp; bestn = n; }
+    if (dat->created[n])
+      tmp = ticker - dat->created[n];
+    else
+      tmp = max(DUNGEONTIME, ticker - dat->created[n]);
+    if (tmp > best) {
+      best = tmp;
+      bestn = n;
+    }
   }
   if (best < DUNGEONTIME) {
-    say(cn, "Sorry, all catacombs are busy. Please try again in %.2f minutes", (DUNGEONTIME - best) / (TICKS * 60.0));
+    say(cn, "Sorry, all catacombs are busy. Please try again in %.2f minutes",
+        (DUNGEONTIME - best) / (TICKS * 60.0));
     return;
   }
 
@@ -1424,12 +1717,16 @@ void create_dungeon(int cn, int co, int target, struct master_data *dat)
     say(cn, "Sorry, you cannot afford the fee of %dG.", fee);
     return;
   }
-  say(cn, "Very well, I have created the catacomb for you. Thank you for paying %d gold.", fee);
+  say(cn,
+      "Very well, I have created the catacomb for you. Thank you for paying %d "
+      "gold.",
+      fee);
 
   xoff = (bestn % 3) * 81 + 2;
   yoff = (bestn / 3) * 81 + 2;
 
-  dat->level[bestn] = 56 + score_to_level(clan_get_training_score(target)); //ch[co].level;
+  dat->level[bestn] =
+      56 + score_to_level(clan_get_training_score(target));  // ch[co].level;
   dat->target[bestn] = target;
   dat->created[bestn] = ticker;
   dat->warning[bestn] = 0;
@@ -1438,47 +1735,64 @@ void create_dungeon(int cn, int co, int target, struct master_data *dat)
 
   for (n = 1; n < 22; n++) {
     switch (n) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:   warrior[n - 1] = get_clan_dungeon(target, n); break;
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+        warrior[n - 1] = get_clan_dungeon(target, n);
+        break;
 
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:  mage[n - 7] = get_clan_dungeon(target, n); break;
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+        mage[n - 7] = get_clan_dungeon(target, n);
+        break;
 
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:  seyan[n - 13] = get_clan_dungeon(target, n); break;
+      case 13:
+      case 14:
+      case 15:
+      case 16:
+      case 17:
+      case 18:
+        seyan[n - 13] = get_clan_dungeon(target, n);
+        break;
 
-    case 19:  teleport = get_clan_dungeon(target, n); break;
-    case 20:  fake = get_clan_dungeon(target, n); break;
-    case 21:  key = get_clan_dungeon(target, n); break;
+      case 19:
+        teleport = get_clan_dungeon(target, n);
+        break;
+      case 20:
+        fake = get_clan_dungeon(target, n);
+        break;
+      case 21:
+        key = get_clan_dungeon(target, n);
+        break;
     }
   }
 
   do {
     destroy_dungeon(bestn);
-  } while (create_maze(RANDOM(12345678), dat->level[bestn], fake, key, warrior, mage, seyan, teleport, target, 0) < 350);
+  } while (create_maze(RANDOM(12345678), dat->level[bestn], fake, key, warrior,
+                       mage, seyan, teleport, target, 0) < 350);
 
-  say(cn, "This catacomb will collapse in %.2f minutes.", DUNGEONTIME / (TICKS * 60.0));
+  say(cn, "This catacomb will collapse in %.2f minutes.",
+      DUNGEONTIME / (TICKS * 60.0));
 
   teleport_char_driver(co, xoff + 2, yoff + 78);
 
-  add_clanlog(target, clan_serial(target), ch[co].ID, 20, "Clan was attacked by %s of %s (%d)", ch[co].name, get_clan_name(get_char_clan(co)), get_char_clan(co));
-  add_clanlog(get_char_clan(co), clan_serial(get_char_clan(co)), ch[co].ID, 20, "%s attacked clan %s (%d)", ch[co].name, get_clan_name(target), target);
+  add_clanlog(target, clan_serial(target), ch[co].ID, 20,
+              "Clan was attacked by %s of %s (%d)", ch[co].name,
+              get_clan_name(get_char_clan(co)), get_char_clan(co));
+  add_clanlog(get_char_clan(co), clan_serial(get_char_clan(co)), ch[co].ID, 20,
+              "%s attacked clan %s (%d)", ch[co].name, get_clan_name(target),
+              target);
 }
 
-void enter_dungeon(int cn, int co, int target, struct master_data *dat)
-{
+void enter_dungeon(int cn, int co, int target, struct master_data *dat) {
   int tmp;
 
   if (target < 1 || target > 9) {
@@ -1487,7 +1801,10 @@ void enter_dungeon(int cn, int co, int target, struct master_data *dat)
   }
   target--;
   if (ch[co].level > 56) {
-    say(cn, "Sorry, you may not enter this catacomb, it was created for level %d and below.", dat->level[target]);
+    say(cn,
+        "Sorry, you may not enter this catacomb, it was created for level %d "
+        "and below.",
+        dat->level[target]);
     return;
   }
   if (!clan_can_attack_inside(get_char_clan(co), dat->target[target])) {
@@ -1505,13 +1822,14 @@ void enter_dungeon(int cn, int co, int target, struct master_data *dat)
   teleport_char_driver(co, (target % 3) * 81 + 4, (target / 3) * 81 + 80);
 }
 
-void list_dungeon(int cn, struct master_data *dat)
-{
+void list_dungeon(int cn, struct master_data *dat) {
   int n, flag = 0;
 
   for (n = 0; n < 9; n++) {
     if (dat->target[n]) {
-      say(cn, "Catacomb %d: Clan %d, level %d, remaining time: %.2f minutes.", n + 1, dat->target[n], dat->level[n], (DUNGEONTIME - ticker + dat->created[n]) / (TICKS * 60.0));
+      say(cn, "Catacomb %d: Clan %d, level %d, remaining time: %.2f minutes.",
+          n + 1, dat->target[n], dat->level[n],
+          (DUNGEONTIME - ticker + dat->created[n]) / (TICKS * 60.0));
       flag = 1;
     }
   }
@@ -1520,28 +1838,29 @@ void list_dungeon(int cn, struct master_data *dat)
   }
 }
 
-void warn_dungeon(int nr, int left)
-{
+void warn_dungeon(int nr, int left) {
   int co;
 
   for (co = getfirst_char(); co; co = getnext_char(co)) {
     if (ch[co].flags & CF_PLAYER) {
       if (((ch[co].x - 2) / 81) + ((ch[co].y - 2) / 81) * 3 == nr) {
-        log_char(co, LOG_SYSTEM, 0, "This catacomb will collapse in %.2f minutes.", left / (TICKS * 60.0));
+        log_char(co, LOG_SYSTEM, 0,
+                 "This catacomb will collapse in %.2f minutes.",
+                 left / (TICKS * 60.0));
       }
     }
   }
 }
 
-void dungeonmaster(int cn, int ret, int lastact)
-{
+void dungeonmaster(int cn, int ret, int lastact) {
   struct master_data *dat;
   int co, target, n, tmp;
   struct msg *msg, *next;
   char *ptr;
 
-  dat = (struct master_data*)set_data(cn, DRD_DUNGEONMASTER, sizeof(struct master_data));
-  if (!dat) return; // oops...
+  dat = (struct master_data *)set_data(cn, DRD_DUNGEONMASTER,
+                                       sizeof(struct master_data));
+  if (!dat) return;  // oops...
 
   // loop through our messages
   for (msg = ch[cn].msg; msg; msg = next) {
@@ -1564,49 +1883,67 @@ void dungeonmaster(int cn, int ret, int lastact)
       co = msg->dat1;
 
       // dont talk to someone we cant see, and dont talk to ourself
-      if (!char_see_char(cn, co) || cn == co) { remove_message(cn, msg); continue; }
+      if (!char_see_char(cn, co) || cn == co) {
+        remove_message(cn, msg);
+        continue;
+      }
 
       // dont talk to someone far away
-      if (char_dist(cn, co) > 10) { remove_message(cn, msg); continue; }
+      if (char_dist(cn, co) > 10) {
+        remove_message(cn, msg);
+        continue;
+      }
 
       // dont talk to the same person twice
-      if (mem_check_driver(cn, co, 7)) { remove_message(cn, msg); continue; }
+      if (mem_check_driver(cn, co, 7)) {
+        remove_message(cn, msg);
+        continue;
+      }
 
-      say(cn, "Hello %s! Welcome to the clan catacombs. Be warned, there is a fee of 3500 gold for attacking now. Say °c4help°c0 for details.", ch[co].name);
+      say(cn,
+          "Hello %s! Welcome to the clan catacombs. Be warned, there is a fee "
+          "of 3500 gold for attacking now. Say °c4help°c0 for details.",
+          ch[co].name);
       mem_add_driver(cn, co, 7);
-
-
     }
 
     // talk back
     if (msg->type == NT_TEXT) {
       co = msg->dat3;
 
-      if (!(ch[co].flags & CF_PLAYER)) { remove_message(cn, msg); continue; }
-
-      switch (analyse_text_driver(cn, msg->dat1, (char*)msg->dat2, co)) {
-      case 2:   say(cn, "Use: 'attack <nr>' to attack clan <nr>, 'enter <nr>' to enter catacomb <nr> or 'list' to get a listing of all catacombs.");
-        break;
-      case 3:   list_dungeon(cn, dat);
-        break;
+      if (!(ch[co].flags & CF_PLAYER)) {
+        remove_message(cn, msg);
+        continue;
       }
-      if ((ptr = strcasestr((char*)msg->dat2, "attack"))) {
+
+      switch (analyse_text_driver(cn, msg->dat1, (char *)msg->dat2, co)) {
+        case 2:
+          say(cn,
+              "Use: 'attack <nr>' to attack clan <nr>, 'enter <nr>' to enter "
+              "catacomb <nr> or 'list' to get a listing of all catacombs.");
+          break;
+        case 3:
+          list_dungeon(cn, dat);
+          break;
+      }
+      if ((ptr = strcasestr((char *)msg->dat2, "attack"))) {
         ptr += 6;
         target = atoi(ptr);
         create_dungeon(cn, co, target, dat);
       }
-      if ((ptr = strcasestr((char*)msg->dat2, "enter"))) {
+      if ((ptr = strcasestr((char *)msg->dat2, "enter"))) {
         ptr += 5;
         target = atoi(ptr);
-        //say(cn,"You want to enter catacomb %d",target);
+        // say(cn,"You want to enter catacomb %d",target);
 
         enter_dungeon(cn, co, target, dat);
       }
 
-      if ((ptr = strcasestr((char*)msg->dat2, "destroy")) && (ch[co].flags & CF_GOD)) {
+      if ((ptr = strcasestr((char *)msg->dat2, "destroy")) &&
+          (ch[co].flags & CF_GOD)) {
         ptr += 7;
         target = atoi(ptr);
-        //say(cn,"You want to destroy catacomb %d",target);
+        // say(cn,"You want to destroy catacomb %d",target);
 
         if (target > 0 && target < 10) {
           target--;
@@ -1645,7 +1982,8 @@ void dungeonmaster(int cn, int ret, int lastact)
   // do something. whenever possible, call do_idle with as high a tick count
   // as reasonable when doing nothing.
 
-  if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret, lastact)) return;
+  if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret, lastact))
+    return;
 
   for (n = 0; n < 9; n++) {
     if (!dat->created[n]) continue;
@@ -1676,36 +2014,37 @@ void dungeonmaster(int cn, int ret, int lastact)
   do_idle(cn, TICKS);
 }
 
-void immortal_dead(int cn, int co)
-{
+void immortal_dead(int cn, int co) {
   charlog(cn, "I JUST DIED! I'M SUPPOSED TO BE IMMORTAL!");
 }
 
-void dungeonteleport(int in, int cn)
-{
+void dungeonteleport(int in, int cn) {
   int x, y, oldx, oldy, cnr;
   char buf[80];
 
-  if (!cn) return;  // always make sure its not an automatic call if you don't handle it
+  if (!cn)
+    return;  // always make sure its not an automatic call if you don't handle
+             // it
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  x = *(unsigned short*)(it[in].drdata + 0);
-  y = *(unsigned short*)(it[in].drdata + 2);
-  cnr = *(unsigned short*)(it[in].drdata + 4);
+  x = *(unsigned short *)(it[in].drdata + 0);
+  y = *(unsigned short *)(it[in].drdata + 2);
+  cnr = *(unsigned short *)(it[in].drdata + 4);
 
   if (x < 1 || x > MAXMAP - 2 || y < 1 || y > MAXMAP - 2) {
-    log_area(ch[cn].x, ch[cn].y, LOG_INFO, cn, 10, "%s touches a teleport object but nothing happens - BUG (%d,%d).", ch[cn].name, x, y);
+    log_area(ch[cn].x, ch[cn].y, LOG_INFO, cn, 10,
+             "%s touches a teleport object but nothing happens - BUG (%d,%d).",
+             ch[cn].name, x, y);
     return;
   }
 
-  oldx = ch[cn].x; oldy = ch[cn].y;
+  oldx = ch[cn].x;
+  oldy = ch[cn].y;
   remove_char(cn);
 
-  if (!drop_char(cn, x, y, 0) &&
-      !drop_char(cn, 240, 250, 0) &&
-      !drop_char(cn, 235, 250, 0) &&
-      !drop_char(cn, 230, 250, 0)) {
+  if (!drop_char(cn, x, y, 0) && !drop_char(cn, 240, 250, 0) &&
+      !drop_char(cn, 235, 250, 0) && !drop_char(cn, 230, 250, 0)) {
     elog("drop char failed in dungeonteleport for %s", ch[cn].name);
     kick_char(cn);
   } else {
@@ -1718,16 +2057,16 @@ void dungeonteleport(int in, int cn)
   }
 }
 
-void dungeonfake(int in, int cn)
-{
+void dungeonfake(int in, int cn) {
   int cnr, x, y;
   char buf[80];
 
   if (!cn) return;
 
-  cnr = *(unsigned short*)(it[in].drdata);
+  cnr = *(unsigned short *)(it[in].drdata);
 
-  x = it[in].x; y = it[in].y;
+  x = it[in].x;
+  y = it[in].y;
   remove_lights(x, y);
 
   remove_item(in);
@@ -1740,23 +2079,23 @@ void dungeonfake(int in, int cn)
   server_chat(1028, buf);
 }
 
-void dungeondoor(int in, int cn)
-{
+void dungeondoor(int in, int cn) {
   int ID1, ID2, missing = 0, co, nr, cnr, onr, cnt;
   char buf[80];
   int xf, yf, xt, yt, x, y, alive = 0;
 
   if (!cn) return;
 
-  ID1 = *(unsigned long*)(it[in].drdata + 0);
-  ID2 = *(unsigned long*)(it[in].drdata + 4);
-  cnr = *(unsigned long*)(it[in].drdata + 8);
+  ID1 = *(unsigned long *)(it[in].drdata + 0);
+  ID2 = *(unsigned long *)(it[in].drdata + 4);
+  cnr = *(unsigned long *)(it[in].drdata + 8);
 
   if (ID1 && !has_item(cn, ID1)) missing++;
   if (ID2 && !has_item(cn, ID2)) missing++;
 
   if (ID1 && ID2 && missing) {
-    log_char(cn, LOG_SYSTEM, 0, "You need %d more key%s.", missing, missing > 1 ? "s" : "");
+    log_char(cn, LOG_SYSTEM, 0, "You need %d more key%s.", missing,
+             missing > 1 ? "s" : "");
   } else if (missing) {
     log_char(cn, LOG_SYSTEM, 0, "You need a key.");
   }
@@ -1764,8 +2103,10 @@ void dungeondoor(int in, int cn)
 
   nr = ((it[in].x - 2) / 81) + ((it[in].y - 2) / 81) * 3;
 
-  xf = (nr % 3) * 81 + 2; xt = xf + 80;
-  yf = (nr / 3) * 81 + 2; yt = yf + 80;
+  xf = (nr % 3) * 81 + 2;
+  xt = xf + 80;
+  yf = (nr / 3) * 81 + 2;
+  yt = yf + 80;
 
   for (x = xf; x < xt; x++) {
     for (y = yf; y < yt; y++) {
@@ -1773,39 +2114,47 @@ void dungeondoor(int in, int cn)
     }
   }
   if (alive > 20) {
-    log_char(cn, LOG_SYSTEM, 0, "Too many Defenders are still alive (%d vs %d).", alive, 20);
+    log_char(cn, LOG_SYSTEM, 0,
+             "Too many Defenders are still alive (%d vs %d).", alive, 20);
     return;
   }
 
   if (!it[in].drdata[12]) {
-
     onr = get_char_clan(cn);
     if (!onr) {
       log_char(cn, LOG_SYSTEM, 0, "You're not supposed to be here.");
       return;
     }
     if (cnt_jewels(onr) < 12) {
-      log_char(cn, LOG_SYSTEM, 0, "You can't steal jewels while your own clan has less than 12 of them.");
+      log_char(cn, LOG_SYSTEM, 0,
+               "You can't steal jewels while your own clan has less than 12 of "
+               "them.");
       return;
     }
 
-    cnt = min(cnt_jewels(cnr) - 11, 3); //clan_stolen_jewel_nr(cnr,onr,ch[cn].level);
+    cnt = min(cnt_jewels(cnr) - 11,
+              3);  // clan_stolen_jewel_nr(cnr,onr,ch[cn].level);
 
     if (cnt > 0) {
-      log_char(cn, LOG_SYSTEM, 0, "You won. You stole %d jewels for your clan's storage.", cnt);
+      log_char(cn, LOG_SYSTEM, 0,
+               "You won. You stole %d jewels for your clan's storage.", cnt);
 
-      sprintf(buf, "%02d:J:%02d:%03d:%010u:%s", cnr, onr, ch[cn].level, ch[cn].ID, ch[cn].name);
+      sprintf(buf, "%02d:J:%02d:%03d:%010u:%s", cnr, onr, ch[cn].level,
+              ch[cn].ID, ch[cn].name);
       server_chat(1028, buf);
-    } else log_char(cn, LOG_SYSTEM, 0, "You won. Unfortunately there's nothing left to steal.");
+    } else
+      log_char(cn, LOG_SYSTEM, 0,
+               "You won. Unfortunately there's nothing left to steal.");
 
-    *(unsigned long*)(it[in].drdata + 0) = 0;
-    *(unsigned long*)(it[in].drdata + 4) = 0;
+    *(unsigned long *)(it[in].drdata + 0) = 0;
+    *(unsigned long *)(it[in].drdata + 4) = 0;
     it[in].drdata[12] = 1;
 
     for (co = getfirst_char(); co; co = getnext_char(co)) {
       if (ch[co].flags & CF_PLAYER) {
         if (((ch[co].x - 2) / 81) + ((ch[co].y - 2) / 81) * 3 == nr) {
-          log_char(co, LOG_SYSTEM, 0, "This catacomb has been solved and will collapse.");
+          log_char(co, LOG_SYSTEM, 0,
+                   "This catacomb has been solved and will collapse.");
         }
       }
       if (ch[co].driver == CDR_DUNGEONMASTER) {
@@ -1816,40 +2165,45 @@ void dungeondoor(int in, int cn)
 
   if (!teleport_char_driver(cn, 245, 250) &&
       !teleport_char_driver(cn, 240, 250) &&
-      !teleport_char_driver(cn, 235, 250)) teleport_char_driver(cn, 230, 250);
+      !teleport_char_driver(cn, 235, 250))
+    teleport_char_driver(cn, 230, 250);
 }
 
-void fighter_dead(int cn, int co)
-{
+void fighter_dead(int cn, int co) {
   int type;
   char buf[80];
 
-  if ((ch[cn].flags & (CF_MAGE | CF_WARRIOR)) == (CF_MAGE | CF_WARRIOR)) type = 'S';
-  else if (ch[cn].flags & CF_MAGE) type = 'M';
-  else type = 'W';
+  if ((ch[cn].flags & (CF_MAGE | CF_WARRIOR)) == (CF_MAGE | CF_WARRIOR))
+    type = 'S';
+  else if (ch[cn].flags & CF_MAGE)
+    type = 'M';
+  else
+    type = 'W';
 
   sprintf(buf, "%02d:%c:%d", ch[cn].restx, type, ch[cn].resty);
   server_chat(1028, buf);
 }
 
-void dungeonkey(int in, int cn)
-{
+void dungeonkey(int in, int cn) {
   int in2;
   char buf[80];
 
   if (!cn) return;
 
   if (ch[cn].citem) {
-    log_char(cn, LOG_SYSTEM, 0, "Please empty your 'hand' (mouse cursor) first.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Please empty your 'hand' (mouse cursor) first.");
     return;
   }
 
   if (it[in].drdata[0] == 1) {
     in2 = create_item("maze_key1");
-    it[in2].ID = MAKE_ITEMID(DEV_ID_MAZE1, *(unsigned long*)(it[in].drdata + 4));
+    it[in2].ID =
+        MAKE_ITEMID(DEV_ID_MAZE1, *(unsigned long *)(it[in].drdata + 4));
   } else {
     in2 = create_item("maze_key2");
-    it[in2].ID = MAKE_ITEMID(DEV_ID_MAZE2, *(unsigned long*)(it[in].drdata + 4));
+    it[in2].ID =
+        MAKE_ITEMID(DEV_ID_MAZE2, *(unsigned long *)(it[in].drdata + 4));
   }
 
   if (!in2) {
@@ -1870,8 +2224,7 @@ void dungeonkey(int in, int cn)
   }
 }
 
-int dungeon_potion(int cn)
-{
+int dungeon_potion(int cn) {
   int fre, in2, endtime, duration, nr, type, str, cnr;
   char buf[256];
 
@@ -1879,8 +2232,10 @@ int dungeon_potion(int cn)
 
   if (!(fre = may_add_spell(cn, IDR_POTION_SP))) return 0;
 
-  if (ch[cn].flags & CF_WARRIOR) type = 0;
-  else type = 1;
+  if (ch[cn].flags & CF_WARRIOR)
+    type = 0;
+  else
+    type = 1;
 
   for (nr = 5; nr >= 0; nr--) {
     if (nr * 10 > ch[cn].value[1][V_INT]) continue;
@@ -1915,8 +2270,8 @@ int dungeon_potion(int cn)
 
   endtime = ticker + duration;
 
-  *(signed long*)(it[in2].drdata) = endtime;
-  *(signed long*)(it[in2].drdata + 4) = ticker;
+  *(signed long *)(it[in2].drdata) = endtime;
+  *(signed long *)(it[in2].drdata + 4) = ticker;
 
   it[in2].carried = cn;
 
@@ -1934,24 +2289,22 @@ int dungeon_potion(int cn)
   return 1;
 }
 
-
-struct dungeonfighter_data
-{
+struct dungeonfighter_data {
   int damage_done;
   int damage_taken;
   int simple_pots_taken;
   int alc_pots_taken;
 };
 
-void dungeonfighter(int cn, int ret, int lastact)
-{
+void dungeonfighter(int cn, int ret, int lastact) {
   int dam, didhit = 0, cnr, need, add, nr, flag = 0;
   struct dungeonfighter_data *dat;
   struct msg *msg, *next;
   char buf[80];
 
-  dat = (struct dungeonfighter_data*)set_data(cn, DRD_DUNGEONFIGHTER, sizeof(struct dungeonfighter_data));
-  if (!dat) return; // oops...
+  dat = (struct dungeonfighter_data *)set_data(
+      cn, DRD_DUNGEONFIGHTER, sizeof(struct dungeonfighter_data));
+  if (!dat) return;  // oops...
 
   cnr = ch[cn].restx;
 
@@ -1959,31 +2312,38 @@ void dungeonfighter(int cn, int ret, int lastact)
     next = msg->next;
 
     switch (msg->type) {
-    case NT_DIDHIT:
-      dam = msg->dat2;
-      dat->damage_done += dam;
-      didhit = 1;
-      break;
+      case NT_DIDHIT:
+        dam = msg->dat2;
+        dat->damage_done += dam;
+        didhit = 1;
+        break;
 
-    case NT_GOTHIT:
-      dam = msg->dat2;
-      dat->damage_taken += dam;
-      break;
+      case NT_GOTHIT:
+        dam = msg->dat2;
+        dat->damage_taken += dam;
+        break;
     }
   }
 
-  if (ch[cn].value[0][V_MANA] && ch[cn].mana < ch[cn].value[0][V_MANA]*POWERSCALE / 2 && dat->simple_pots_taken < 5) {
+  if (ch[cn].value[0][V_MANA] &&
+      ch[cn].mana < ch[cn].value[0][V_MANA] * POWERSCALE / 2 &&
+      dat->simple_pots_taken < 5) {
     if (dat->damage_done > 10 && dat->damage_done > dat->damage_taken / 16) {
-      need = ch[cn].value[0][V_MANA] - ch[cn].mana / POWERSCALE; add = nr = 0;
+      need = ch[cn].value[0][V_MANA] - ch[cn].mana / POWERSCALE;
+      add = nr = 0;
       if (need > 24 && clan[cnr].dungeon.simple_pot[1][2]) {
-        add = 24; nr = 2;
+        add = 24;
+        nr = 2;
       } else if (need > 12 && clan[cnr].dungeon.simple_pot[1][1]) {
-        add = 16; nr = 1;
+        add = 16;
+        nr = 1;
       } else if (clan[cnr].dungeon.simple_pot[1][0]) {
-        add = 8; nr = 0;
+        add = 8;
+        nr = 0;
       }
       if (add) {
-        ch[cn].mana = min(ch[cn].value[0][V_MANA] * POWERSCALE, ch[cn].mana + add * POWERSCALE);
+        ch[cn].mana = min(ch[cn].value[0][V_MANA] * POWERSCALE,
+                          ch[cn].mana + add * POWERSCALE);
         emote(cn, "drinks a mana potion (%d)", add);
         dat->simple_pots_taken++;
         sprintf(buf, "%02d:s:%01d:%01d", cnr, 1, nr);
@@ -1991,21 +2351,28 @@ void dungeonfighter(int cn, int ret, int lastact)
         flag = 1;
       }
     }
-    //say(cn,"mana: taken=%d, done=%d, pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
+    // say(cn,"mana: taken=%d, done=%d,
+    // pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
   }
 
-  if (ch[cn].hp < ch[cn].value[0][V_HP]*POWERSCALE / 2 && dat->simple_pots_taken < 5) {
+  if (ch[cn].hp < ch[cn].value[0][V_HP] * POWERSCALE / 2 &&
+      dat->simple_pots_taken < 5) {
     if (dat->damage_done > 10 && dat->damage_done > dat->damage_taken / 16) {
-      need = ch[cn].value[0][V_HP] - ch[cn].hp / POWERSCALE; add = nr = 0;
+      need = ch[cn].value[0][V_HP] - ch[cn].hp / POWERSCALE;
+      add = nr = 0;
       if (need > 24 && clan[cnr].dungeon.simple_pot[0][2]) {
-        add = 24; nr = 2;
+        add = 24;
+        nr = 2;
       } else if (need > 12 && clan[cnr].dungeon.simple_pot[0][1]) {
-        add = 16; nr = 1;
+        add = 16;
+        nr = 1;
       } else if (clan[cnr].dungeon.simple_pot[0][0]) {
-        add = 8; nr = 0;
+        add = 8;
+        nr = 0;
       }
       if (add) {
-        ch[cn].hp = min(ch[cn].value[0][V_HP] * POWERSCALE, ch[cn].hp + add * POWERSCALE);
+        ch[cn].hp = min(ch[cn].value[0][V_HP] * POWERSCALE,
+                        ch[cn].hp + add * POWERSCALE);
         emote(cn, "drinks a healing potion (%d)", add);
         dat->simple_pots_taken++;
         sprintf(buf, "%02d:s:%01d:%01d", cnr, 0, nr);
@@ -2013,96 +2380,104 @@ void dungeonfighter(int cn, int ret, int lastact)
         flag = 1;
       }
     }
-    //say(cn,"hp: taken=%d, done=%d, pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
+    // say(cn,"hp: taken=%d, done=%d,
+    // pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
   }
-  if ((ch[cn].hp < ch[cn].value[0][V_HP]*POWERSCALE / 2 || ch[cn].mana < ch[cn].value[0][V_MANA]*POWERSCALE / 2) && dat->simple_pots_taken < 5 && !flag) {
+  if ((ch[cn].hp < ch[cn].value[0][V_HP] * POWERSCALE / 2 ||
+       ch[cn].mana < ch[cn].value[0][V_MANA] * POWERSCALE / 2) &&
+      dat->simple_pots_taken < 5 && !flag) {
     if (dat->damage_done > 10 && dat->damage_done > dat->damage_taken / 16) {
-      need = max(ch[cn].value[0][V_HP] - ch[cn].hp / POWERSCALE, ch[cn].value[0][V_MANA] - ch[cn].mana / POWERSCALE); add = nr = 0;
+      need = max(ch[cn].value[0][V_HP] - ch[cn].hp / POWERSCALE,
+                 ch[cn].value[0][V_MANA] - ch[cn].mana / POWERSCALE);
+      add = nr = 0;
       if (need > 24 && clan[cnr].dungeon.simple_pot[2][2]) {
-        add = 24; nr = 2;
+        add = 24;
+        nr = 2;
       } else if (need > 12 && clan[cnr].dungeon.simple_pot[2][1]) {
-        add = 16; nr = 1;
+        add = 16;
+        nr = 1;
       } else if (clan[cnr].dungeon.simple_pot[2][0]) {
-        add = 8; nr = 0;
+        add = 8;
+        nr = 0;
       }
       if (add) {
-        ch[cn].hp = min(ch[cn].value[0][V_HP] * POWERSCALE, ch[cn].hp + add * POWERSCALE);
-        ch[cn].mana = min(ch[cn].value[0][V_MANA] * POWERSCALE, ch[cn].mana + add * POWERSCALE);
-        ch[cn].endurance = min(ch[cn].value[0][V_ENDURANCE] * POWERSCALE, ch[cn].endurance + add * POWERSCALE);
+        ch[cn].hp = min(ch[cn].value[0][V_HP] * POWERSCALE,
+                        ch[cn].hp + add * POWERSCALE);
+        ch[cn].mana = min(ch[cn].value[0][V_MANA] * POWERSCALE,
+                          ch[cn].mana + add * POWERSCALE);
+        ch[cn].endurance = min(ch[cn].value[0][V_ENDURANCE] * POWERSCALE,
+                               ch[cn].endurance + add * POWERSCALE);
         emote(cn, "drinks a combo potion (%d)", add);
         dat->simple_pots_taken++;
         sprintf(buf, "%02d:s:%01d:%01d", cnr, 2, nr);
         server_chat(1028, buf);
       }
     }
-    //say(cn,"hp: taken=%d, done=%d, pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
+    // say(cn,"hp: taken=%d, done=%d,
+    // pots=%d",dat->damage_taken,dat->damage_done,dat->simple_pots_taken);
   }
 
-  if (didhit && dat->alc_pots_taken < 3 && dat->damage_done > 0 && ch[cn].hp > ch[cn].value[0][V_HP]*POWERSCALE / 2) {
-    if (dungeon_potion(cn)) { dat->alc_pots_taken++; }
+  if (didhit && dat->alc_pots_taken < 3 && dat->damage_done > 0 &&
+      ch[cn].hp > ch[cn].value[0][V_HP] * POWERSCALE / 2) {
+    if (dungeon_potion(cn)) {
+      dat->alc_pots_taken++;
+    }
   }
 
   char_driver(CDR_SIMPLEBADDY, CDT_DRIVER, cn, ret, lastact);
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-  case CDR_DUNGEONMASTER:   dungeonmaster(cn, ret, lastact); return 1;
-  case CDR_DUNGEONFIGHTER:  dungeonfighter(cn, ret, lastact); return 1;
+    case CDR_DUNGEONMASTER:
+      dungeonmaster(cn, ret, lastact);
+      return 1;
+    case CDR_DUNGEONFIGHTER:
+      dungeonfighter(cn, ret, lastact);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  case IDR_DUNGEONTELE: dungeonteleport(in, cn); return 1;
-  case IDR_DUNGEONFAKE: dungeonfake(in, cn); return 1;
-  case IDR_DUNGEONDOOR: dungeondoor(in, cn); return 1;
-  case IDR_DUNGEONKEY:  dungeonkey(in, cn); return 1;
+    case IDR_DUNGEONTELE:
+      dungeonteleport(in, cn);
+      return 1;
+    case IDR_DUNGEONFAKE:
+      dungeonfake(in, cn);
+      return 1;
+    case IDR_DUNGEONDOOR:
+      dungeondoor(in, cn);
+      return 1;
+    case IDR_DUNGEONKEY:
+      dungeonkey(in, cn);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  case CDR_DUNGEONMASTER:   immortal_dead(cn, co); return 1;
-  case CDR_DUNGEONFIGHTER:  fighter_dead(cn, co); return 1;
+    case CDR_DUNGEONMASTER:
+      immortal_dead(cn, co);
+      return 1;
+    case CDR_DUNGEONFIGHTER:
+      fighter_dead(cn, co);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_respawn_driver(int nr, int cn)
-{
+int ch_respawn_driver(int nr, int cn) {
   switch (nr) {
-  default:    return 0;
+    default:
+      return 0;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

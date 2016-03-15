@@ -42,25 +42,30 @@ Added RCS tags
 #include "poison.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);			// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);       // item driver (for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
+int ch_respawn_driver(int nr,
+                      int cn);  // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 	return 0;
+    case CDT_DRIVER:
+      return ch_driver(nr, obj, ret, lastact);
+    case CDT_ITEM:
+      return it_driver(nr, obj, ret);
+    case CDT_DEAD:
+      return ch_died_driver(nr, obj, ret);
+    case CDT_RESPAWN:
+      return ch_respawn_driver(nr, obj);
+    default:
+      return 0;
   }
 }
 
-struct simple_baddy_driver_data
-{
+struct simple_baddy_driver_data {
   int startdist;
   int chardist;
   int stopdist;
@@ -96,102 +101,120 @@ struct simple_baddy_driver_data
   int drinkspecial;
 };
 
-void simple_baddy_driver_parse(int cn, struct simple_baddy_driver_data *dat)
-{
+void simple_baddy_driver_parse(int cn, struct simple_baddy_driver_data *dat) {
   char *ptr, name[64], value[64];
 
-  for (ptr = nextnv(ch[cn].arg, name, value); ptr; ptr = nextnv(ptr, name, value)) {
-
-    if (!strcmp(name, "aggressive")) dat->aggressive = atoi(value);
-    else if (!strcmp(name, "scavenger")) dat->scavenger = atoi(value);
-    else if (!strcmp(name, "helper")) dat->helper = atoi(value);
-    else if (!strcmp(name, "startdist")) dat->startdist = atoi(value);
-    else if (!strcmp(name, "chardist")) dat->chardist = atoi(value);
-    else if (!strcmp(name, "stopdist")) dat->stopdist = atoi(value);
-    else if (!strcmp(name, "dir")) dat->dir = atoi(value);
-    else if (!strcmp(name, "dayx")) dat->dayx = atoi(value);
-    else if (!strcmp(name, "dayy")) dat->dayy = atoi(value);
-    else if (!strcmp(name, "daydir")) dat->daydir = atoi(value);
-    else if (!strcmp(name, "nightx")) dat->nightx = atoi(value);
-    else if (!strcmp(name, "nighty")) dat->nighty = atoi(value);
-    else if (!strcmp(name, "nightdir")) dat->nightdir = atoi(value);
-    else if (!strcmp(name, "teleport")) dat->teleport = atoi(value);
-    else if (!strcmp(name, "helpid")) dat->helpid = atoi(value);
-    else if (!strcmp(name, "notsecure")) dat->notsecure = atoi(value);
-    else if (!strcmp(name, "mindist")) dat->mindist = atoi(value);
-    else if (!strcmp(name, "poisonpower")) dat->poison_power = atoi(value);
-    else if (!strcmp(name, "poisontype")) dat->poison_type = atoi(value);
-    else if (!strcmp(name, "poisonchance")) dat->poison_chance = atoi(value);
-    else if (!strcmp(name, "drinkspecial")) dat->drinkspecial = atoi(value);
-    else elog("unknown arg for %s (%d): %s", ch[cn].name, cn, name);
+  for (ptr = nextnv(ch[cn].arg, name, value); ptr;
+       ptr = nextnv(ptr, name, value)) {
+    if (!strcmp(name, "aggressive"))
+      dat->aggressive = atoi(value);
+    else if (!strcmp(name, "scavenger"))
+      dat->scavenger = atoi(value);
+    else if (!strcmp(name, "helper"))
+      dat->helper = atoi(value);
+    else if (!strcmp(name, "startdist"))
+      dat->startdist = atoi(value);
+    else if (!strcmp(name, "chardist"))
+      dat->chardist = atoi(value);
+    else if (!strcmp(name, "stopdist"))
+      dat->stopdist = atoi(value);
+    else if (!strcmp(name, "dir"))
+      dat->dir = atoi(value);
+    else if (!strcmp(name, "dayx"))
+      dat->dayx = atoi(value);
+    else if (!strcmp(name, "dayy"))
+      dat->dayy = atoi(value);
+    else if (!strcmp(name, "daydir"))
+      dat->daydir = atoi(value);
+    else if (!strcmp(name, "nightx"))
+      dat->nightx = atoi(value);
+    else if (!strcmp(name, "nighty"))
+      dat->nighty = atoi(value);
+    else if (!strcmp(name, "nightdir"))
+      dat->nightdir = atoi(value);
+    else if (!strcmp(name, "teleport"))
+      dat->teleport = atoi(value);
+    else if (!strcmp(name, "helpid"))
+      dat->helpid = atoi(value);
+    else if (!strcmp(name, "notsecure"))
+      dat->notsecure = atoi(value);
+    else if (!strcmp(name, "mindist"))
+      dat->mindist = atoi(value);
+    else if (!strcmp(name, "poisonpower"))
+      dat->poison_power = atoi(value);
+    else if (!strcmp(name, "poisontype"))
+      dat->poison_type = atoi(value);
+    else if (!strcmp(name, "poisonchance"))
+      dat->poison_chance = atoi(value);
+    else if (!strcmp(name, "drinkspecial"))
+      dat->drinkspecial = atoi(value);
+    else
+      elog("unknown arg for %s (%d): %s", ch[cn].name, cn, name);
   }
 }
 
-void simple_baddy_driver(int cn, int ret, int lastact)
-{
+void simple_baddy_driver(int cn, int ret, int lastact) {
   struct simple_baddy_driver_data *dat;
   struct msg *msg, *next;
   int co, friend_ = 0, x, y, n, in;
 
-  dat = (struct simple_baddy_driver_data*)set_data(cn, DRD_SIMPLEBADDYDRIVER, sizeof(struct simple_baddy_driver_data));
-  if (!dat) return;	// oops...
+  dat = (struct simple_baddy_driver_data *)set_data(
+      cn, DRD_SIMPLEBADDYDRIVER, sizeof(struct simple_baddy_driver_data));
+  if (!dat) return;  // oops...
 
   // loop through our messages
   for (msg = ch[cn].msg; msg; msg = next) {
     next = msg->next;
 
     switch (msg->type) {
-    case NT_CREATE:
-      if (ch[cn].arg) {
-        dat->aggressive = 0;
-        dat->helper = 0;
-        dat->startdist = 20;
-        dat->chardist = 0;
-        dat->stopdist = 40;
-        dat->scavenger = 0;
-        dat->dir = DX_DOWN;
+      case NT_CREATE:
+        if (ch[cn].arg) {
+          dat->aggressive = 0;
+          dat->helper = 0;
+          dat->startdist = 20;
+          dat->chardist = 0;
+          dat->stopdist = 40;
+          dat->scavenger = 0;
+          dat->dir = DX_DOWN;
 
-        simple_baddy_driver_parse(cn, dat);
-        ch[cn].arg = NULL;
-      }
-      dat->creation_time = ticker;
-      fight_driver_set_dist(cn, dat->startdist, dat->chardist, dat->stopdist);
+          simple_baddy_driver_parse(cn, dat);
+          ch[cn].arg = NULL;
+        }
+        dat->creation_time = ticker;
+        fight_driver_set_dist(cn, dat->startdist, dat->chardist, dat->stopdist);
 
-      if (ch[cn].item[30] && (ch[cn].flags & CF_NOBODY)) {
-        ch[cn].flags &= ~(CF_NOBODY);
-        ch[cn].flags |= CF_ITEMDEATH;
-        //xlog("transformed item %s",it[ch[cn].item[30]].name);
-      }
-      break;
+        if (ch[cn].item[30] && (ch[cn].flags & CF_NOBODY)) {
+          ch[cn].flags &= ~(CF_NOBODY);
+          ch[cn].flags |= CF_ITEMDEATH;
+          // xlog("transformed item %s",it[ch[cn].item[30]].name);
+        }
+        break;
 
-    case NT_CHAR:
-      co = msg->dat1;
-      if (dat->helper &&
-          ch[co].group == ch[cn].group &&
-          cn != co &&
-          ch[cn].value[0][V_BLESS] &&
-          ch[cn].mana >= BLESSCOST &&
-          may_add_spell(co, IDR_BLESS) &&
-          char_see_char(cn, co))
-        friend_ = co;
-      break;
+      case NT_CHAR:
+        co = msg->dat1;
+        if (dat->helper && ch[co].group == ch[cn].group && cn != co &&
+            ch[cn].value[0][V_BLESS] && ch[cn].mana >= BLESSCOST &&
+            may_add_spell(co, IDR_BLESS) && char_see_char(cn, co))
+          friend_ = co;
+        break;
 
-    case NT_TEXT:
-      co = msg->dat3;
-      tabunga(cn, co, (char*)msg->dat2);
-      break;
+      case NT_TEXT:
+        co = msg->dat3;
+        tabunga(cn, co, (char *)msg->dat2);
+        break;
 
-    case NT_DIDHIT:
-      if (dat->poison_power && msg->dat1 && msg->dat2 > 0 && can_attack(cn, msg->dat1) && RANDOM(100) < dat->poison_chance)
-        poison_someone(msg->dat1, dat->poison_power, dat->poison_type);
-      break;
+      case NT_DIDHIT:
+        if (dat->poison_power && msg->dat1 && msg->dat2 > 0 &&
+            can_attack(cn, msg->dat1) && RANDOM(100) < dat->poison_chance)
+          poison_someone(msg->dat1, dat->poison_power, dat->poison_type);
+        break;
 
-    case NT_NPC:
-      if (dat->helpid && msg->dat1 == dat->helpid && (co = msg->dat2) != cn && ch[co].group == ch[cn].group)
-        fight_driver_add_enemy(cn, msg->dat3, 1, 0);
-      break;
+      case NT_NPC:
+        if (dat->helpid && msg->dat1 == dat->helpid && (co = msg->dat2) != cn &&
+            ch[co].group == ch[cn].group)
+          fight_driver_add_enemy(cn, msg->dat3, 1, 0);
+        break;
     }
-
 
     standard_message_driver(cn, msg, dat->aggressive, dat->helper);
     remove_message(cn, msg);
@@ -209,7 +232,10 @@ void simple_baddy_driver(int cn, int ret, int lastact)
     dat->lastfight = ticker;
     return;
   }
-  if (fight_driver_follow_invisible(cn)) { dat->lastfight = ticker; return; }
+  if (fight_driver_follow_invisible(cn)) {
+    dat->lastfight = ticker;
+    return;
+  }
 
   // look around for a second if we've just been created
   if (ticker - dat->creation_time < TICKS) {
@@ -218,13 +244,16 @@ void simple_baddy_driver(int cn, int ret, int lastact)
   }
 
   if (dat->scavenger) {
-    if (abs(ch[cn].x - ch[cn].tmpx) >= dat->scavenger || abs(ch[cn].y - ch[cn].tmpy) >= dat->scavenger) {
+    if (abs(ch[cn].x - ch[cn].tmpx) >= dat->scavenger ||
+        abs(ch[cn].y - ch[cn].tmpy) >= dat->scavenger) {
       dat->dir = 0;
       if (dat->notsecure) {
         if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->mindist)) return;
       } else {
         if (ticker - dat->lastfight > TICKS * 10) {
-          if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret, lastact)) return;
+          if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret,
+                                 lastact))
+            return;
         } else {
           if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
         }
@@ -248,14 +277,18 @@ void simple_baddy_driver(int cn, int ret, int lastact)
 
     dx2offset(dat->dir, &x, &y, NULL);
 
-    if (abs(ch[cn].x + x - ch[cn].tmpx) < dat->scavenger && abs(ch[cn].y + y - ch[cn].tmpy) < dat->scavenger && do_walk(cn, dat->dir)) {
+    if (abs(ch[cn].x + x - ch[cn].tmpx) < dat->scavenger &&
+        abs(ch[cn].y + y - ch[cn].tmpy) < dat->scavenger &&
+        do_walk(cn, dat->dir)) {
       fight_driver_set_home(cn, ch[cn].x, ch[cn].y);
       return;
-    } else dat->dir = 0;
+    } else
+      dat->dir = 0;
   } else {
     if (dat->dayx) {
       if (hour > 19 || hour < 6) {
-        if (dat->teleport && teleport_char_driver(cn, dat->nightx, dat->nighty)) {
+        if (dat->teleport &&
+            teleport_char_driver(cn, dat->nightx, dat->nighty)) {
           fight_driver_set_home(cn, ch[cn].x, ch[cn].y);
           return;
         }
@@ -263,19 +296,24 @@ void simple_baddy_driver(int cn, int ret, int lastact)
           if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->mindist)) return;
         } else {
           if (ticker - dat->lastfight > TICKS * 10) {
-            if (secure_move_driver(cn, dat->nightx, dat->nighty, dat->nightdir, ret, lastact)) return;
+            if (secure_move_driver(cn, dat->nightx, dat->nighty, dat->nightdir,
+                                   ret, lastact))
+              return;
           } else {
             if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
           }
         }
         fight_driver_set_home(cn, ch[cn].x, ch[cn].y);
       } else {
-        if (dat->teleport && teleport_char_driver(cn, dat->dayx, dat->dayy)) return;
+        if (dat->teleport && teleport_char_driver(cn, dat->dayx, dat->dayy))
+          return;
         if (dat->notsecure) {
           if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->mindist)) return;
         } else {
           if (ticker - dat->lastfight > TICKS * 10) {
-            if (secure_move_driver(cn, dat->dayx, dat->dayy, dat->daydir, ret, lastact)) return;
+            if (secure_move_driver(cn, dat->dayx, dat->dayy, dat->daydir, ret,
+                                   lastact))
+              return;
           } else {
             if (move_driver(cn, dat->dayx, dat->dayy, 0)) return;
           }
@@ -283,14 +321,18 @@ void simple_baddy_driver(int cn, int ret, int lastact)
         fight_driver_set_home(cn, ch[cn].x, ch[cn].y);
       }
     } else {
-      if (dat->teleport && teleport_char_driver(cn, ch[cn].tmpx, ch[cn].tmpy)) return;
+      if (dat->teleport && teleport_char_driver(cn, ch[cn].tmpx, ch[cn].tmpy))
+        return;
 
       if (dat->notsecure) {
         if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->mindist)) return;
-        //say(cn,"move failed, %d, target=%d,%d",pathnodes(),ch[cn].tmpx,ch[cn].tmpy);
+        // say(cn,"move failed, %d,
+        // target=%d,%d",pathnodes(),ch[cn].tmpx,ch[cn].tmpy);
       } else {
         if (ticker - dat->lastfight > TICKS * 10) {
-          if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->dir, ret, lastact)) return;
+          if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, dat->dir, ret,
+                                 lastact))
+            return;
         } else {
           if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
         }
@@ -309,7 +351,6 @@ void simple_baddy_driver(int cn, int ret, int lastact)
     }
   }
 
-
   if (regenerate_driver(cn)) return;
 
   if (spell_self_driver(cn)) return;
@@ -317,45 +358,50 @@ void simple_baddy_driver(int cn, int ret, int lastact)
   // help friend by blessing him. all checks already done in message loop
   if (friend_ && do_bless(cn, friend_)) return;
 
-  //say(cn,"i am %d",cn);
+  // say(cn,"i am %d",cn);
   do_idle(cn, TICKS);
 }
 
-void simple_baddy_dead(int cn, int co)
-{
+void simple_baddy_dead(int cn, int co) {
   if ((ch[cn].flags & CF_EDEMON) && char_see_char(cn, co)) {
-    if (ch[cn].value[1][V_DEMON] > 5) create_earthmud(cn, ch[co].x, ch[co].y, ch[cn].value[1][V_DEMON]);
+    if (ch[cn].value[1][V_DEMON] > 5)
+      create_earthmud(cn, ch[co].x, ch[co].y, ch[cn].value[1][V_DEMON]);
     create_earthrain(cn, ch[co].x, ch[co].y, ch[cn].value[1][V_DEMON]);
   }
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-  case CDR_SIMPLEBADDY:	simple_baddy_driver(cn, ret, lastact); return 1;
-  default:		return 0;
+    case CDR_SIMPLEBADDY:
+      simple_baddy_driver(cn, ret, lastact);
+      return 1;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  default:		return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  case CDR_SIMPLEBADDY:	simple_baddy_dead(cn, co); return 1;
-  default:		return 0;
+    case CDR_SIMPLEBADDY:
+      simple_baddy_dead(cn, co);
+      return 1;
+    default:
+      return 0;
   }
 }
 
-int ch_respawn_driver(int nr, int cn)
-{
+int ch_respawn_driver(int nr, int cn) {
   switch (nr) {
-  case CDR_SIMPLEBADDY:	return 1;
-  default:		return 0;
+    case CDR_SIMPLEBADDY:
+      return 1;
+    default:
+      return 0;
   }
 }

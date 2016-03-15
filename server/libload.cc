@@ -42,13 +42,12 @@ Added RCS tags
 #include "drvlib.h"
 #include "talk.h"
 
-#define MAXLIB	100
-#define MAXDRV	200
+#define MAXLIB 100
+#define MAXDRV 200
 
 typedef int (*driver_type)(int, int, int, int, int);
 
-struct lib
-{
+struct lib {
   int used;
   char name[80];
   time_t time;
@@ -62,15 +61,14 @@ static struct lib *libs = NULL;
 static int *fast_chdrv;
 static int *fast_itdrv;
 
-static int load_lib(struct lib *lib)
-{
+static int load_lib(struct lib *lib) {
   struct stat st;
 
   if (stat(lib->name, &st)) {
     elog("Error loading library %s, not present.", lib->name);
     if (lib->handle) {
       dlclose(lib->handle);
-      //bzero(lib,sizeof(*lib));
+      // bzero(lib,sizeof(*lib));
       lib->handle = NULL;
       lib->time = 0;
       lib->driver = NULL;
@@ -85,7 +83,7 @@ static int load_lib(struct lib *lib)
     lib->handle = dlopen(lib->name, RTLD_NOW);
     if (!lib->handle) {
       elog("Error loading library %s.", lib->name);
-      //bzero(lib,sizeof(*lib));
+      // bzero(lib,sizeof(*lib));
       lib->handle = NULL;
       lib->time = 0;
       lib->driver = NULL;
@@ -96,7 +94,7 @@ static int load_lib(struct lib *lib)
     if (!lib->driver) {
       dlclose(lib->handle);
       elog("Error resolving symbol driver in library %s.", lib->name);
-      //bzero(lib,sizeof(*lib));
+      // bzero(lib,sizeof(*lib));
       lib->handle = NULL;
       lib->time = 0;
       lib->driver = NULL;
@@ -105,12 +103,13 @@ static int load_lib(struct lib *lib)
 
     lib->time = st.st_mtime;
   }
-  if (lib->handle) return 1;
-  else return 0;
+  if (lib->handle)
+    return 1;
+  else
+    return 0;
 }
 
-static void add_lib(char *name)
-{
+static void add_lib(char *name) {
   int n;
 
   for (n = 1; n < MAXLIB; n++) {
@@ -123,25 +122,28 @@ static void add_lib(char *name)
   }
 }
 
-int init_lib(void)
-{
+int init_lib(void) {
   DIR *dir;
   struct dirent *de;
   char dirname[NAME_MAX], name[NAME_MAX];
 
-  libs = (struct lib*)xcalloc(sizeof(struct lib) * MAXLIB, IM_BASE);
+  libs = (struct lib *)xcalloc(sizeof(struct lib) * MAXLIB, IM_BASE);
   if (!libs) return 0;
-  xlog("Allocated libs: %.2fM (%lu*%d)", sizeof(struct lib)*MAXLIB / 1024.0 / 1024.0, sizeof(struct lib), MAXLIB);
+  xlog("Allocated libs: %.2fM (%lu*%d)",
+       sizeof(struct lib) * MAXLIB / 1024.0 / 1024.0, sizeof(struct lib),
+       MAXLIB);
   mem_usage += sizeof(struct lib) * MAXLIB;
 
-  fast_chdrv = (int*)xcalloc(sizeof(int) * MAXDRV, IM_BASE);
+  fast_chdrv = (int *)xcalloc(sizeof(int) * MAXDRV, IM_BASE);
   if (!fast_chdrv) return 0;
-  xlog("Allocated fast_chdrvs: %.2fM (%lu*%d)", sizeof(int)*MAXDRV / 1024.0 / 1024.0, sizeof(int), MAXDRV);
+  xlog("Allocated fast_chdrvs: %.2fM (%lu*%d)",
+       sizeof(int) * MAXDRV / 1024.0 / 1024.0, sizeof(int), MAXDRV);
   mem_usage += sizeof(int) * MAXDRV;
 
-  fast_itdrv = (int*)xcalloc(sizeof(int) * MAXDRV, IM_BASE);
+  fast_itdrv = (int *)xcalloc(sizeof(int) * MAXDRV, IM_BASE);
   if (!fast_itdrv) return 0;
-  xlog("Allocated fast_itdrvs: %.2fM (%lu*%d)", sizeof(int)*MAXDRV / 1024.0 / 1024.0, sizeof(int), MAXDRV);
+  xlog("Allocated fast_itdrvs: %.2fM (%lu*%d)",
+       sizeof(int) * MAXDRV / 1024.0 / 1024.0, sizeof(int), MAXDRV);
   mem_usage += sizeof(int) * MAXDRV;
 
   dir = opendir("runtime/generic");
@@ -172,30 +174,35 @@ int init_lib(void)
   return 1;
 }
 
-void exit_lib(void)
-{
+void exit_lib(void) {
   xfree(fast_chdrv);
   xfree(fast_itdrv);
   xfree(libs);
 }
 
-int char_driver(int nr, int type, int cn, int ret, int last_action)
-{
+int char_driver(int nr, int type, int cn, int ret, int last_action) {
   int n, val = 0;
 
-  if (nr == 0) { if (type == 0) player_driver(cn, ret, last_action); return 1; }
+  if (nr == 0) {
+    if (type == 0) player_driver(cn, ret, last_action);
+    return 1;
+  }
 
   if (nr < 0 || nr >= MAXDRV) {
     elog("ERROR: Character driver %d out of bounds", nr);
     return 0;
   }
 
-  if ((n = fast_chdrv[nr]) && libs[n].used && load_lib(libs + n) && (val = libs[n].driver(type, nr, cn, ret, last_action))) return val;
+  if ((n = fast_chdrv[nr]) && libs[n].used && load_lib(libs + n) &&
+      (val = libs[n].driver(type, nr, cn, ret, last_action)))
+    return val;
 
-  //xlog("Fast lookup failed for character driver %d.",nr);
+  // xlog("Fast lookup failed for character driver %d.",nr);
 
   for (n = 1; n < MAXLIB; n++)
-    if (libs[n].used && load_lib(libs + n) && (val = libs[n].driver(type, nr, cn, ret, last_action))) break;
+    if (libs[n].used && load_lib(libs + n) &&
+        (val = libs[n].driver(type, nr, cn, ret, last_action)))
+      break;
 
   if (n == MAXLIB) {
     elog("ERROR: Could not find character driver %d in any library", nr);
@@ -207,8 +214,7 @@ int char_driver(int nr, int type, int cn, int ret, int last_action)
   return val;
 }
 
-int item_driver(int nr, int in, int cn)
-{
+int item_driver(int nr, int in, int cn) {
   int n, tmp = 0;
 
   if (nr == 0) {
@@ -216,7 +222,7 @@ int item_driver(int nr, int in, int cn)
     return 1;
   }
 
-  if (nr >= 1000) return 1;	// identity tag
+  if (nr >= 1000) return 1;  // identity tag
 
   if (nr < 0 || nr >= MAXDRV) {
     elog("ERROR: Item driver %d out of bounds", nr);
@@ -224,54 +230,74 @@ int item_driver(int nr, int in, int cn)
   }
 
   switch (nr) {
-  case IDR_BONEBRIDGE:	if (areaID != 18) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_BONEHINT:	if (areaID != 18) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_NOMADDICE:	if (areaID != 19) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_STAFFER2:	if (areaID != 29) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_OXYPOTION:	if (areaID != 31) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_LIZARDFLOWER:	if (areaID != 31) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_CALIGAR:	if (areaID != 36) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
-  case IDR_ARKHATA:	if (areaID != 37) {
-      if (cn) log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
-      return 1;
-    }
-    break;
+    case IDR_BONEBRIDGE:
+      if (areaID != 18) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_BONEHINT:
+      if (areaID != 18) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_NOMADDICE:
+      if (areaID != 19) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_STAFFER2:
+      if (areaID != 29) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_OXYPOTION:
+      if (areaID != 31) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_LIZARDFLOWER:
+      if (areaID != 31) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_CALIGAR:
+      if (areaID != 36) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
+    case IDR_ARKHATA:
+      if (areaID != 37) {
+        if (cn)
+          log_char(cn, LOG_SYSTEM, 0, "This does not work outside its area.");
+        return 1;
+      }
+      break;
   }
 
-  if ((n = fast_itdrv[nr]) && libs[n].used && load_lib(libs + n) && (tmp = libs[n].driver(CDT_ITEM, nr, in, cn, 0))) return tmp;
+  if ((n = fast_itdrv[nr]) && libs[n].used && load_lib(libs + n) &&
+      (tmp = libs[n].driver(CDT_ITEM, nr, in, cn, 0)))
+    return tmp;
 
-  //xlog("Fast lookup failed for item driver %d.",nr);
+  // xlog("Fast lookup failed for item driver %d.",nr);
 
   for (n = 1; n < MAXLIB; n++)
-    if (libs[n].used && load_lib(libs + n) && (tmp = libs[n].driver(CDT_ITEM, nr, in, cn, 0))) break;
+    if (libs[n].used && load_lib(libs + n) &&
+        (tmp = libs[n].driver(CDT_ITEM, nr, in, cn, 0)))
+      break;
 
   if (n == MAXLIB) {
     elog("ERROR: Could not find item driver %d in any library", nr);

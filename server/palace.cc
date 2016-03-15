@@ -57,26 +57,31 @@ Added RCS tags
 #include "chat.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);      // character driver (decides next action)
-int it_driver(int nr, int in, int cn);          // item driver (for use)
-int ch_died_driver(int nr, int cn, int co);       // called when a character dies
-int ch_respawn_driver(int nr, int cn);          // called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);       // item driver (for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
+int ch_respawn_driver(int nr,
+                      int cn);  // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case CDT_DRIVER:  return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM:    return it_driver(nr, obj, ret);
-  case CDT_DEAD:    return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN: return ch_respawn_driver(nr, obj);
-  default:  return 0;
+    case CDT_DRIVER:
+      return ch_driver(nr, obj, ret, lastact);
+    case CDT_ITEM:
+      return it_driver(nr, obj, ret);
+    case CDT_DEAD:
+      return ch_died_driver(nr, obj, ret);
+    case CDT_RESPAWN:
+      return ch_respawn_driver(nr, obj);
+    default:
+      return 0;
   }
 }
 
-#define MAXPAT  20
-struct palace_guard_data
-{
+#define MAXPAT 20
+struct palace_guard_data {
   unsigned char patrolx[MAXPAT], patroly[MAXPAT];
   unsigned char alertx, alerty;
   unsigned char reserve;
@@ -94,33 +99,47 @@ struct palace_guard_data
   int lastfight;
 };
 
-void palace_guard_parse(int cn, struct palace_guard_data *dat)
-{
+void palace_guard_parse(int cn, struct palace_guard_data *dat) {
   char *ptr, name[64], value[64];
   int pat = 0;
 
-  for (ptr = nextnv(ch[cn].arg, name, value); ptr; ptr = nextnv(ptr, name, value)) {
-
-    if (!strcmp(name, "patrolx")) { if (pat >= MAXPAT) elog("palace_guard_parse: too many patrol stops"); else dat->patrolx[pat] = atoi(value); }
-    else if (!strcmp(name, "patroly")) { if (pat >= MAXPAT) elog("palace_guard_parse: too many patrol stops"); else dat->patroly[pat++] = atoi(value); }
-    else if (!strcmp(name, "patrol")) dat->patrol = atoi(value);
-    else if (!strcmp(name, "alertx")) dat->alertx = atoi(value);
-    else if (!strcmp(name, "alerty")) dat->alerty = atoi(value);
-    else if (!strcmp(name, "reserve")) dat->reserve = atoi(value);
-    else if (!strcmp(name, "scream")) dat->scream = atoi(value);
-    else if (!strcmp(name, "line")) dat->line = atoi(value);
-    else elog("unknown arg for %s (%d): %s", ch[cn].name, cn, name);
+  for (ptr = nextnv(ch[cn].arg, name, value); ptr;
+       ptr = nextnv(ptr, name, value)) {
+    if (!strcmp(name, "patrolx")) {
+      if (pat >= MAXPAT)
+        elog("palace_guard_parse: too many patrol stops");
+      else
+        dat->patrolx[pat] = atoi(value);
+    } else if (!strcmp(name, "patroly")) {
+      if (pat >= MAXPAT)
+        elog("palace_guard_parse: too many patrol stops");
+      else
+        dat->patroly[pat++] = atoi(value);
+    } else if (!strcmp(name, "patrol"))
+      dat->patrol = atoi(value);
+    else if (!strcmp(name, "alertx"))
+      dat->alertx = atoi(value);
+    else if (!strcmp(name, "alerty"))
+      dat->alerty = atoi(value);
+    else if (!strcmp(name, "reserve"))
+      dat->reserve = atoi(value);
+    else if (!strcmp(name, "scream"))
+      dat->scream = atoi(value);
+    else if (!strcmp(name, "line"))
+      dat->line = atoi(value);
+    else
+      elog("unknown arg for %s (%d): %s", ch[cn].name, cn, name);
   }
 }
 
-void palace_guard(int cn, int ret, int lastact)
-{
+void palace_guard(int cn, int ret, int lastact) {
   struct palace_guard_data *dat;
   struct msg *msg, *next;
   int co, in, m;
 
-  dat = (struct palace_guard_data*)set_data(cn, DRD_PALACEGUARD, sizeof(struct palace_guard_data));
-  if (!dat) return; // oops...
+  dat = (struct palace_guard_data *)set_data(cn, DRD_PALACEGUARD,
+                                             sizeof(struct palace_guard_data));
+  if (!dat) return;  // oops...
 
   // loop through our messages
   for (msg = ch[cn].msg; msg; msg = next) {
@@ -136,26 +155,28 @@ void palace_guard(int cn, int ret, int lastact)
       if (ch[cn].item[30] && (ch[cn].flags & CF_NOBODY)) {
         ch[cn].flags &= ~(CF_NOBODY);
         ch[cn].flags |= CF_ITEMDEATH;
-        //xlog("transformed item %s",it[ch[cn].item[30]].name);
+        // xlog("transformed item %s",it[ch[cn].item[30]].name);
       }
     }
 
     // did we see someone?
     if (msg->type == NT_CHAR) {
-
       co = msg->dat1;
-      if ((in = ch[co].item[WN_HEAD]) && it[in].driver == IDR_PALACECAP && it[in].drdata[0]) {  // wearing activated palace cap
+      if ((in = ch[co].item[WN_HEAD]) && it[in].driver == IDR_PALACECAP &&
+          it[in].drdata[0]) {  // wearing activated palace cap
         fight_driver_remove_enemy(cn, co);
         remove_message(cn, msg);
         continue;
       }
-      if (dat->alertx && !dat->doalert && char_see_char(cn, co) && can_attack(cn, co)) {
+      if (dat->alertx && !dat->doalert && char_see_char(cn, co) &&
+          can_attack(cn, co)) {
         if (!dat->dofreeze) say(cn, "Granishni?");
         dat->dofreeze = 1;
         dat->dox = ch[co].x;
         dat->doy = ch[co].y;
       }
-      if (dat->dofreeze && tile_char_dist(cn, co) < 4 && char_see_char(cn, co) && can_attack(cn, co)) {
+      if (dat->dofreeze && tile_char_dist(cn, co) < 4 &&
+          char_see_char(cn, co) && can_attack(cn, co)) {
         if (!dat->doalert) {
           dat->doalert = 1;
           say(cn, "Granishni!");
@@ -165,9 +186,12 @@ void palace_guard(int cn, int ret, int lastact)
         dat->dox = ch[co].x;
         dat->doy = ch[co].y;
       }
-      if (dat->scream && ticker - dat->lastfight > TICKS * 20 && char_dist(cn, co) < 16 && char_see_char(cn, co) && can_attack(cn, co)) {
+      if (dat->scream && ticker - dat->lastfight > TICKS * 20 &&
+          char_dist(cn, co) < 16 && char_see_char(cn, co) &&
+          can_attack(cn, co)) {
         say(cn, "Granishni kwalar!");
-        notify_area_shout(ch[cn].x, ch[cn].y, NT_NPC, NTID_PALACE_ALERT, ch[co].x, ch[co].y);
+        notify_area_shout(ch[cn].x, ch[cn].y, NT_NPC, NTID_PALACE_ALERT,
+                          ch[co].x, ch[co].y);
         dat->lastfight = ticker;
       }
     }
@@ -182,8 +206,10 @@ void palace_guard(int cn, int ret, int lastact)
       }
     }
 
-    if (dat->scream) standard_message_driver(cn, msg, 0, 0);
-    else standard_message_driver(cn, msg, 1, 1);
+    if (dat->scream)
+      standard_message_driver(cn, msg, 0, 0);
+    else
+      standard_message_driver(cn, msg, 1, 1);
 
     remove_message(cn, msg);
   }
@@ -195,7 +221,8 @@ void palace_guard(int cn, int ret, int lastact)
     if (abs(dat->alertx - ch[cn].x) < 2 && abs(dat->alerty - ch[cn].y) < 2) {
       dat->doalert = 0;
       dat->docheck = 0;
-      notify_area_shout(ch[cn].x, ch[cn].y, NT_NPC, NTID_PALACE_ALERT, dat->dox, dat->doy);
+      notify_area_shout(ch[cn].x, ch[cn].y, NT_NPC, NTID_PALACE_ALERT, dat->dox,
+                        dat->doy);
       say(cn, "Granishni kwalar!");
     } else {
       if (move_driver(cn, dat->alertx, dat->alerty, 1)) return;
@@ -205,8 +232,14 @@ void palace_guard(int cn, int ret, int lastact)
 
   fight_driver_update(cn);
 
-  if (fight_driver_attack_visible(cn, 0)) { dat->lastfight = ticker; return; }
-  if (fight_driver_follow_invisible(cn)) { dat->lastfight = ticker; return; }
+  if (fight_driver_attack_visible(cn, 0)) {
+    dat->lastfight = ticker;
+    return;
+  }
+  if (fight_driver_follow_invisible(cn)) {
+    dat->lastfight = ticker;
+    return;
+  }
 
   if (dat->doscout) {
     if (ticker - dat->doscout > TICKS * 30) {
@@ -243,27 +276,39 @@ void palace_guard(int cn, int ret, int lastact)
   if (dat->line) {
     m = ch[cn].x + ch[cn].y * MAXMAP;
 
-    if ((map[m].gsprite >> 16) == 51050 && (map[m + 1].gsprite >> 16) == 51052) dat->line = DX_RIGHT;
-    if ((map[m].gsprite >> 16) == 51050 && (map[m - 1].gsprite >> 16) == 51052) dat->line = DX_LEFT;
-    if ((map[m].gsprite >> 16) == 51050 && (map[m + MAXMAP].gsprite >> 16) == 51051) dat->line = DX_DOWN;
-    if ((map[m].gsprite >> 16) == 51050 && (map[m - MAXMAP].gsprite >> 16) == 51051) dat->line = DX_UP;
+    if ((map[m].gsprite >> 16) == 51050 && (map[m + 1].gsprite >> 16) == 51052)
+      dat->line = DX_RIGHT;
+    if ((map[m].gsprite >> 16) == 51050 && (map[m - 1].gsprite >> 16) == 51052)
+      dat->line = DX_LEFT;
+    if ((map[m].gsprite >> 16) == 51050 &&
+        (map[m + MAXMAP].gsprite >> 16) == 51051)
+      dat->line = DX_DOWN;
+    if ((map[m].gsprite >> 16) == 51050 &&
+        (map[m - MAXMAP].gsprite >> 16) == 51051)
+      dat->line = DX_UP;
 
     switch ((map[m].gsprite >> 16)) {
-    case 51050:
-    case 51051:
-    case 51052: if (do_walk(cn, dat->line)) return;
-    default:  if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
+      case 51050:
+      case 51051:
+      case 51052:
+        if (do_walk(cn, dat->line)) return;
+      default:
+        if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
     }
   }
 
   if (dat->patrol || dat->docheck) {
-    if (abs(dat->patrolx[dat->pat] - ch[cn].x) < 2 && abs(dat->patroly[dat->pat] - ch[cn].y) < 2) {
+    if (abs(dat->patrolx[dat->pat] - ch[cn].x) < 2 &&
+        abs(dat->patroly[dat->pat] - ch[cn].y) < 2) {
       dat->pat++;
-      if (dat->pat == MAXPAT || !dat->patrolx[dat->pat]) dat->pat = dat->docheck = 0;
+      if (dat->pat == MAXPAT || !dat->patrolx[dat->pat])
+        dat->pat = dat->docheck = 0;
       if (dat->docheck) say(cn, "Nashterk'ka?");
     }
-    if (move_driver(cn, dat->patrolx[dat->pat], dat->patroly[dat->pat], 1)) return;
-    if (tmove_driver(cn, dat->patrolx[dat->pat], dat->patroly[dat->pat], 1)) return;
+    if (move_driver(cn, dat->patrolx[dat->pat], dat->patroly[dat->pat], 1))
+      return;
+    if (tmove_driver(cn, dat->patrolx[dat->pat], dat->patroly[dat->pat], 1))
+      return;
   } else {
     if (abs(ch[cn].x - ch[cn].tmpx) > 0 || abs(ch[cn].y - ch[cn].tmpy) > 0) {
       if (move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, 0)) return;
@@ -271,32 +316,76 @@ void palace_guard(int cn, int ret, int lastact)
     }
   }
 
-  //say(cn,"i am %d",cn);
+  // say(cn,"i am %d",cn);
   do_idle(cn, TICKS);
 }
 
-void palace_bomb(int in, int cn)
-{
+void palace_bomb(int in, int cn) {
   int fn, m, co;
 
   if (cn) {
     if (it[in].drdata[0] == 2) {
-      //log_char(cn,LOG_SYSTEM,0,"boom");
+      // log_char(cn,LOG_SYSTEM,0,"boom");
 
       fn = create_explosion(8, 50050);
       add_explosion(fn, it[in].x, it[in].y);
       sound_area(it[in].x, it[in].y, 6);
 
       m = it[in].x + it[in].y * MAXMAP;
-      if ((co = map[m].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m + 1].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m - 1].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m + MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m - MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m + 1 + MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m + 1 - MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m - 1 + MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
-      if ((co = map[m - 1 - MAXMAP].ch) && (!(ch[co].flags & CF_PLAYER) || *(unsigned long*)(it[in].drdata + 1) == ch[co].ID) && strcmp(ch[co].name, "Islena")) create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250, POWERSCALE * 2);
+      if ((co = map[m].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m + 1].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m - 1].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m + MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m - MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m + 1 + MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m + 1 - MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m - 1 + MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
+      if ((co = map[m - 1 - MAXMAP].ch) &&
+          (!(ch[co].flags & CF_PLAYER) ||
+           *(unsigned long *)(it[in].drdata + 1) == ch[co].ID) &&
+          strcmp(ch[co].name, "Islena"))
+        create_show_effect(EF_BURN, co, ticker, ticker + TICKS * 60, 250,
+                           POWERSCALE * 2);
       remove_item(in);
       destroy_item(in);
     } else if (it[in].drdata[0] == 1 && it[in].carried) {
@@ -307,7 +396,7 @@ void palace_bomb(int in, int cn)
       it[in].drdata[0] = 1;
       it[in].sprite++;
       ch[cn].flags |= CF_ITEMS;
-      *(unsigned long*)(it[in].drdata + 1) = ch[cn].ID;
+      *(unsigned long *)(it[in].drdata + 1) = ch[cn].ID;
     }
     return;
   }
@@ -322,8 +411,7 @@ void palace_bomb(int in, int cn)
   call_item(it[in].driver, in, 0, ticker + TICKS * 5);
 }
 
-void palace_cap(int in, int cn)
-{
+void palace_cap(int in, int cn) {
   int n, fn;
 
   if (cn) return;
@@ -349,13 +437,14 @@ void palace_cap(int in, int cn)
       if (!(fn = ch[cn].ef[n])) continue;
       if (ef[fn].type == EF_CAP) break;
     }
-    if (n == 4) create_show_effect(EF_CAP, cn, ticker, ticker + TICKS / 4 + 1, 0, 1);
-    else ef[fn].stop = ticker + TICKS / 4 + 1;
+    if (n == 4)
+      create_show_effect(EF_CAP, cn, ticker, ticker + TICKS / 4 + 1, 0, 1);
+    else
+      ef[fn].stop = ticker + TICKS / 4 + 1;
   }
 }
 
-void palace_door(int in, int cn)
-{
+void palace_door(int in, int cn) {
   if (!cn) {
     if (it[in].drdata[1] == 1) {
       if (!(map[it[in].x + it[in].y * MAXMAP].flags & MF_TMOVEBLOCK)) {
@@ -367,7 +456,8 @@ void palace_door(int in, int cn)
       it[in].drdata[0]--;
       it[in].sprite = 15196 + it[in].drdata[0];
       set_sector(it[in].x, it[in].y);
-      if (it[in].drdata[0]) call_item(it[in].driver, in, 0, ticker + 3);
+      if (it[in].drdata[0])
+        call_item(it[in].driver, in, 0, ticker + 3);
       else {
         it[in].drdata[0] = it[in].drdata[1] = 0;
       }
@@ -375,7 +465,8 @@ void palace_door(int in, int cn)
       it[in].drdata[0]++;
       it[in].sprite = 15196 + it[in].drdata[0];
       set_sector(it[in].x, it[in].y);
-      if (it[in].drdata[0] < 15) call_item(it[in].driver, in, 0, ticker + 3);
+      if (it[in].drdata[0] < 15)
+        call_item(it[in].driver, in, 0, ticker + 3);
       else {
         it[in].drdata[1] = 1;
         call_item(it[in].driver, in, 0, ticker + TICKS * 10);
@@ -395,9 +486,7 @@ void palace_door(int in, int cn)
   call_item(it[in].driver, in, 0, ticker + 2);
 }
 
-
-void islena_door(int in, int cn)
-{
+void islena_door(int in, int cn) {
   int x, y, co, islena = 0;
 
   if (!cn) return;
@@ -411,7 +500,10 @@ void islena_door(int in, int cn)
     for (y = 49; y < 58; y++) {
       if ((co = map[x + y * MAXMAP].ch)) {
         if ((ch[co].flags & CF_PLAYER)) {
-          log_char(cn, LOG_SYSTEM, 0, "You hear fighting behind the door. It seems Islena is killing somebody else at the moment. Please come back later so she can take care of you, too.");
+          log_char(cn, LOG_SYSTEM, 0,
+                   "You hear fighting behind the door. It seems Islena is "
+                   "killing somebody else at the moment. Please come back "
+                   "later so she can take care of you, too.");
           return;
         }
         if (ch[co].driver == CDR_PALACEISLENA) islena = co;
@@ -419,24 +511,26 @@ void islena_door(int in, int cn)
     }
   }
   if (!islena) {
-    log_char(cn, LOG_SYSTEM, 0, "Islena is being re-incarnated. Please try again soon.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Islena is being re-incarnated. Please try again soon.");
     return;
   }
-  if (ch[islena].hp < ch[islena].value[0][V_HP]*POWERSCALE || ch[islena].mana < ch[islena].value[0][V_MANA]*POWERSCALE) {
-    log_char(cn, LOG_SYSTEM, 0, "Islena is resting after killing your predecessor. Being well mannered, you wait for her.");
+  if (ch[islena].hp < ch[islena].value[0][V_HP] * POWERSCALE ||
+      ch[islena].mana < ch[islena].value[0][V_MANA] * POWERSCALE) {
+    log_char(cn, LOG_SYSTEM, 0,
+             "Islena is resting after killing your predecessor. Being well "
+             "mannered, you wait for her.");
     return;
   }
 
   teleport_char_driver(cn, 143, 55);
 }
 
-struct islena_ppd
-{
+struct islena_ppd {
   int islena_state;
 };
 
-struct islena_data
-{
+struct islena_data {
   int last_talk;
 
   int last_hurt_time;
@@ -444,16 +538,16 @@ struct islena_data
   int last_power_msg;
 };
 
-void palace_islena(int cn, int ret, int lastact)
-{
+void palace_islena(int cn, int ret, int lastact) {
   struct islena_data *dat;
   struct islena_ppd *ppd;
   struct msg *msg, *next;
   int co;
   int didsay = 0, talkdir = 0, washit = 0;
 
-  dat = (struct islena_data*)set_data(cn, DRD_ISLENA, sizeof(struct islena_data));
-  if (!dat) return; // oops...
+  dat = (struct islena_data *)set_data(cn, DRD_ISLENA,
+                                       sizeof(struct islena_data));
+  if (!dat) return;  // oops...
 
   // loop through our messages
   for (msg = ch[cn].msg; msg; msg = next) {
@@ -467,8 +561,10 @@ void palace_islena(int cn, int ret, int lastact)
     if (msg->type == NT_CHAR) {
       co = msg->dat1;
 
-      if ((ch[co].flags & CF_PLAYER) && char_see_char(cn, co) && (ppd = (struct islena_ppd*)set_data(co, DRD_ISLENA_PPD, sizeof(struct islena_ppd)))) {
-        //ppd->islena_state=0;
+      if ((ch[co].flags & CF_PLAYER) && char_see_char(cn, co) &&
+          (ppd = (struct islena_ppd *)set_data(co, DRD_ISLENA_PPD,
+                                               sizeof(struct islena_ppd)))) {
+        // ppd->islena_state=0;
 
         if (ppd->islena_state >= 10) {
           fight_driver_add_enemy(cn, co, 1, 1);
@@ -476,21 +572,44 @@ void palace_islena(int cn, int ret, int lastact)
           continue;
         }
 
-        if (ticker < dat->last_talk + TICKS * 5) { remove_message(cn, msg); continue; }
+        if (ticker < dat->last_talk + TICKS * 5) {
+          remove_message(cn, msg);
+          continue;
+        }
 
         switch (ppd->islena_state) {
-        case 0:   say(cn, "Ah, %s. I have heard of thee. Thou hast quite a reputation among my minions.", ch[co].name);
-          ppd->islena_state++; didsay = 1;
-          break;
-        case 1:   say(cn, "Thou hast been led by the nose by Ishtar, %s. I was quite content living here among my creatures, but Ishtar had to stir up hatred among the human population against me.", ch[co].name);
-          ppd->islena_state++; didsay = 1;
-          break;
-        case 2:   say(cn, "It was never my wish to continue the war of the last eon. So why don't we set the enmity aside? I will forgive thee all the trouble thou hast caused me.");
-          ppd->islena_state++; didsay = 1;
-          break;
-        case 3:   say(cn, "None of us must die today if thou wilt just leave me be, %s.", ch[co].name);
-          ppd->islena_state++; didsay = 1;
-          break;
+          case 0:
+            say(cn,
+                "Ah, %s. I have heard of thee. Thou hast quite a reputation "
+                "among my minions.",
+                ch[co].name);
+            ppd->islena_state++;
+            didsay = 1;
+            break;
+          case 1:
+            say(cn,
+                "Thou hast been led by the nose by Ishtar, %s. I was quite "
+                "content living here among my creatures, but Ishtar had to "
+                "stir up hatred among the human population against me.",
+                ch[co].name);
+            ppd->islena_state++;
+            didsay = 1;
+            break;
+          case 2:
+            say(cn,
+                "It was never my wish to continue the war of the last eon. So "
+                "why don't we set the enmity aside? I will forgive thee all "
+                "the trouble thou hast caused me.");
+            ppd->islena_state++;
+            didsay = 1;
+            break;
+          case 3:
+            say(cn,
+                "None of us must die today if thou wilt just leave me be, %s.",
+                ch[co].name);
+            ppd->islena_state++;
+            didsay = 1;
+            break;
         }
         if (didsay) {
           dat->last_talk = ticker;
@@ -505,22 +624,29 @@ void palace_islena(int cn, int ret, int lastact)
 
     if (msg->type == NT_TEXT) {
       co = msg->dat3;
-      tabunga(cn, co, (char*)msg->dat2);
+      tabunga(cn, co, (char *)msg->dat2);
     }
 
-    if (((msg->type == NT_GOTHIT) || (msg->type == NT_SPELL && msg->dat2 == V_FREEZE)) && (co = msg->dat1)) {
+    if (((msg->type == NT_GOTHIT) ||
+         (msg->type == NT_SPELL && msg->dat2 == V_FREEZE)) &&
+        (co = msg->dat1)) {
       if (ch[co].flags & CF_PLAYER) {
         washit = 1;
-        if ((ppd = (struct islena_ppd*)set_data(co, DRD_ISLENA_PPD, sizeof(struct islena_ppd)))) {
-          if (ppd->islena_state < 10) say(cn, "Thou wilt not hear? So be it. This is thy death!");
+        if ((ppd = (struct islena_ppd *)set_data(co, DRD_ISLENA_PPD,
+                                                 sizeof(struct islena_ppd)))) {
+          if (ppd->islena_state < 10)
+            say(cn, "Thou wilt not hear? So be it. This is thy death!");
           ppd->islena_state = 10;
         }
-        if (ticker - dat->last_hurt_time > TICKS * 30 || dat->last_hurt_by == ch[co].ID) {
+        if (ticker - dat->last_hurt_time > TICKS * 30 ||
+            dat->last_hurt_by == ch[co].ID) {
           dat->last_hurt_time = ticker;
           dat->last_hurt_by = ch[co].ID;
         } else {
           if (ticker - dat->last_power_msg > TICKS * 15) {
-            say(cn, "I call on thee, the Power of Two! Save me from this treacherous attack!");
+            say(cn,
+                "I call on thee, the Power of Two! Save me from this "
+                "treacherous attack!");
           }
           ch[cn].hp = ch[cn].value[0][V_HP] * POWERSCALE;
           ch[cn].mana = ch[cn].value[0][V_MANA] * POWERSCALE;
@@ -542,10 +668,12 @@ void palace_islena(int cn, int ret, int lastact)
   fight_driver_update(cn);
 
   if (fight_driver_attack_visible(cn, 0)) {
-    //say(cn,"action=%d, washit=%d",ch[cn].action,washit);
+    // say(cn,"action=%d, washit=%d",ch[cn].action,washit);
     if (washit && ch[cn].action == AC_IDLE) {
       if (ticker - dat->last_power_msg > TICKS * 15) {
-        say(cn, "I call on thee, the Power of none! Save me from this treacherous attack!");
+        say(cn,
+            "I call on thee, the Power of none! Save me from this treacherous "
+            "attack!");
       }
       ch[cn].hp = ch[cn].value[0][V_HP] * POWERSCALE;
       ch[cn].mana = ch[cn].value[0][V_MANA] * POWERSCALE;
@@ -555,11 +683,15 @@ void palace_islena(int cn, int ret, int lastact)
     }
     return;
   }
-  if (fight_driver_follow_invisible(cn)) { return; }
+  if (fight_driver_follow_invisible(cn)) {
+    return;
+  }
 
   if (washit) {
     if (ticker - dat->last_power_msg > TICKS * 15) {
-      say(cn, "I call on thee, the Power of None! Save me from this treacherous attack!");
+      say(cn,
+          "I call on thee, the Power of None! Save me from this treacherous "
+          "attack!");
     }
     ch[cn].hp = ch[cn].value[0][V_HP] * POWERSCALE;
     ch[cn].mana = ch[cn].value[0][V_MANA] * POWERSCALE;
@@ -568,7 +700,8 @@ void palace_islena(int cn, int ret, int lastact)
     dat->last_power_msg = ticker;
   }
 
-  if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret, lastact)) return;
+  if (secure_move_driver(cn, ch[cn].tmpx, ch[cn].tmpy, DX_DOWN, ret, lastact))
+    return;
 
   if (regenerate_driver(cn)) return;
   if (spell_self_driver(cn)) return;
@@ -578,8 +711,7 @@ void palace_islena(int cn, int ret, int lastact)
   do_idle(cn, TICKS);
 }
 
-void islena_dead(int cn, int co)
-{
+void islena_dead(int cn, int co) {
   char buf[256];
 
   if (!co) return;
@@ -591,9 +723,15 @@ void islena_dead(int cn, int co)
     ch[co].flags |= CF_WON;
     reset_name(co);
     say(cn, "So it must end? Why me?");
-    log_char(co, LOG_SYSTEM, 0, "From now on, thou shalt be known as %s %s. Thou hast slain Islena and the purpose of thy days is fulfilled. All shall admire thine persistence, braveness and power. But still, some doubts remain. How can a mere human succeed were Ishtar failed?", Sirname(co), ch[co].name);
+    log_char(co, LOG_SYSTEM, 0,
+             "From now on, thou shalt be known as %s %s. Thou hast slain "
+             "Islena and the purpose of thy days is fulfilled. All shall "
+             "admire thine persistence, braveness and power. But still, some "
+             "doubts remain. How can a mere human succeed were Ishtar failed?",
+             Sirname(co), ch[co].name);
 
-    sprintf(buf, "0000000000°c10Grats: %s is a %s now!", ch[co].name, Sirname(co));
+    sprintf(buf, "0000000000°c10Grats: %s is a %s now!", ch[co].name,
+            Sirname(co));
     server_chat(6, buf);
   }
 }
@@ -612,48 +750,94 @@ Added RCS tags
 
 */
 
-void itemspawn(int in, int cn)
-{
+void itemspawn(int in, int cn) {
   int in2;
 
-  if (!cn) return;  // always make sure its not an automatic call if you don't handle it
+  if (!cn)
+    return;  // always make sure its not an automatic call if you don't handle
+             // it
 
   if (ch[cn].citem) {
-    log_char(cn, LOG_SYSTEM, 0, "Please empty your 'hand' (mouse cursor) first.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Please empty your 'hand' (mouse cursor) first.");
     return;
   }
 
   // get item to spawn
   switch (it[in].drdata[0]) {
-  case 0:   in2 = create_item("melting_key"); break;
-  case 1:   in2 = create_item("ice_boots1"); break;
-  case 2:   in2 = create_item("ice_cape1"); break;
-  case 3:   in2 = create_item("ice_belt1"); break;
-  case 4:   in2 = create_item("ice_ring1"); break;
-  case 5:   in2 = create_item("ice_amulet1"); break;
-  case 6:   in2 = create_item("melting_key2"); break;
+    case 0:
+      in2 = create_item("melting_key");
+      break;
+    case 1:
+      in2 = create_item("ice_boots1");
+      break;
+    case 2:
+      in2 = create_item("ice_cape1");
+      break;
+    case 3:
+      in2 = create_item("ice_belt1");
+      break;
+    case 4:
+      in2 = create_item("ice_ring1");
+      break;
+    case 5:
+      in2 = create_item("ice_amulet1");
+      break;
+    case 6:
+      in2 = create_item("melting_key2");
+      break;
 
-  case 7:   in2 = create_item("ice_boots2"); break;
-  case 8:   in2 = create_item("ice_cape2"); break;
-  case 9:   in2 = create_item("ice_belt2"); break;
-  case 10:  in2 = create_item("ice_ring2"); break;
-  case 11:  in2 = create_item("ice_amulet2"); break;
+    case 7:
+      in2 = create_item("ice_boots2");
+      break;
+    case 8:
+      in2 = create_item("ice_cape2");
+      break;
+    case 9:
+      in2 = create_item("ice_belt2");
+      break;
+    case 10:
+      in2 = create_item("ice_ring2");
+      break;
+    case 11:
+      in2 = create_item("ice_amulet2");
+      break;
 
-  case 12:  in2 = create_item("ice_boots3"); break;
-  case 13:  in2 = create_item("ice_cape3"); break;
-  case 14:  in2 = create_item("ice_belt3"); break;
-  case 15:  in2 = create_item("ice_ring3"); break;
-  case 16:  in2 = create_item("ice_amulet3"); break;
-  case 17:  in2 = create_item("palace_bomb"); break;
-  case 18:  in2 = create_item("palace_cap"); break;
+    case 12:
+      in2 = create_item("ice_boots3");
+      break;
+    case 13:
+      in2 = create_item("ice_cape3");
+      break;
+    case 14:
+      in2 = create_item("ice_belt3");
+      break;
+    case 15:
+      in2 = create_item("ice_ring3");
+      break;
+    case 16:
+      in2 = create_item("ice_amulet3");
+      break;
+    case 17:
+      in2 = create_item("palace_bomb");
+      break;
+    case 18:
+      in2 = create_item("palace_cap");
+      break;
 
-  default:
-    log_char(cn, LOG_SYSTEM, 0, "Congratulations, %s, you have just discovered bug #4244B-%d-%d, please report it to the authorities!", ch[cn].name, it[in].x, it[in].y);
-    return;
+    default:
+      log_char(cn, LOG_SYSTEM, 0,
+               "Congratulations, %s, you have just discovered bug "
+               "#4244B-%d-%d, please report it to the authorities!",
+               ch[cn].name, it[in].x, it[in].y);
+      return;
   }
 
   if (!in2) {
-    log_char(cn, LOG_SYSTEM, 0, "Congratulations, %s, you have just discovered bug #4244C-%d-%d, please report it to the authorities!", ch[cn].name, it[in].x, it[in].y);
+    log_char(cn, LOG_SYSTEM, 0,
+             "Congratulations, %s, you have just discovered bug #4244C-%d-%d, "
+             "please report it to the authorities!",
+             ch[cn].name, it[in].x, it[in].y);
     return;
   }
 
@@ -670,14 +854,14 @@ void itemspawn(int in, int cn)
   log_char(cn, LOG_SYSTEM, 0, "You got a %s.", it[in2].name);
 }
 
-void warmfire(int in, int cn)
-{
+void warmfire(int in, int cn) {
   int in2, fn, n;
 
   if (!cn) return;
 
   if (ch[cn].citem) {
-    log_char(cn, LOG_SYSTEM, 0, "Please empty your 'hand' (mouse cursor) first.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Please empty your 'hand' (mouse cursor) first.");
     return;
   }
   if (!it[in].drdata[0]) {
@@ -690,7 +874,9 @@ void warmfire(int in, int cn)
       it[in2].drdata[0] = ch[cn].x;
       it[in2].drdata[1] = ch[cn].y;
 
-      log_char(cn, LOG_SYSTEM, 0, "Next to the fire, you find an ancient scroll. It seems to be a scroll of teleport which will take you back here.");
+      log_char(cn, LOG_SYSTEM, 0,
+               "Next to the fire, you find an ancient scroll. It seems to be a "
+               "scroll of teleport which will take you back here.");
     }
   }
 
@@ -712,11 +898,12 @@ void warmfire(int in, int cn)
     }
   }
   update_char(cn);
-  log_char(cn, LOG_SYSTEM, 0, "You move close to the heat of the fire, and you feel the demon's cold leave you.");
+  log_char(cn, LOG_SYSTEM, 0,
+           "You move close to the heat of the fire, and you feel the demon's "
+           "cold leave you.");
 }
 
-void backtofire(int in, int cn)
-{
+void backtofire(int in, int cn) {
   if (!cn) return;
   if (!it[in].carried) return;  // can only use if item is carried
 
@@ -728,8 +915,7 @@ void backtofire(int in, int cn)
   }
 }
 
-void meltingkey(int in, int cn)
-{
+void meltingkey(int in, int cn) {
   int sprite;
 
   if (cn) return;
@@ -737,7 +923,9 @@ void meltingkey(int in, int cn)
 
   it[in].drdata[1]++;
   if (it[in].drdata[1] >= it[in].drdata[0]) {
-    if (it[in].carried) log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s melted away.", it[in].name);
+    if (it[in].carried)
+      log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s melted away.",
+               it[in].name);
     if (ch[cn].flags & CF_PLAYER) dlog(cn, in, "dropped because it melted");
     remove_item(in);
     destroy_item(in);
@@ -750,7 +938,8 @@ void meltingkey(int in, int cn)
     if (it[in].carried) {
       ch[it[in].carried].flags |= CF_ITEMS;
       if (sprite == 50495) {
-        log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s starts to melt.", it[in].name);
+        log_char(it[in].carried, LOG_SYSTEM, 0, "Your %s starts to melt.",
+                 it[in].name);
       }
     }
   }
@@ -758,8 +947,7 @@ void meltingkey(int in, int cn)
   call_item(it[in].driver, in, 0, ticker + TICKS * 10);
 }
 
-void freakdoor(int in, int cn)
-{
+void freakdoor(int in, int cn) {
   int me, you, in2;
 
   if (!cn) return;
@@ -771,30 +959,33 @@ void freakdoor(int in, int cn)
   if (it[in].drdata[14]) me = 0;  // one-way freaks
 
   if (me) {
-    you = *(unsigned int*)(it[in].drdata + 10);
+    you = *(unsigned int *)(it[in].drdata + 10);
 
     if (!you) {
       for (in2 = 1; in2 < MAXITEM; in2++) {
         if (!it[in2].flags) continue;
         if (it[in2].driver != IDR_FREAKDOOR) continue;
         if (in2 == in) continue;
-        if (it[in2].drdata[15]) continue; // no-target freak
+        if (it[in2].drdata[15]) continue;  // no-target freak
         if (it[in2].drdata[8] == me) break;
       }
       if (in2 == MAXITEM) {
-        elog("PANIC: freakdoor %d at %d,%d: partner not found", me, it[in].x, it[in].y);
+        elog("PANIC: freakdoor %d at %d,%d: partner not found", me, it[in].x,
+             it[in].y);
         return;
       }
-      you = *(unsigned int*)(it[in].drdata + 10) = in2;
+      you = *(unsigned int *)(it[in].drdata + 10) = in2;
     }
-  } else you = in;
+  } else
+    you = in;
 
-  //log_char(cn,LOG_SYSTEM,0,"Door %d (%d/%d)",me,in,you);
+  // log_char(cn,LOG_SYSTEM,0,"Door %d (%d/%d)",me,in,you);
 
   if (it[in].x != ch[cn].x || it[in].y != ch[cn].y) {
     item_driver(IDR_DOOR, in, cn);
     // open the other door if it is closed and our door was opened
-    if (you != in && it[in].drdata[0] && !it[you].drdata[0]) item_driver(IDR_DOOR, you, cn);
+    if (you != in && it[in].drdata[0] && !it[you].drdata[0])
+      item_driver(IDR_DOOR, you, cn);
   } else if (in != you) {
     int dx, dy, px, py;
 
@@ -804,7 +995,8 @@ void freakdoor(int in, int cn)
     if (player_driver_get_move(cn, &px, &py)) {
       dx = px - ch[cn].x;
       dy = py - ch[cn].y;
-    } else dx = dy = 0;
+    } else
+      dx = dy = 0;
 
     it[you].drdata[9] = 1;  // set flag: no 2nd jump
     teleport_char_driver(cn, it[you].x, it[you].y);
@@ -816,49 +1008,76 @@ void freakdoor(int in, int cn)
   }
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-  case CDR_PALACEGUARD: palace_guard(cn, ret, lastact); return 1;
-  case CDR_PALACEISLENA:  palace_islena(cn, ret, lastact); return 1;
+    case CDR_PALACEGUARD:
+      palace_guard(cn, ret, lastact);
+      return 1;
+    case CDR_PALACEISLENA:
+      palace_islena(cn, ret, lastact);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  case IDR_ITEMSPAWN: itemspawn(in, cn); return 1;
-  case IDR_MELTINGKEY:  meltingkey(in, cn); return 1;
-  case IDR_WARMFIRE:  warmfire(in, cn); return 1;
-  case IDR_BACKTOFIRE:  backtofire(in, cn); return 1;
-  case IDR_PALACEBOMB:  palace_bomb(in, cn); return 1;
-  case IDR_PALACECAP: palace_cap(in, cn); return 1;
-  case IDR_FREAKDOOR: freakdoor(in, cn); return 1;
-  case IDR_PALACEDOOR:  palace_door(in, cn); return 1;
-  case IDR_ISLENADOOR:  islena_door(in, cn); return 1;
+    case IDR_ITEMSPAWN:
+      itemspawn(in, cn);
+      return 1;
+    case IDR_MELTINGKEY:
+      meltingkey(in, cn);
+      return 1;
+    case IDR_WARMFIRE:
+      warmfire(in, cn);
+      return 1;
+    case IDR_BACKTOFIRE:
+      backtofire(in, cn);
+      return 1;
+    case IDR_PALACEBOMB:
+      palace_bomb(in, cn);
+      return 1;
+    case IDR_PALACECAP:
+      palace_cap(in, cn);
+      return 1;
+    case IDR_FREAKDOOR:
+      freakdoor(in, cn);
+      return 1;
+    case IDR_PALACEDOOR:
+      palace_door(in, cn);
+      return 1;
+    case IDR_ISLENADOOR:
+      islena_door(in, cn);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  case CDR_PALACEGUARD: return 1;
-  case CDR_PALACEISLENA:  islena_dead(cn, co); return 1;
+    case CDR_PALACEGUARD:
+      return 1;
+    case CDR_PALACEISLENA:
+      islena_dead(cn, co);
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_respawn_driver(int nr, int cn)
-{
+int ch_respawn_driver(int nr, int cn) {
   switch (nr) {
-  case CDR_PALACEGUARD: return 1;
-  case CDR_PALACEISLENA:  return 1;
+    case CDR_PALACEGUARD:
+      return 1;
+    case CDR_PALACEISLENA:
+      return 1;
 
-  default:    return 0;
+    default:
+      return 0;
   }
 }

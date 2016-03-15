@@ -17,7 +17,6 @@ Added RCS tags
 extern int used_chars;
 extern int used_items;
 
-
 int init_create(void);
 int create_item(const char *name);
 int create_char_nr(int tmp, int tmpa);

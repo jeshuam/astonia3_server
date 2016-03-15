@@ -32,24 +32,23 @@
 #include "database.h"
 #include "teufel_pk.h"
 
-#define MAXTEUFEL	10
+#define MAXTEUFEL 10
 
-struct teufel_pk_data
-{
+struct teufel_pk_data {
   int cc[MAXTEUFEL];
   int dam[MAXTEUFEL];
   char name[MAXTEUFEL][16];
   int last_dam;
 };
 
-void teufel_damage(int cn, int cc, int dam)
-{
+void teufel_damage(int cn, int cc, int dam) {
   int n;
 
   struct teufel_pk_data *dat;
 
-  dat = (struct teufel_pk_data*)set_data(cn, DRD_TEUFELPK, sizeof(struct teufel_pk_data));
-  if (!dat) return;	// oops...
+  dat = (struct teufel_pk_data *)set_data(cn, DRD_TEUFELPK,
+                                          sizeof(struct teufel_pk_data));
+  if (!dat) return;  // oops...
 
   if (realtime - dat->last_dam > 20) {
     for (n = 0; n < MAXTEUFEL; n++) dat->cc[n] = dat->dam[n] = 0;
@@ -70,8 +69,7 @@ void teufel_damage(int cn, int cc, int dam)
   dat->last_dam = realtime;
 }
 
-void secure_log(int cc, int co, const char *what)
-{
+void secure_log(int cc, int co, const char *what) {
   if (!(ch[cc].flags & CF_USED)) return;
   if (!(ch[cc].flags & CF_PLAYER)) return;
 
@@ -81,8 +79,7 @@ void secure_log(int cc, int co, const char *what)
   log_char(cc, LOG_SYSTEM, 0, "You got %s on %s.", what, ch[co].name);
 }
 
-void winner_gets_item(int cc, int co)
-{
+void winner_gets_item(int cc, int co) {
   int in, rnd;
 
   if (!(ch[cc].flags & CF_USED)) return;
@@ -100,20 +97,21 @@ void winner_gets_item(int cc, int co)
     ch[co].flags |= CF_ITEMS;
     dlog(cc, in, "won in teufelheim PK from %s", ch[co].name);
     dlog(co, in, "lost in teufelheim PK to %s", ch[cc].name);
-    log_char(cc, LOG_SYSTEM, 0, "You won a %s from %s!", it[in].name, ch[co].name);
-    log_char(co, LOG_SYSTEM, 0, "%s won a %s from you!", ch[cc].name, it[in].name);
+    log_char(cc, LOG_SYSTEM, 0, "You won a %s from %s!", it[in].name,
+             ch[co].name);
+    log_char(co, LOG_SYSTEM, 0, "%s won a %s from you!", ch[cc].name,
+             it[in].name);
   }
 }
 
-void teufel_death(int cn, int cc)
-{
+void teufel_death(int cn, int cc) {
   struct teufel_pk_data *dat;
   int n;
   int kill_n = -1, dam = 0, killer = -1;
 
-  dat = (struct teufel_pk_data*)set_data(cn, DRD_TEUFELPK, sizeof(struct teufel_pk_data));
-  if (!dat) return;	// oops...
-
+  dat = (struct teufel_pk_data *)set_data(cn, DRD_TEUFELPK,
+                                          sizeof(struct teufel_pk_data));
+  if (!dat) return;  // oops...
 
   for (n = 0; n < MAXTEUFEL; n++) {
     if (dat->cc[n]) {
@@ -129,7 +127,6 @@ void teufel_death(int cn, int cc)
   if (kill_n == -1 || killer == -1) {
     elog("no one got the kill?");
   } else {
-
     db_new_pvp();
 
     for (n = 0; n < MAXTEUFEL; n++) {
@@ -151,23 +148,30 @@ void teufel_death(int cn, int cc)
 
   del_data(cn, DRD_TEUFELPK);
 
-  if (ch[cn].x >= 120 && ch[cn].x <= 254 && ch[cn].y >= 139 && ch[cn].y <= 228) {
-    if (teleport_char_driver(cn, 225, 249)) ;
-    else if (teleport_char_driver(cn, 221, 248)) ;
-    else if (teleport_char_driver(cn, 227, 245)) ;
-    else if (teleport_char_driver(cn, 219, 241)) ;
-    else teleport_char_driver(cn, 216, 237);
-  } else { // error fallback
-    if (teleport_char_driver(cn, 250, 250)) ;
-    else if (teleport_char_driver(cn, 247, 250)) ;
-    else if (teleport_char_driver(cn, 250, 247)) ;
-    else if (teleport_char_driver(cn, 247, 247)) ;
-    else teleport_char_driver(cn, 245, 247);
+  if (ch[cn].x >= 120 && ch[cn].x <= 254 && ch[cn].y >= 139 &&
+      ch[cn].y <= 228) {
+    if (teleport_char_driver(cn, 225, 249))
+      ;
+    else if (teleport_char_driver(cn, 221, 248))
+      ;
+    else if (teleport_char_driver(cn, 227, 245))
+      ;
+    else if (teleport_char_driver(cn, 219, 241))
+      ;
+    else
+      teleport_char_driver(cn, 216, 237);
+  } else {  // error fallback
+    if (teleport_char_driver(cn, 250, 250))
+      ;
+    else if (teleport_char_driver(cn, 247, 250))
+      ;
+    else if (teleport_char_driver(cn, 250, 247))
+      ;
+    else if (teleport_char_driver(cn, 247, 247))
+      ;
+    else
+      teleport_char_driver(cn, 245, 247);
   }
 
   ch[cn].hp = 10 * POWERSCALE;
 }
-
-
-
-

@@ -51,20 +51,26 @@ Added RCS tags
 #include "consistency.h"
 
 // library helper functions needed for init
-int ch_driver(int nr, int cn, int ret, int lastact);			// character driver (decides next action)
-int it_driver(int nr, int in, int cn);					// item driver (special cases for use)
-int ch_died_driver(int nr, int cn, int co);				// called when a character dies
-int ch_respawn_driver(int nr, int cn);					// called when an NPC is about to respawn
+int ch_driver(int nr, int cn, int ret,
+              int lastact);  // character driver (decides next action)
+int it_driver(int nr, int in, int cn);  // item driver (special cases for use)
+int ch_died_driver(int nr, int cn, int co);  // called when a character dies
+int ch_respawn_driver(int nr,
+                      int cn);  // called when an NPC is about to respawn
 
 // EXPORTED - character/item driver
-int driver(int type, int nr, int obj, int ret, int lastact)
-{
+int driver(int type, int nr, int obj, int ret, int lastact) {
   switch (type) {
-  case CDT_DRIVER:	return ch_driver(nr, obj, ret, lastact);
-  case CDT_ITEM: 		return it_driver(nr, obj, ret);
-  case CDT_DEAD:		return ch_died_driver(nr, obj, ret);
-  case CDT_RESPAWN:	return ch_respawn_driver(nr, obj);
-  default: 		return 0;
+    case CDT_DRIVER:
+      return ch_driver(nr, obj, ret, lastact);
+    case CDT_ITEM:
+      return it_driver(nr, obj, ret);
+    case CDT_DEAD:
+      return ch_died_driver(nr, obj, ret);
+    case CDT_RESPAWN:
+      return ch_respawn_driver(nr, obj);
+    default:
+      return 0;
   }
 }
 
@@ -72,14 +78,15 @@ int driver(int type, int nr, int obj, int ret, int lastact)
 static int fire = 1, pause_till = 0;
 
 // part 5: section powerup
-static int sect[8] = {0, 0, 0, 0, 0, 0, 0, 0};	// power status of section 1...8
+static int sect[8] = {0, 0, 0, 0, 0, 0, 0, 0};  // power status of section 1...8
 
 // sector offset table
-static char offx[25] = { 0, -8, 8, 0, 0, -8, -8, 8, 8, -16, 16,  0,  0, -8, -8,  8,  8, -16, -16, 16, 16, -16, -16, 16, 16};
-static char offy[25] = { 0, 0, 0, -8, 8, -8, 8, -8, 8,  0,  0, -16, 16, -16, 16, -16, 16, -8,  8, -8,  8, -16, 16, -16, 16};
+static char offx[25] = {0,  -8, 8, 0, 0,   -8,  -8, 8,  8,   -16, 16, 0, 0,
+                        -8, -8, 8, 8, -16, -16, 16, 16, -16, -16, 16, 16};
+static char offy[25] = {0,   0,  0,   -8, 8,  -8, 8,  -8, 8,   0,  0,   -16, 16,
+                        -16, 16, -16, 16, -8, 8,  -8, 8,  -16, 16, -16, 16};
 
-static int can_hit(int in, int co, int frx, int fry, int tox, int toy)
-{
+static int can_hit(int in, int co, int frx, int fry, int tox, int toy) {
   int dx, dy, x, y, n, cx, cy, m;
 
   x = frx * 1024 + 512;
@@ -91,11 +98,15 @@ static int can_hit(int in, int co, int frx, int fry, int tox, int toy)
   if (abs(dx) < 2 && abs(dy) < 2) return 0;
 
   // line algorithm with a step of 0.5 tiles
-  if (abs(dx) > abs(dy)) { dy = dy * 256 / abs(dx); dx = dx * 256 / abs(dx); }
-  else { dx = dx * 256 / abs(dy); dy = dy * 256 / abs(dy); }
+  if (abs(dx) > abs(dy)) {
+    dy = dy * 256 / abs(dx);
+    dx = dx * 256 / abs(dx);
+  } else {
+    dx = dx * 256 / abs(dy);
+    dy = dy * 256 / abs(dy);
+  }
 
   for (n = 0; n < 48; n++) {
-
     x += dx;
     y += dy;
 
@@ -107,15 +118,16 @@ static int can_hit(int in, int co, int frx, int fry, int tox, int toy)
     m = cx + cy * MAXMAP;
 
     if ((edemonball_map_block(m)) && map[m].it != in) {
-      if (map[m].ch != co) return 0;
-      else return 1;
+      if (map[m].ch != co)
+        return 0;
+      else
+        return 1;
     }
   }
   return 1;
 }
 
-int free_line(int x, int y, int dx, int dy)
-{
+int free_line(int x, int y, int dx, int dy) {
   int n;
 
   for (n = 0; n < 5; n++) {
@@ -126,8 +138,7 @@ int free_line(int x, int y, int dx, int dy)
   return 1;
 }
 
-void edemonball_driver(int in, int cn)
-{
+void edemonball_driver(int in, int cn) {
   int co, n, m, base;
   int dx, dy, ox = 0, oy = 0, tx = 0, ty = 0;
   int dir, dist, left, step, eta, str;
@@ -154,7 +165,8 @@ void edemonball_driver(int in, int cn)
 
   // disable/enable for part 5
   if (it[in].drdata[0] >= 2 && it[in].drdata[0] <= 9) {
-    if (sect[it[in].drdata[0] - 2] == 0 || sect[it[in].drdata[0] - 2] > 248) {	// turned off
+    if (sect[it[in].drdata[0] - 2] == 0 ||
+        sect[it[in].drdata[0] - 2] > 248) {  // turned off
       if (it[in].sprite != 14160) {
         it[in].sprite = 14160;
         set_sector(it[in].x, it[in].y);
@@ -167,10 +179,11 @@ void edemonball_driver(int in, int cn)
     }
   }
 
-  for (n = 0; n < 25;  n++) {
-    for (co = getfirst_char_sector(it[in].x + offx[n], it[in].y + offy[n]); co; co = ch[co].sec_next) {
-
-      if (abs(ch[co].x - it[in].x) > 10 || abs(ch[co].y - it[in].y) > 10) continue;
+  for (n = 0; n < 25; n++) {
+    for (co = getfirst_char_sector(it[in].x + offx[n], it[in].y + offy[n]); co;
+         co = ch[co].sec_next) {
+      if (abs(ch[co].x - it[in].x) > 10 || abs(ch[co].y - it[in].y) > 10)
+        continue;
 
       if (abs(ch[co].x - it[in].x) > abs(ch[co].y - it[in].y)) {
         if (ch[co].x > it[in].x) ox = 1;
@@ -182,9 +195,10 @@ void edemonball_driver(int in, int cn)
         ox = 0;
       }
 
-      if (ch[co].action != AC_WALK) { tx = ch[co].x; ty = ch[co].y; }
-      else {
-
+      if (ch[co].action != AC_WALK) {
+        tx = ch[co].x;
+        ty = ch[co].y;
+      } else {
         dir = ch[co].dir;
         dx2offset(dir, &dx, &dy, NULL);
         dist = map_dist(it[in].x, it[in].y, ch[co].x, ch[co].y);
@@ -195,15 +209,24 @@ void edemonball_driver(int in, int cn)
         step = ch[co].duration;
 
         eta -= left;
-        if (eta <= 0) { tx = ch[co].tox; ty = ch[co].toy; }
-        else {
+        if (eta <= 0) {
+          tx = ch[co].tox;
+          ty = ch[co].toy;
+        } else {
           for (m = 1; m < 10; m++) {
             eta -= step;
-            if (eta <= 0) { tx = ch[co].x + dx * m; ty = ch[co].y + dy * m; break; }
+            if (eta <= 0) {
+              tx = ch[co].x + dx * m;
+              ty = ch[co].y + dy * m;
+              break;
+            }
           }
 
           // too far away, time-wise to make any prediction. give up.
-          if (m == 10) { tx = ch[co].x; ty = ch[co].y; }
+          if (m == 10) {
+            tx = ch[co].x;
+            ty = ch[co].y;
+          }
         }
       }
 
@@ -221,35 +244,88 @@ void edemonball_driver(int in, int cn)
     }
   }
 
-  if (it[in].drdata[3] == 0 && !free_line(it[in].x, it[in].y + 1, 0, 1)) it[in].drdata[3] = 3;
-  if (it[in].drdata[3] == 3 && !free_line(it[in].x, it[in].y - 1, 0, -1)) it[in].drdata[3] = 6;
-  if (it[in].drdata[3] == 6 && !free_line(it[in].x + 1, it[in].y, 1, 0)) it[in].drdata[3] = 9;
-  if (it[in].drdata[3] == 9 && !free_line(it[in].x - 1, it[in].y, -1, 0)) it[in].drdata[3] = 12;
+  if (it[in].drdata[3] == 0 && !free_line(it[in].x, it[in].y + 1, 0, 1))
+    it[in].drdata[3] = 3;
+  if (it[in].drdata[3] == 3 && !free_line(it[in].x, it[in].y - 1, 0, -1))
+    it[in].drdata[3] = 6;
+  if (it[in].drdata[3] == 6 && !free_line(it[in].x + 1, it[in].y, 1, 0))
+    it[in].drdata[3] = 9;
+  if (it[in].drdata[3] == 9 && !free_line(it[in].x - 1, it[in].y, -1, 0))
+    it[in].drdata[3] = 12;
 
   switch (it[in].drdata[3]) {
-  case 0:         create_edemonball(0, it[in].x, it[in].y + 1, it[in].x, it[in].y + 10, str, base); it[in].drdata[3]++; break;
-  case 1:		create_edemonball(0, it[in].x, it[in].y + 1, it[in].x + 1, it[in].y + 10, str, base); it[in].drdata[3]++; break;
-  case 2:		create_edemonball(0, it[in].x, it[in].y + 1, it[in].x - 1, it[in].y + 10, str, base); it[in].drdata[3]++; break;
+    case 0:
+      create_edemonball(0, it[in].x, it[in].y + 1, it[in].x, it[in].y + 10, str,
+                        base);
+      it[in].drdata[3]++;
+      break;
+    case 1:
+      create_edemonball(0, it[in].x, it[in].y + 1, it[in].x + 1, it[in].y + 10,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
+    case 2:
+      create_edemonball(0, it[in].x, it[in].y + 1, it[in].x - 1, it[in].y + 10,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
 
-  case 3:         create_edemonball(0, it[in].x, it[in].y - 1, it[in].x, it[in].y - 10, str, base); it[in].drdata[3]++; break;
-  case 4:		create_edemonball(0, it[in].x, it[in].y - 1, it[in].x + 1, it[in].y - 10, str, base); it[in].drdata[3]++; break;
-  case 5:		create_edemonball(0, it[in].x, it[in].y - 1, it[in].x - 1, it[in].y - 10, str, base); it[in].drdata[3]++; break;
+    case 3:
+      create_edemonball(0, it[in].x, it[in].y - 1, it[in].x, it[in].y - 10, str,
+                        base);
+      it[in].drdata[3]++;
+      break;
+    case 4:
+      create_edemonball(0, it[in].x, it[in].y - 1, it[in].x + 1, it[in].y - 10,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
+    case 5:
+      create_edemonball(0, it[in].x, it[in].y - 1, it[in].x - 1, it[in].y - 10,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
 
-  case 6:         create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y, str, base); it[in].drdata[3]++; break;
-  case 7:		create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y + 1, str, base); it[in].drdata[3]++; break;
-  case 8:		create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y - 1, str, base); it[in].drdata[3]++; break;
+    case 6:
+      create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y, str,
+                        base);
+      it[in].drdata[3]++;
+      break;
+    case 7:
+      create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y + 1,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
+    case 8:
+      create_edemonball(0, it[in].x + 1, it[in].y, it[in].x + 10, it[in].y - 1,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
 
-  case 9:         create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y, str, base); it[in].drdata[3]++; break;
-  case 10:	create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y + 1, str, base); it[in].drdata[3]++; break;
-  case 11:	create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y - 1, str, base); it[in].drdata[3]++; break;
-  default:	it[in].drdata[3] = 0; break;
+    case 9:
+      create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y, str,
+                        base);
+      it[in].drdata[3]++;
+      break;
+    case 10:
+      create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y + 1,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
+    case 11:
+      create_edemonball(0, it[in].x - 1, it[in].y, it[in].x - 10, it[in].y - 1,
+                        str, base);
+      it[in].drdata[3]++;
+      break;
+    default:
+      it[in].drdata[3] = 0;
+      break;
   }
 
   call_item(it[in].driver, in, 0, ticker + 16);
 }
 
-void edemonswitch_driver(int in, int cn)
-{
+void edemonswitch_driver(int in, int cn) {
   if (!cn) {
     if (fire) return;
 
@@ -277,8 +353,7 @@ void edemonswitch_driver(int in, int cn)
   call_item(it[in].driver, in, 0, pause_till + 1);
 }
 
-void edemongate_driver(int in, int cn)
-{
+void edemongate_driver(int in, int cn) {
   int n, co, ser, nr;
   char name[80];
   if (cn) return;
@@ -286,27 +361,20 @@ void edemongate_driver(int in, int cn)
   nr = it[in].drdata[0];
 
   if (nr == 0) {
-    static int pos[14] = {
-      62, 157,
-      62, 164,
-      62, 174,
-      62, 184,
-      62, 191,
-      56, 174,
-      67, 174
-    };
+    static int pos[14] = {62,  157, 62,  164, 62,  174, 62,
+                          184, 62,  191, 56,  174, 67,  174};
 
     for (n = 0; n < 7; n++) {
       co = *(unsigned short*)(it[in].drdata + 4 + n * 4);
       ser = *(unsigned short*)(it[in].drdata + 6 + n * 4);
 
-      if (!co || !ch[co].flags || (unsigned short)ch[co].serial != (unsigned short)ser) {
+      if (!co || !ch[co].flags ||
+          (unsigned short)ch[co].serial != (unsigned short)ser) {
         sprintf(name, "edemon2s");
         co = create_char(name, 0);
         if (!co) break;
 
         if (item_drop_char(in, co)) {
-
           ch[co].tmpx = pos[n * 2];
           ch[co].tmpy = pos[n * 2 + 1];
 
@@ -320,7 +388,7 @@ void edemongate_driver(int in, int cn)
 
           *(unsigned short*)(it[in].drdata + 4 + n * 4) = co;
           *(unsigned short*)(it[in].drdata + 6 + n * 4) = ch[co].serial;
-          break;	// only one spawn per call
+          break;  // only one spawn per call
         } else {
           destroy_char(co);
           break;
@@ -345,7 +413,6 @@ void edemongate_driver(int in, int cn)
         if (!co) break;
 
         if (item_drop_char(in, co)) {
-
           ch[co].tmpx = pos[n] % MAXMAP;
           ch[co].tmpy = pos[n] / MAXMAP;
 
@@ -359,7 +426,7 @@ void edemongate_driver(int in, int cn)
 
           co_nr[n] = co;
           serial[n] = ch[co].serial;
-          break;	// only one spawn per call
+          break;  // only one spawn per call
         } else {
           destroy_char(co);
           break;
@@ -370,18 +437,20 @@ void edemongate_driver(int in, int cn)
   }
 }
 
-void edemonloader_driver(int in, int cn)
-{
+void edemonloader_driver(int in, int cn) {
   int nr, pwr, sprite, in2, ani, m, gsprite;
 
-  nr = it[in].drdata[0];	// section number
-  pwr = it[in].drdata[1];	// power status
+  nr = it[in].drdata[0];   // section number
+  pwr = it[in].drdata[1];  // power status
   ani = it[in].drdata[2];
 
-  if (cn) {	// player using item
+  if (cn) {  // player using item
     if (pwr) {
-      if (ch[cn].citem) log_char(cn, LOG_SYSTEM, 0, "There is already a crystal, you cannot add another item.");
-      else log_char(cn, LOG_SYSTEM, 0, "The crystal is stuck.");
+      if (ch[cn].citem)
+        log_char(cn, LOG_SYSTEM, 0,
+                 "There is already a crystal, you cannot add another item.");
+      else
+        log_char(cn, LOG_SYSTEM, 0, "The crystal is stuck.");
       return;
     }
     if (!(in2 = ch[cn].citem)) {
@@ -399,7 +468,7 @@ void edemonloader_driver(int in, int cn)
     ch[cn].flags |= CF_ITEMS;
     destroy_item(in2);
     sound_area(it[in].x, it[in].y, 41);
-  } else {	// timer call
+  } else {  // timer call
     if (pwr) pwr--;
     if (ani) ani--;
 
@@ -412,23 +481,31 @@ void edemonloader_driver(int in, int cn)
   m = it[in].x + it[in].y * MAXMAP;
   gsprite = map[m].gsprite & 0x0000ffff;
 
-  if (ani) gsprite |= (14247 - ani) << 16;
-  else if (pwr) gsprite |= 14248 << 16;
-  else gsprite |= 14240 << 16;
+  if (ani)
+    gsprite |= (14247 - ani) << 16;
+  else if (pwr)
+    gsprite |= 14248 << 16;
+  else
+    gsprite |= 14240 << 16;
 
-  if (pwr) { sprite = 14257 + 5 - (pwr / 43); sect[nr] = pwr; }	//50467
-  else { sprite = 14234; sect[nr] = 0; } // 50466;
+  if (pwr) {
+    sprite = 14257 + 5 - (pwr / 43);
+    sect[nr] = pwr;
+  }  // 50467
+  else {
+    sprite = 14234;
+    sect[nr] = 0;
+  }  // 50466;
 
   if (it[in].sprite != sprite || map[m].gsprite != gsprite) {
     it[in].sprite = sprite;
     map[m].gsprite = gsprite;
     set_sector(it[in].x, it[in].y);
-    if (sprite == 14234) sound_area(it[in].x, it[in].y, 43);	// power off
+    if (sprite == 14234) sound_area(it[in].x, it[in].y, 43);  // power off
   }
 }
 
-void edemonlight_driver(int in, int cn)
-{
+void edemonlight_driver(int in, int cn) {
   int nr, light, sprite;
 
   if (cn) return;
@@ -456,26 +533,29 @@ void edemonlight_driver(int in, int cn)
   call_item(it[in].driver, in, cn, ticker + TICKS);
 }
 
-int edemondoor_driver(int in, int cn)
-{
+int edemondoor_driver(int in, int cn) {
   int m, in2, n, nr;
 
   if (!it[in].x) return 2;
 
-  if (!cn) {	// called by timer
-    if (it[in].drdata[39]) it[in].drdata[39]--;	// timer counter
-    if (!it[in].drdata[0]) return 2;		// if the door is closed already, don't open it again
-    if (it[in].drdata[39]) return 2;		// we have more outstanding timer calls, dont close now
+  if (!cn) {                                     // called by timer
+    if (it[in].drdata[39]) it[in].drdata[39]--;  // timer counter
+    if (!it[in].drdata[0])
+      return 2;  // if the door is closed already, don't open it again
+    if (it[in].drdata[39])
+      return 2;  // we have more outstanding timer calls, dont close now
   }
 
-  if (!cn && it[in].drdata[5]) return 2;	// no auto-close for this door
+  if (!cn && it[in].drdata[5]) return 2;  // no auto-close for this door
 
   m = it[in].x + it[in].y * MAXMAP;
 
-  if (it[in].drdata[0] && (map[m].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK))) {	// doorway is blocked
-    if (!cn) {	// timer callback - restart
-      it[in].drdata[39]++;	// timer counter
-      if (!it[in].drdata[5]) call_item(it[in].driver, in, 0, ticker + TICKS * 5);
+  if (it[in].drdata[0] &&
+      (map[m].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK))) {  // doorway is blocked
+    if (!cn) {              // timer callback - restart
+      it[in].drdata[39]++;  // timer counter
+      if (!it[in].drdata[5])
+        call_item(it[in].driver, in, 0, ticker + TICKS * 5);
     }
     return 2;
   }
@@ -486,26 +566,31 @@ int edemondoor_driver(int in, int cn)
       if ((in2 = ch[cn].item[n]))
         if (*(unsigned int*)(it[in].drdata + 1) == it[in2].ID) break;
     if (n == INVENTORYSIZE) {
-      if (!(in2 = ch[cn].citem) || *(unsigned int*)(it[in].drdata + 1) != it[in2].ID) {
+      if (!(in2 = ch[cn].citem) ||
+          *(unsigned int*)(it[in].drdata + 1) != it[in2].ID) {
         log_char(cn, LOG_SYSTEM, 0, "You need a key to use this door.");
         return 2;
       }
     }
-    log_char(cn, LOG_SYSTEM, 0, "You use %s to %slock the door.", it[in2].name, it[in].drdata[0] ? "" :  "un");
+    log_char(cn, LOG_SYSTEM, 0, "You use %s to %slock the door.", it[in2].name,
+             it[in].drdata[0] ? "" : "un");
   }
 
   nr = it[in].drdata[6];
   if (!sect[nr] && cn) {
-    log_char(cn, LOG_SYSTEM, 0, "The door won't move. It seems somehow lifeless.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "The door won't move. It seems somehow lifeless.");
     return 2;
   }
 
   remove_lights(it[in].x, it[in].y);
 
-  if (cn) sound_area(it[in].x, it[in].y, 3);
-  else sound_area(it[in].x, it[in].y, 2);
+  if (cn)
+    sound_area(it[in].x, it[in].y, 3);
+  else
+    sound_area(it[in].x, it[in].y, 2);
 
-  if (it[in].drdata[0]) {	// it is open, close
+  if (it[in].drdata[0]) {  // it is open, close
     it[in].flags |= *(unsigned long long*)(it[in].drdata + 30);
     if (it[in].flags & IF_MOVEBLOCK) map[m].flags |= MF_TMOVEBLOCK;
     if (it[in].flags & IF_SIGHTBLOCK) map[m].flags |= MF_TSIGHTBLOCK;
@@ -513,35 +598,38 @@ int edemondoor_driver(int in, int cn)
     if (it[in].flags & IF_DOOR) map[m].flags |= MF_DOOR;
     it[in].drdata[0] = 0;
     it[in].sprite--;
-  } else { // it is closed, open
-    *(unsigned long long*)(it[in].drdata + 30) = it[in].flags & (IF_MOVEBLOCK | IF_SIGHTBLOCK | IF_DOOR | IF_SOUNDBLOCK);
+  } else {  // it is closed, open
+    *(unsigned long long*)(it[in].drdata + 30) =
+        it[in].flags & (IF_MOVEBLOCK | IF_SIGHTBLOCK | IF_DOOR | IF_SOUNDBLOCK);
     it[in].flags &= ~(IF_MOVEBLOCK | IF_SIGHTBLOCK | IF_DOOR | IF_SOUNDBLOCK);
-    map[m].flags &= ~(MF_TMOVEBLOCK | MF_TSIGHTBLOCK | MF_DOOR | MF_TSOUNDBLOCK);
+    map[m].flags &=
+        ~(MF_TMOVEBLOCK | MF_TSIGHTBLOCK | MF_DOOR | MF_TSOUNDBLOCK);
     it[in].drdata[0] = 1;
     it[in].sprite++;
 
-    it[in].drdata[39]++;	// timer counter
+    it[in].drdata[39]++;  // timer counter
     if (!it[in].drdata[5]) call_item(it[in].driver, in, 0, ticker + TICKS * 10);
   }
 
   reset_los(it[in].x, it[in].y);
-  if (!it[in].drdata[38] && !reset_dlight(it[in].x, it[in].y)) it[in].drdata[38] = 1;
+  if (!it[in].drdata[38] && !reset_dlight(it[in].x, it[in].y))
+    it[in].drdata[38] = 1;
   add_lights(it[in].x, it[in].y);
 
   return 1;
 }
 
-void edemonblock_driver(int in, int cn)
-{
+void edemonblock_driver(int in, int cn) {
   int m, m2, dx, dy, dir, nr;
 
-  if (cn) {	// player using item
+  if (cn) {  // player using item
     m = it[in].x + it[in].y * MAXMAP;
     dir = ch[cn].dir;
     dx2offset(dir, &dx, &dy, NULL);
     m2 = (it[in].x + dx) + (it[in].y + dy) * MAXMAP;
 
-    if ((map[m2].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK)) || map[m2].it || map[m2].gsprite < 12150 || map[m2].gsprite > 12158) {
+    if ((map[m2].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK)) || map[m2].it ||
+        map[m2].gsprite < 12150 || map[m2].gsprite > 12158) {
       log_char(cn, LOG_SYSTEM, 0, "It won't move.");
       return;
     }
@@ -551,7 +639,8 @@ void edemonblock_driver(int in, int cn)
 
     map[m2].flags |= MF_TMOVEBLOCK;
     map[m2].it = in;
-    it[in].x += dx; it[in].y += dy;
+    it[in].x += dx;
+    it[in].y += dy;
     set_sector(it[in].x, it[in].y);
 
     // hack to avoid using the chest over and over
@@ -562,19 +651,22 @@ void edemonblock_driver(int in, int cn)
     *(unsigned int*)(it[in].drdata) = ticker;
 
     return;
-  } else {	// timer call
-    if (!(*(unsigned int*)(it[in].drdata + 4))) {	// no coords set, so its first call. remember coords
+  } else {                                         // timer call
+    if (!(*(unsigned int*)(it[in].drdata + 4))) {  // no coords set, so its
+                                                   // first call. remember
+                                                   // coords
       *(unsigned short*)(it[in].drdata + 4) = it[in].x;
       *(unsigned short*)(it[in].drdata + 6) = it[in].y;
     }
 
-    // if 15 minutes have passed without anyone touching the chest, beam it back.
-    if (ticker - * (unsigned int*)(it[in].drdata) > TICKS * 60 * 15 &&
+    // if 15 minutes have passed without anyone touching the chest, beam it
+    // back.
+    if (ticker - *(unsigned int*)(it[in].drdata) > TICKS * 60 * 15 &&
         (*(unsigned short*)(it[in].drdata + 4) != it[in].x ||
          *(unsigned short*)(it[in].drdata + 6) != it[in].y)) {
-
       m = it[in].x + it[in].y * MAXMAP;
-      m2 = (*(unsigned short*)(it[in].drdata + 4)) + (*(unsigned short*)(it[in].drdata + 6)) * MAXMAP;
+      m2 = (*(unsigned short*)(it[in].drdata + 4)) +
+           (*(unsigned short*)(it[in].drdata + 6)) * MAXMAP;
 
       if (!(map[m2].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK)) && !map[m2].it) {
         map[m].flags &= ~MF_TMOVEBLOCK;
@@ -592,15 +684,15 @@ void edemonblock_driver(int in, int cn)
   }
 }
 
-void edemontube_driver(int in, int cn)
-{
+void edemontube_driver(int in, int cn) {
   int nr, in2, x, y, n, co, next, light, sprite;
 
   nr = it[in].drdata[0];
 
-  if (cn) {	// character using it
-    teleport_char_driver(cn, *(unsigned short*)(it[in].drdata + 2), *(unsigned short*)(it[in].drdata + 4));
-  } else {	// timer call
+  if (cn) {  // character using it
+    teleport_char_driver(cn, *(unsigned short*)(it[in].drdata + 2),
+                         *(unsigned short*)(it[in].drdata + 4));
+  } else {  // timer call
     if (sect[nr] && sect[nr] < 249) {
       light = 200;
       sprite = 14138;
@@ -620,37 +712,42 @@ void edemontube_driver(int in, int cn)
       add_item_light(in);
     }
 
-
-
     if (!(*(unsigned short*)(it[in].drdata + 2))) {
       for (in2 = 1; in2 < MAXITEM; in2++) {
         if (it[in2].driver == IDR_EDEMONLOADER && it[in2].drdata[0] == nr) {
-
           // find teleport target (up or down of item)
-          x = it[in2].x; y = it[in2].y;
-          if (!(map[x + y * MAXMAP + MAXMAP].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK))) y++;
-          else if (!(map[x + y * MAXMAP - MAXMAP].flags & (MF_MOVEBLOCK | MF_TMOVEBLOCK))) y--;
+          x = it[in2].x;
+          y = it[in2].y;
+          if (!(map[x + y * MAXMAP + MAXMAP].flags &
+                (MF_MOVEBLOCK | MF_TMOVEBLOCK)))
+            y++;
+          else if (!(map[x + y * MAXMAP - MAXMAP].flags &
+                     (MF_MOVEBLOCK | MF_TMOVEBLOCK)))
+            y--;
 
           // remember target
           *(unsigned short*)(it[in].drdata + 2) = x;
           *(unsigned short*)(it[in].drdata + 4) = y;
 
-          //xlog("%s (%d) found %s (%d) at %d,%d",it[in].name,in,it[in2].name,in2,it[in2].x,it[in2].y);
+          // xlog("%s (%d) found %s (%d) at
+          // %d,%d",it[in].name,in,it[in2].name,in2,it[in2].x,it[in2].y);
         }
       }
     }
     if (sect[nr] > 250) {
-      for (n = 0; n < 25;  n++) {
-        for (co = getfirst_char_sector(it[in].x + offx[n], it[in].y + offy[n]); co; co = next) {
-
+      for (n = 0; n < 25; n++) {
+        for (co = getfirst_char_sector(it[in].x + offx[n], it[in].y + offy[n]);
+             co; co = next) {
           next = ch[co].sec_next;
 
           if (!(ch[co].flags & CF_PLAYER)) continue;
 
-          if (abs(ch[co].x - it[in].x) > 10 || abs(ch[co].y - it[in].y) > 10) continue;
+          if (abs(ch[co].x - it[in].x) > 10 || abs(ch[co].y - it[in].y) > 10)
+            continue;
 
           if (char_see_item(co, in)) {
-            teleport_char_driver(co, *(unsigned short*)(it[in].drdata + 2), *(unsigned short*)(it[in].drdata + 4));
+            teleport_char_driver(co, *(unsigned short*)(it[in].drdata + 2),
+                                 *(unsigned short*)(it[in].drdata + 4));
             log_char(co, LOG_SYSTEM, 0, "The strange tube teleported you.");
           }
         }
@@ -660,38 +757,53 @@ void edemontube_driver(int in, int cn)
   }
 }
 
-int ch_driver(int nr, int cn, int ret, int lastact)
-{
+int ch_driver(int nr, int cn, int ret, int lastact) {
   switch (nr) {
-  default:	return 0;
+    default:
+      return 0;
   }
 }
 
-int it_driver(int nr, int in, int cn)
-{
+int it_driver(int nr, int in, int cn) {
   switch (nr) {
-  case IDR_EDEMONBALL:	edemonball_driver(in, cn); return 1;
-  case IDR_EDEMONSWITCH:	edemonswitch_driver(in, cn); return 1;
-  case IDR_EDEMONGATE:	edemongate_driver(in, cn); return 1;
-  case IDR_EDEMONLOADER:	edemonloader_driver(in, cn); return 1;
-  case IDR_EDEMONLIGHT:	edemonlight_driver(in, cn); return 1;
-  case IDR_EDEMONDOOR:	return edemondoor_driver(in, cn);
-  case IDR_EDEMONBLOCK:	edemonblock_driver(in, cn); return 1;
-  case IDR_EDEMONTUBE:	edemontube_driver(in, cn); return 1;
+    case IDR_EDEMONBALL:
+      edemonball_driver(in, cn);
+      return 1;
+    case IDR_EDEMONSWITCH:
+      edemonswitch_driver(in, cn);
+      return 1;
+    case IDR_EDEMONGATE:
+      edemongate_driver(in, cn);
+      return 1;
+    case IDR_EDEMONLOADER:
+      edemonloader_driver(in, cn);
+      return 1;
+    case IDR_EDEMONLIGHT:
+      edemonlight_driver(in, cn);
+      return 1;
+    case IDR_EDEMONDOOR:
+      return edemondoor_driver(in, cn);
+    case IDR_EDEMONBLOCK:
+      edemonblock_driver(in, cn);
+      return 1;
+    case IDR_EDEMONTUBE:
+      edemontube_driver(in, cn);
+      return 1;
 
-  default:	return 0;
+    default:
+      return 0;
   }
 }
 
-int ch_died_driver(int nr, int cn, int co)
-{
+int ch_died_driver(int nr, int cn, int co) {
   switch (nr) {
-  default:	return 0;
+    default:
+      return 0;
   }
 }
-int ch_respawn_driver(int nr, int cn)
-{
+int ch_respawn_driver(int nr, int cn) {
   switch (nr) {
-  default:		return 0;
+    default:
+      return 0;
   }
 }

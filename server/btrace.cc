@@ -17,8 +17,7 @@ Added RCS tags
 
 #include "log.h"
 
-void btrace(const char *msg)
-{
+void btrace(const char *msg) {
   int i, n;
   void *ba[128];
   char **names;
@@ -31,5 +30,3 @@ void btrace(const char *msg)
     free(names);
   }
 }
-
-

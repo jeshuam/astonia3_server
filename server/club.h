@@ -1,10 +1,9 @@
 #pragma once
 
-#define MAXCLUB   16384
-#define CLUBOFFSET  1024
+#define MAXCLUB 16384
+#define CLUBOFFSET 1024
 
-struct club
-{
+struct club {
   char name[80];
   int serial;
   int paid;

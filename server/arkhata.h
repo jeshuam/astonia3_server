@@ -1,7 +1,6 @@
 #pragma once
 
-struct arkhata_ppd
-{
+struct arkhata_ppd {
   int rammy_state;
   int jaz_state;
   int fiona_state;
@@ -24,4 +23,3 @@ struct arkhata_ppd
   int krenach_state;
   int krenach_time;
 };
-

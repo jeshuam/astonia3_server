@@ -14,8 +14,7 @@ Added RCS tags
 
 */
 
-struct lostcon_ppd
-{
+struct lostcon_ppd {
   int autobless;
   int autopulse;
 
@@ -38,4 +37,3 @@ struct lostcon_ppd
 
   int maxlag;
 };
-

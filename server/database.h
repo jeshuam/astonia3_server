@@ -20,10 +20,14 @@ void sweep_database(void);
 void area_alive(int godown);
 int get_area(int ID, int mirror, int *pserver, int *pport);
 int change_area(int cn, int area, int x, int y);
-int dlog(int cn, int in, const char *format, ...) __attribute__ ((format(printf, 3, 4)));
-unsigned long long get_mail(int to, int from, char *buf, unsigned long long start);
+int dlog(int cn, int in, const char *format, ...)
+    __attribute__((format(printf, 3, 4)));
+unsigned long long get_mail(int to, int from, char *buf,
+                            unsigned long long start);
 int send_mail(int to, int from, char *text);
-int find_login(char *name, char *password, int *area_ptr, int *cn_ptr, int *mirror_ptr, int *ID_ptr, int vendor, int *punique, unsigned int ip);
+int find_login(char *name, char *password, int *area_ptr, int *cn_ptr,
+               int *mirror_ptr, int *ID_ptr, int vendor, int *punique,
+               unsigned int ip);
 void tick_login(void);
 int query_ID(unsigned int ID);
 int query_name(char *name);
@@ -39,10 +43,13 @@ int read_notes(int uID, int rID);
 void lock_server(void);
 void unlock_server(void);
 int get_mirror(int ID, int mirror);
-int db_unpunish(int ID, void* pm, int pmlen);
+int db_unpunish(int ID, void *pm, int pmlen);
 void list_queries(int cn);
-int add_clanlog(int clan, int serial, int cID, int prio, const char *format, ...) __attribute__ ((format(printf, 5, 6)));;
-int lookup_clanlog(int cnID, int clan, int serial, int coID, int prio, int from_time, int to_time);
+int add_clanlog(int clan, int serial, int cID, int prio, const char *format,
+                ...) __attribute__((format(printf, 5, 6)));
+;
+int lookup_clanlog(int cnID, int clan, int serial, int coID, int prio,
+                   int from_time, int to_time);
 void call_check_task(void);
 void call_area_load(void);
 int exterminate(int masterID, char *name, char *staffcode);
@@ -57,13 +64,6 @@ int db_create_club(int cnr);
 void schedule_clubs(void);
 void db_update_club(int cnr);
 void db_new_pvp(void);
-void db_add_pvp(const char *killer, const char *victim, const char *what, int damage);
+void db_add_pvp(const char *killer, const char *victim, const char *what,
+                int damage);
 int karmalog(int rID);
-
-
-
-
-
-
-
-

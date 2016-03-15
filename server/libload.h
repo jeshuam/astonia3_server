@@ -17,9 +17,9 @@ Added RCS tags
 int init_lib(void);
 void exit_lib(void);
 
-#define CDT_DRIVER  0
-#define CDT_ITEM  1
-#define CDT_DEAD  2
+#define CDT_DRIVER 0
+#define CDT_ITEM 1
+#define CDT_DEAD 2
 #define CDT_RESPAWN 3
 #define CDT_SPECIAL 4
 

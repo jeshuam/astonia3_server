@@ -23,8 +23,7 @@ Added RCS tags
 
 int cidle_avg = 0;
 
-long long timel(void)
-{
+long long timel(void) {
   struct timeval tv;
 
   gettimeofday(&tv, NULL);
@@ -32,14 +31,13 @@ long long timel(void)
   return (long long)tv.tv_sec * (long long)1000000 + (long long)tv.tv_usec;
 }
 
-void tick_sleep(int show)
-{
+void tick_sleep(int show) {
   struct timeval tv;
   long long now, tosleep, diff;
   static long long next = 0;
   static int nextshow = 0, cidle = 0;
 
-  //return;	// !!!!!!!!!!!!
+  // return;  // !!!!!!!!!!!!
 
   if (!next) next = timel() + TICK;
 
@@ -55,7 +53,10 @@ void tick_sleep(int show)
     // how long did we REALLY sleep? (tends to be too long)
     now = timel();
     diff = next - now;
-  } else { tosleep = 0; diff = 0; }
+  } else {
+    tosleep = 0;
+    diff = 0;
+  }
 
   // update statistics
   cidle = 100.0 / TICK * (tosleep - diff);
@@ -65,7 +66,8 @@ void tick_sleep(int show)
   next += TICK;
 
   if (show) {
-    if (nextshow) nextshow--;
+    if (nextshow)
+      nextshow--;
     else {
       xlog("idle=%6.2f%%.", cidle_avg / 100.0);
       nextshow = TICKS * 3;

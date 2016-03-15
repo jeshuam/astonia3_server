@@ -16,10 +16,9 @@ Added RCS tags
 
 #include "server.h"
 
-#define MAXDEPOT  80
+#define MAXDEPOT 80
 
-struct depot_ppd
-{
+struct depot_ppd {
   struct item itm[MAXDEPOT];
 };
 int swap_depot(int cn, int nr);

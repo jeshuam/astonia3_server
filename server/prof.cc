@@ -30,30 +30,29 @@ Added RCS tags
 #include "prof.h"
 
 struct prof prof[P_MAX] = {
-  {"Athlete",		6,	30,	3},		// 0
-  {"Alchemist",		10,	50,	10},		// 1
-  {"Miner",		4,	20,	2},		// 2
-  {"Assassin",		10,	50,	5},		// 3
-  {"Thief",		6,	30,	3},		// 4
-  {"Light Warrior",	6,	30,	3},		// 5
-  {"Dark Warrior",	6,	30,	3},		// 6
-  {"Trader",		4,	20,	2},		// 7
-  {"Mercenary",		4,	20,	2},		// 8
-  {"Clan Warrior",	6,	30,	3},		// 9
-  {"Herbalist",		10,	30,	10},		// 10
-  {"Demon",		1,	30,	1},		// 11
-  {"empty",		3,	30,	1},		// 12
-  {"empty",		3,	30,	1},		// 13
-  {"empty",		3,	30,	1},		// 14
-  {"empty",		3,	30,	1},		// 15
-  {"empty",		3,	30,	1},		// 16
-  {"empty",		3,	30,	1},		// 17
-  {"empty",		3,	30,	1},		// 18
-  {"empty",		3,	30,	1}		// 19
+    {"Athlete", 6, 30, 3},        // 0
+    {"Alchemist", 10, 50, 10},    // 1
+    {"Miner", 4, 20, 2},          // 2
+    {"Assassin", 10, 50, 5},      // 3
+    {"Thief", 6, 30, 3},          // 4
+    {"Light Warrior", 6, 30, 3},  // 5
+    {"Dark Warrior", 6, 30, 3},   // 6
+    {"Trader", 4, 20, 2},         // 7
+    {"Mercenary", 4, 20, 2},      // 8
+    {"Clan Warrior", 6, 30, 3},   // 9
+    {"Herbalist", 10, 30, 10},    // 10
+    {"Demon", 1, 30, 1},          // 11
+    {"empty", 3, 30, 1},          // 12
+    {"empty", 3, 30, 1},          // 13
+    {"empty", 3, 30, 1},          // 14
+    {"empty", 3, 30, 1},          // 15
+    {"empty", 3, 30, 1},          // 16
+    {"empty", 3, 30, 1},          // 17
+    {"empty", 3, 30, 1},          // 18
+    {"empty", 3, 30, 1}           // 19
 };
 
-static const char *prof_title(int p, int v)
-{
+static const char *prof_title(int p, int v) {
   int d;
 
   d = 100 * v / prof[p].max;
@@ -68,20 +67,19 @@ static const char *prof_title(int p, int v)
   return "a master ";
 }
 
-
-int show_prof_info(int cn, int co, char *buf)
-{
+int show_prof_info(int cn, int co, char *buf) {
   int n, len = 0;
 
   for (n = 0; n < P_MAX; n++) {
-    if (ch[co].prof[n]) len += sprintf(buf + len, "%s is %s%s. ", Hename(co), prof_title(n, ch[co].prof[n]), prof[n].name);
+    if (ch[co].prof[n])
+      len += sprintf(buf + len, "%s is %s%s. ", Hename(co),
+                     prof_title(n, ch[co].prof[n]), prof[n].name);
   }
 
   return len;
 }
 
-int free_prof_points(int co)
-{
+int free_prof_points(int co) {
   int n, cnt;
 
   for (n = cnt = 0; n < P_MAX; n++) {
@@ -90,8 +88,7 @@ int free_prof_points(int co)
   return ch[co].value[1][V_PROFESSION] - cnt;
 }
 
-void cmd_steal(int cn)
-{
+void cmd_steal(int cn) {
   int co, x, y, n, cnt, in = 0, chance, dice, diff, m;
 
   if (!ch[cn].prof[P_THIEF]) {
@@ -126,7 +123,8 @@ void cmd_steal(int cn)
   }
 
   if (!can_attack(cn, co)) {
-    log_char(cn, LOG_SYSTEM, 0, "You cannot steal from someone you are not allowed to attack.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "You cannot steal from someone you are not allowed to attack.");
     return;
   }
   if (map[m].flags & (MF_ARENA | MF_CLAN)) {
@@ -147,13 +145,17 @@ void cmd_steal(int cn)
   }
 
   if (ch[co].action != AC_IDLE || ticker - ch[co].regen_ticker < TICKS) {
-    log_char(cn, LOG_SYSTEM, 0, "You cannot steal from someone if your victim is not standing still.");
+    log_char(
+        cn, LOG_SYSTEM, 0,
+        "You cannot steal from someone if your victim is not standing still.");
     return;
   }
 
   for (n = cnt = 0; n < INVENTORYSIZE; n++) {
     if (n >= 12 && n < 30) continue;
-    if ((in = ch[co].item[n]) && !(it[in].flags & IF_QUEST) && can_carry(cn, in, 1)) cnt++;
+    if ((in = ch[co].item[n]) && !(it[in].flags & IF_QUEST) &&
+        can_carry(cn, in, 1))
+      cnt++;
   }
   if (!cnt) {
     log_char(cn, LOG_SYSTEM, 0, "You could not find anything to steal.");
@@ -163,7 +165,8 @@ void cmd_steal(int cn)
 
   for (n = cnt = 0; n < INVENTORYSIZE; n++) {
     if (n >= 12 && n < 30) continue;
-    if ((in = ch[co].item[n]) && !(it[in].flags & IF_QUEST) && can_carry(cn, in, 1)) {
+    if ((in = ch[co].item[n]) && !(it[in].flags & IF_QUEST) &&
+        can_carry(cn, in, 1)) {
       if (cnt < 1) break;
       cnt--;
     }
@@ -176,7 +179,8 @@ void cmd_steal(int cn)
   diff = (ch[cn].value[0][V_STEALTH] - ch[co].value[0][V_PERCEPT]) / 2;
   chance = 40 + diff;
   if (chance < 10) {
-    log_char(cn, LOG_SYSTEM, 0, "You'd get caught for sure. You decide not to try.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "You'd get caught for sure. You decide not to try.");
     return;
   }
   chance = min(chance, ch[cn].prof[P_THIEF] * 3);
@@ -185,11 +189,15 @@ void cmd_steal(int cn)
   diff = chance - dice;
 
   if (diff < -20) {
-    log_char(cn, LOG_SYSTEM, 0, "%s noticed your attempt and stopped you from stealing.", ch[co].name);
+    log_char(cn, LOG_SYSTEM, 0,
+             "%s noticed your attempt and stopped you from stealing.",
+             ch[co].name);
     ch[cn].endurance = 1;
     if (ch[co].flags & CF_PLAYER) {
-      log_char(co, LOG_SYSTEM, 0, "°c3%s tried to steal from you!", ch[cn].name);
-    } else notify_char(co, NT_GOTHIT, cn, 0, 0);
+      log_char(co, LOG_SYSTEM, 0, "°c3%s tried to steal from you!",
+               ch[cn].name);
+    } else
+      notify_char(co, NT_GOTHIT, cn, 0, 0);
     return;
   }
 
@@ -204,27 +212,16 @@ void cmd_steal(int cn)
   add_pk_steal(cn);
 
   if (diff < 0) {
-    log_char(cn, LOG_SYSTEM, 0, "%s noticed your theft, but you managed to steal a %s anyway.", ch[co].name, it[in].name);
+    log_char(cn, LOG_SYSTEM, 0,
+             "%s noticed your theft, but you managed to steal a %s anyway.",
+             ch[co].name, it[in].name);
     ch[cn].endurance = 1;
     if (ch[co].flags & CF_PLAYER) {
-      log_char(co, LOG_SYSTEM, 0, "°c3%s stole your %s!", ch[cn].name, it[in].name);
-    } else notify_char(co, NT_GOTHIT, cn, 0, 0);
-  } else log_char(cn, LOG_SYSTEM, 0, "You stole a %s without %s noticing.", it[in].name, ch[co].name);
+      log_char(co, LOG_SYSTEM, 0, "°c3%s stole your %s!", ch[cn].name,
+               it[in].name);
+    } else
+      notify_char(co, NT_GOTHIT, cn, 0, 0);
+  } else
+    log_char(cn, LOG_SYSTEM, 0, "You stole a %s without %s noticing.",
+             it[in].name, ch[co].name);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

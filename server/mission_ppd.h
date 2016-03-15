@@ -1,21 +1,19 @@
 #pragma once
 
-struct single_mission
-{
+struct single_mission {
   int type;
   int mdidx;
   int difficulty;
 };
 
-struct mission_ppd
-{
-  int missiongive_state;    // mission giver status (talk switch/case)
+struct mission_ppd {
+  int missiongive_state;  // mission giver status (talk switch/case)
   int lastseenmissiongiver;
 
   int active;
   int solved;
   int points;
-  int mcnt; // number of missions accepted
+  int mcnt;  // number of missions accepted
 
   int dif_kill;
 
@@ -32,4 +30,3 @@ struct mission_ppd
   // custom potion creation
   int statowed, statcnt, stat[3];
 };
-

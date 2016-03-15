@@ -15,19 +15,19 @@ Added RCS tags
 */
 
 #define INVENTORYSIZE 110
-#define MAXCONTAINER  1024
+#define MAXCONTAINER 1024
 #define CONTAINERSIZE (INVENTORYSIZE)
 
-struct container
-{
-  int cn, in;     // character or item which is this container (reference object)
+struct container {
+  int cn, in;  // character or item which is this container (reference object)
 
-  int owner;      // for graves: the victim may access the grave
-  int owner_not_seyan;    // for graves: new seyans may not access their old grave
-  int killer;     // for graves: the killer may access the grave
-  int access;     // for graves: the owner may grant access to a third person
+  int owner;            // for graves: the victim may access the grave
+  int owner_not_seyan;  // for graves: new seyans may not access their old grave
+  int killer;           // for graves: the killer may access the grave
+  int access;  // for graves: the owner may grant access to a third person
 
-  int item[CONTAINERSIZE];  // up to CONTAINERSIZE item numbers (contents of container)
+  int item[CONTAINERSIZE];  // up to CONTAINERSIZE item numbers (contents of
+                            // container)
 
   struct container *next;
 };

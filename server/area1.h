@@ -17,11 +17,10 @@ Added RCS tags
 
 */
 
-#define AF1_STORAGE_HINT  (1u<<1)
-#define AF1_BUY_HINT    (1u<<2)
+#define AF1_STORAGE_HINT (1u << 1)
+#define AF1_BUY_HINT (1u << 2)
 
-struct area1_ppd
-{
+struct area1_ppd {
   int yoakin_state;
   int yoakin_seen_timer;
 
@@ -59,4 +58,3 @@ struct area1_ppd
   int shrike_state;
   int shrike_fails;
 };
-

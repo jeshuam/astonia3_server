@@ -32,7 +32,7 @@ Added RCS tags
 
 static struct timer *free_t = NULL, *next_t = NULL;
 
-#define TIMER_CNT	4096
+#define TIMER_CNT 4096
 
 int used_timers;
 
@@ -49,8 +49,8 @@ int used_timers;
 // DLL functions MUST NOT use timers directly as function addresses
 // might change over reloads!
 // never add a new timer with ticker==due from a timer-called function!
-int set_timer(int due, void (*func)(int, int, int, int, int), int dat1, int dat2, int dat3, int dat4, int dat5)
-{
+int set_timer(int due, void (*func)(int, int, int, int, int), int dat1,
+              int dat2, int dat3, int dat4, int dat5) {
   struct timer *t, *last = NULL, *f;
 
   // get free timer
@@ -58,12 +58,13 @@ int set_timer(int due, void (*func)(int, int, int, int, int), int dat1, int dat2
   if (!f) {
     int n;
 
-    f = (struct timer*)xcalloc(sizeof(struct timer) * TIMER_CNT, IM_TIMER);
+    f = (struct timer *)xcalloc(sizeof(struct timer) * TIMER_CNT, IM_TIMER);
     for (n = 1; n < TIMER_CNT - 1; n++) {
       f[n].next = f + n + 1;
     }
     free_t = f + 1;
-  } else free_t = f->next;
+  } else
+    free_t = f->next;
 
   // find position in list
   for (t = next_t; t && t->due < due; t = t->next) last = t;
@@ -91,7 +92,8 @@ int set_timer(int due, void (*func)(int, int, int, int, int), int dat1, int dat2
   return 1;
 }
 
-// left from debugging. funny thing is: this one doesnt create a "unused" warning, even though it is unused.
+// left from debugging. funny thing is: this one doesnt create a "unused"
+// warning, even though it is unused.
 // it seems GNU-C doesnt notice this because it references itself. ts
 // static void display_queue(int step, int dum2, int dum3, int dum4, int dum5)
 // {
@@ -105,8 +107,7 @@ int set_timer(int due, void (*func)(int, int, int, int, int), int dat1, int dat2
 // }
 
 // called once per tick. fires due timers.
-void tick_timer(void)
-{
+void tick_timer(void) {
   struct timer *t, *last = NULL;
 
   for (t = next_t; t && t->due <= ticker; t = t->next) {
@@ -126,11 +127,10 @@ void tick_timer(void)
 }
 
 // initialise timer lists
-int init_timer(void)
-{
+int init_timer(void) {
   used_timers = 0;
 
-  //set_timer(ticker+TICKS*10,display_queue,TICKS*10,0,0,0,0);
+  // set_timer(ticker+TICKS*10,display_queue,TICKS*10,0,0,0,0);
 
   return 1;
 }

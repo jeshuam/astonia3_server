@@ -17,8 +17,7 @@ Added RCS tags
 
 */
 
-struct misc_ppd
-{
+struct misc_ppd {
   int lfreduct_usage_count;
 
   int complaint_date;
@@ -32,4 +31,3 @@ struct misc_ppd
 
   unsigned char treedone[8];
 };
-

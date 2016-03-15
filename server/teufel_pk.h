@@ -12,5 +12,3 @@
 int teufel_pk(int cn, int co);
 void teufel_damage(int cn, int cc, int dam);
 void teufel_death(int cn, int cc);
-
-

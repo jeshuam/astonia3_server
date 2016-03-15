@@ -16,18 +16,16 @@ Added RCS tags
 
 #include "server.h"
 
-#define MAXSTORE  64
+#define MAXSTORE 64
 #define STORESIZE (INVENTORYSIZE)
 
-struct ware
-{
+struct ware {
   int cnt;
   int always;
   struct item item;
 };
 
-struct store
-{
+struct store {
   int gold;
   int pricemulti;
 

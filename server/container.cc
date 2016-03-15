@@ -37,13 +37,15 @@ static struct container *fcontainer;
 int used_containers;
 
 // get new container from free list
-int alloc_container(int cn, int in)
-{
+int alloc_container(int cn, int in) {
   int ct;
   struct container *tmp;
 
   tmp = fcontainer;
-  if (!tmp) { elog("alloc_item: MAXITEM reached!"); return 0; }
+  if (!tmp) {
+    elog("alloc_item: MAXITEM reached!");
+    return 0;
+  }
 
   fcontainer = tmp->next;
 
@@ -59,8 +61,7 @@ int alloc_container(int cn, int in)
 }
 
 // release (delete) container to free list
-void free_container(int ct)
-{
+void free_container(int ct) {
   if (!con[ct].cn && !con[ct].in) {
     elog("trying to free already free container %d", ct);
     return;
@@ -76,12 +77,14 @@ void free_container(int ct)
 }
 
 // create a container and attach it to item in
-int create_item_container(int in)
-{
+int create_item_container(int in) {
   int ct;
 
   if (in < 1 || in >= MAXITEM) {
-    elog("create_item_container(): trying to create container for illegal item %d", in);
+    elog(
+        "create_item_container(): trying to create container for illegal item "
+        "%d",
+        in);
     return 0;
   }
 
@@ -95,12 +98,14 @@ int create_item_container(int in)
 }
 
 // remove and free the container attached to in
-int destroy_item_container(int in)
-{
+int destroy_item_container(int in) {
   int n, ct, in2;
 
   if (in < 1 || in >= MAXITEM) {
-    elog("destroy_item_container(): trying to destroy container for illegal item %d", in);
+    elog(
+        "destroy_item_container(): trying to destroy container for illegal "
+        "item %d",
+        in);
     return 0;
   }
 
@@ -108,19 +113,26 @@ int destroy_item_container(int in)
   if (!ct) return 0;
 
   if (ct < 1 || ct >= MAXCONTAINER) {
-    elog("destroy_item_container(): trying to destroy illegal container %d", ct);
+    elog("destroy_item_container(): trying to destroy illegal container %d",
+         ct);
     return 0;
   }
 
   if (!con[ct].cn && !con[ct].in) {
-    elog("destroy_item_container(): trying to destroy already erased container %d", ct);
+    elog(
+        "destroy_item_container(): trying to destroy already erased container "
+        "%d",
+        ct);
     return 0;
   }
 
   for (n = 0; n < CONTAINERSIZE; n++) {
     if ((in2 = con[ct].item[n])) {
       if (in2 < 1 || in2 >= MAXITEM) {
-        elog("destroy_item_container(): found illegal item %d in container %d (item %d)", in2, ct, in);
+        elog(
+            "destroy_item_container(): found illegal item %d in container %d "
+            "(item %d)",
+            in2, ct, in);
       } else {
         free_item(in2);
       }
@@ -134,8 +146,7 @@ int destroy_item_container(int in)
 }
 
 // add item in to container ct at position pos.
-int add_item_container(int ct, int in, int pos)
-{
+int add_item_container(int ct, int in, int pos) {
   int n;
 
   if (ct < 1 || ct >= MAXCONTAINER) {
@@ -170,8 +181,7 @@ int add_item_container(int ct, int in, int pos)
 }
 
 // remove item in from its container.
-int remove_item_container(int in)
-{
+int remove_item_container(int in) {
   int n, ct;
 
   if (in < 1 || in >= MAXITEM) {
@@ -197,8 +207,7 @@ int remove_item_container(int in)
 }
 
 // count the number of items in a container
-int container_itemcnt(int in)
-{
+int container_itemcnt(int in) {
   int n, ct, cnt = 0;
 
   if (in < 1 || in >= MAXITEM) {
@@ -220,20 +229,24 @@ int container_itemcnt(int in)
 }
 
 // called at startup
-int init_container(void)
-{
+int init_container(void) {
   int n;
 
-  con = (struct container*)xcalloc(sizeof(struct container) * MAXCONTAINER, IM_BASE);
+  con = (struct container *)xcalloc(sizeof(struct container) * MAXCONTAINER,
+                                    IM_BASE);
   if (!con) return 0;
-  xlog("Allocated containers: %.2fM (%lu*%d)", sizeof(struct container)*MAXCONTAINER / 1024.0 / 1024.0, sizeof(struct container), MAXCONTAINER);
+  xlog("Allocated containers: %.2fM (%lu*%d)",
+       sizeof(struct container) * MAXCONTAINER / 1024.0 / 1024.0,
+       sizeof(struct container), MAXCONTAINER);
   mem_usage += sizeof(struct container) * MAXCONTAINER;
 
   // add containers to free list
-  for (n = 1; n < MAXCONTAINER; n++) { con[n].cn = 42; free_container(n); }
+  for (n = 1; n < MAXCONTAINER; n++) {
+    con[n].cn = 42;
+    free_container(n);
+  }
 
   used_containers = 0;
 
   return 1;
 }
-

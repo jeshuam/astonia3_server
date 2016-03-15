@@ -29,8 +29,8 @@ Added RCS tags
 #include <sys/wait.h>
 #include "mail.h"
 
-int sendmail(const char *to, const char *subject, const char *body, const char *from, int do_copy)
-{
+int sendmail(const char *to, const char *subject, const char *body,
+             const char *from, int do_copy) {
   int in[2], pid, sock;
   char tmp[256];
 

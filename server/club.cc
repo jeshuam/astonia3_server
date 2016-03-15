@@ -25,8 +25,7 @@
 
 int club_update_done = 0;
 
-int get_char_club(int cn)
-{
+int get_char_club(int cn) {
   int cnr;
 
   if (!(cnr = ch[cn].clan)) return 0;
@@ -54,26 +53,24 @@ int get_char_club(int cn)
   return cnr;
 }
 
-static const char *rankname[3] = {
-  "Member",
-  "Leader",
-  "Founder"
-};
+static const char *rankname[3] = {"Member", "Leader", "Founder"};
 
-int show_club_info(int cn, int co, char *buf)
-{
+int show_club_info(int cn, int co, char *buf) {
   int cnr, rank;
 
   if (!(cnr = get_char_club(co))) return 0;
 
   rank = ch[co].clan_rank;
-  if (rank < 0 || rank > 2) { elog("showclub(): got illegal club rank (%s,%d,%d)", ch[cn].name, cn, rank); rank = 0; }
+  if (rank < 0 || rank > 2) {
+    elog("showclub(): got illegal club rank (%s,%d,%d)", ch[cn].name, cn, rank);
+    rank = 0;
+  }
 
-  return sprintf(buf, "%s is a member of the club '%s' (%d), %s rank is %s. ", Hename(co), club[cnr].name, cnr, hisname(co), rankname[rank]);
+  return sprintf(buf, "%s is a member of the club '%s' (%d), %s rank is %s. ",
+                 Hename(co), club[cnr].name, cnr, hisname(co), rankname[rank]);
 }
 
-void tick_club(void)
-{
+void tick_club(void) {
   static int last_update = 0;
   int n;
 
@@ -92,7 +89,8 @@ void tick_club(void)
       } else {
         club[n].money -= 10000 * 100;
         club[n].paid += 60 * 60 * 24 * 7;
-        xlog("club %d %s paid 10000g, new money %d, new paid %d", n, club[n].name, club[n].money, club[n].paid);
+        xlog("club %d %s paid 10000g, new money %d, new paid %d", n,
+             club[n].name, club[n].money, club[n].paid);
       }
       db_update_club(n);
       break;
@@ -101,24 +99,29 @@ void tick_club(void)
   }
 }
 
-void showclub(int cn)
-{
+void showclub(int cn) {
   int cnr, rank;
 
   if ((cnr = get_char_club(cn))) {
     rank = ch[cn].clan_rank;
-    if (rank < 0 || rank > 2) { elog("showclub(): got illegal clan rank (%s,%d,%d)", ch[cn].name, cn, rank); rank = 0; }
+    if (rank < 0 || rank > 2) {
+      elog("showclub(): got illegal clan rank (%s,%d,%d)", ch[cn].name, cn,
+           rank);
+      rank = 0;
+    }
 
-    log_char(cn, LOG_SYSTEM, 0, "You are a member of the club '%s' (%d), your rank is %s.", club[cnr].name, cnr, rankname[rank]);
+    log_char(cn, LOG_SYSTEM, 0,
+             "You are a member of the club '%s' (%d), your rank is %s.",
+             club[cnr].name, cnr, rankname[rank]);
 
-    log_char(cn, LOG_SYSTEM, 0, "Your club has %d gold, the next payment of 10000 gold is due in %d hours.",
-             club[cnr].money / 100,
-             (club[cnr].paid - realtime) / 60 / 60);
+    log_char(cn, LOG_SYSTEM, 0,
+             "Your club has %d gold, the next payment of 10000 gold is due in "
+             "%d hours.",
+             club[cnr].money / 100, (club[cnr].paid - realtime) / 60 / 60);
   }
 }
 
-void kill_club(int cnr)
-{
+void kill_club(int cnr) {
   if (cnr > 0 && cnr < MAXCLUB) {
     club[cnr].paid = 1;
     club[cnr].money = 0;
@@ -126,8 +129,7 @@ void kill_club(int cnr)
   }
 }
 
-int create_club(char *name)
-{
+int create_club(char *name) {
   int n;
 
   for (n = 0; name[n]; n++) {
@@ -149,16 +151,17 @@ int create_club(char *name)
   club[n].serial++;
   club[n].paid = realtime + 60 * 60 * 24 * 7;
   club[n].money = 0;
-  if (club[n].serial == 1) db_create_club(n);
-  else db_update_club(n);
+  if (club[n].serial == 1)
+    db_create_club(n);
+  else
+    db_update_club(n);
 
   xlog("created club %d %s", n, club[n].name);
 
   return n;
 }
 
-int rename_club(int nr, char *name)
-{
+int rename_club(int nr, char *name) {
   int n;
 
   for (n = 0; name[n]; n++) {

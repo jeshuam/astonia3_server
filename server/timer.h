@@ -14,8 +14,7 @@ Added RCS tags
 
 */
 
-struct timer
-{
+struct timer {
   int due;
 
   void (*func)(int, int, int, int, int);
@@ -28,5 +27,5 @@ extern int used_timers;
 
 int init_timer(void);
 void tick_timer(void);
-int set_timer(int due, void (*func)(int, int, int, int, int), int dat1, int dat2, int dat3, int dat4, int dat5);
-
+int set_timer(int due, void (*func)(int, int, int, int, int), int dat1,
+              int dat2, int dat3, int dat4, int dat5);

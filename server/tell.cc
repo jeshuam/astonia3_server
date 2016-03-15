@@ -20,22 +20,22 @@ Added RCS tags
 #include "talk.h"
 #include "tell.h"
 
-#define MAXTELL	10
+#define MAXTELL 10
 
-struct tell_data
-{
+struct tell_data {
   int target[MAXTELL];
   int time[MAXTELL];
 };
 
-void register_sent_tell(int cn, int coID)
-{
+void register_sent_tell(int cn, int coID) {
   struct tell_data *dat;
   int n, empty = -1;
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  if (!(dat = (struct tell_data*)set_data(cn, DRD_TELL_DATA, sizeof(struct tell_data)))) return;	// OOPS
+  if (!(dat = (struct tell_data *)set_data(cn, DRD_TELL_DATA,
+                                           sizeof(struct tell_data))))
+    return;  // OOPS
 
   for (n = 0; n < 10; n++) {
     if (dat->target[n] == coID) return;
@@ -47,35 +47,37 @@ void register_sent_tell(int cn, int coID)
   }
 }
 
-void register_rec_tell(int cn, int coID)
-{
+void register_rec_tell(int cn, int coID) {
   int n;
   struct tell_data *dat;
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  if (!(dat = (struct tell_data*)set_data(cn, DRD_TELL_DATA, sizeof(struct tell_data)))) return;	// OOPS
+  if (!(dat = (struct tell_data *)set_data(cn, DRD_TELL_DATA,
+                                           sizeof(struct tell_data))))
+    return;  // OOPS
 
-  //log_char(cn,LOG_SYSTEM,0,"should remove tell %d",coID);
+  // log_char(cn,LOG_SYSTEM,0,"should remove tell %d",coID);
 
   for (n = 0; n < MAXTELL; n++) {
     if (dat->target[n] == coID) {
       dat->target[n] = 0;
       dat->time[n] = 0;
-      //log_char(cn,LOG_SYSTEM,0,"removed tell %d %d",n,coID);
+      // log_char(cn,LOG_SYSTEM,0,"removed tell %d %d",n,coID);
     }
   }
 }
 
-void check_tells(int cn)
-{
+void check_tells(int cn) {
   int n;
   struct tell_data *dat;
   char name[80];
 
   if (!(ch[cn].flags & CF_PLAYER)) return;
 
-  if (!(dat = (struct tell_data*)set_data(cn, DRD_TELL_DATA, sizeof(struct tell_data)))) return;	// OOPS
+  if (!(dat = (struct tell_data *)set_data(cn, DRD_TELL_DATA,
+                                           sizeof(struct tell_data))))
+    return;  // OOPS
 
   for (n = 0; n < MAXTELL; n++) {
     if (!dat->target[n]) continue;

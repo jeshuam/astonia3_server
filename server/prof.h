@@ -16,12 +16,11 @@ Added RCS tags
 
 #include "server.h"
 
-struct prof
-{
+struct prof {
   const char *name;
 
   char base;  // start value
-  char max; // maximum value
+  char max;   // maximum value
   char step;  // raised in steps
 };
 extern struct prof prof[P_MAX];

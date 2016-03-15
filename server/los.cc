@@ -26,38 +26,38 @@ struct los *los;
 
 static int dodoors = 0, doorx, doory;
 
-int init_los(void)
-{
-  los = (struct los*)xcalloc(sizeof(struct los) * MAXCHARS, IM_BASE);
+int init_los(void) {
+  los = (struct los *)xcalloc(sizeof(struct los) * MAXCHARS, IM_BASE);
   if (!los) return 0;
-  xlog("Allocated los: %.2fM (%lu*%d)", sizeof(struct los)*MAXCHARS / 1024.0 / 1024.0, sizeof(struct los), MAXCHARS);
+  xlog("Allocated los: %.2fM (%lu*%d)",
+       sizeof(struct los) * MAXCHARS / 1024.0 / 1024.0, sizeof(struct los),
+       MAXCHARS);
   mem_usage += sizeof(struct los) * MAXCHARS;
 
   return 1;
 }
 
-static inline void add_los(int cn, int x, int y, int v)
-{
-  if (!los[cn].tab[x + los[cn].xoff][y + los[cn].yoff]) los[cn].tab[x + los[cn].xoff][y + los[cn].yoff] = v;
+static inline void add_los(int cn, int x, int y, int v) {
+  if (!los[cn].tab[x + los[cn].xoff][y + los[cn].yoff])
+    los[cn].tab[x + los[cn].xoff][y + los[cn].yoff] = v;
 }
 
-static inline int check_map(int x, int y)
-{
+static inline int check_map(int x, int y) {
   int m;
 
   if (x < 1 || x >= MAXMAP || y < 1 || y >= MAXMAP) return 0;
 
   m = x + y * MAXMAP;
 
-  if (dodoors && (map[m].flags & MF_DOOR) && (x != doorx || y != doory)) return 1;
+  if (dodoors && (map[m].flags & MF_DOOR) && (x != doorx || y != doory))
+    return 1;
 
   if (map[m].flags & (MF_SIGHTBLOCK | MF_TSIGHTBLOCK)) return 0;
 
   return 1;
 }
 
-static inline int is_close_los_down(int cn, int xc, int yc, int v)
-{
+static inline int is_close_los_down(int cn, int xc, int yc, int v) {
   int x, y;
 
   x = xc + los[cn].xoff;
@@ -70,8 +70,7 @@ static inline int is_close_los_down(int cn, int xc, int yc, int v)
   return 0;
 }
 
-static inline int is_close_los_up(int cn, int xc, int yc, int v)
-{
+static inline int is_close_los_up(int cn, int xc, int yc, int v) {
   int x, y;
 
   x = xc + los[cn].xoff;
@@ -84,8 +83,7 @@ static inline int is_close_los_up(int cn, int xc, int yc, int v)
   return 0;
 }
 
-static inline int is_close_los_left(int cn, int xc, int yc, int v)
-{
+static inline int is_close_los_left(int cn, int xc, int yc, int v) {
   int x, y;
 
   x = xc + los[cn].xoff;
@@ -98,8 +96,7 @@ static inline int is_close_los_left(int cn, int xc, int yc, int v)
   return 0;
 }
 
-static inline int is_close_los_right(int cn, int xc, int yc, int v)
-{
+static inline int is_close_los_right(int cn, int xc, int yc, int v) {
   int x, y;
 
   x = xc + los[cn].xoff;
@@ -112,16 +109,14 @@ static inline int is_close_los_right(int cn, int xc, int yc, int v)
   return 0;
 }
 
-static inline int check_los(int cn, int x, int y)
-{
+static inline int check_los(int cn, int x, int y) {
   x = x + los[cn].xoff;
   y = y + los[cn].yoff;
 
   return los[cn].tab[x][y];
 }
 
-static void build_los(int cn, int xc, int yc, int maxdist)
-{
+static void build_los(int cn, int xc, int yc, int maxdist) {
   int x, y, dist, found;
   unsigned long long prof;
 
@@ -148,20 +143,31 @@ static void build_los(int cn, int xc, int yc, int maxdist)
   for (dist = 2; dist < maxdist; dist++) {
     found = 0;
     for (x = xc - dist; x <= xc + dist; x++) {
-      if (is_close_los_down(cn, x, yc - dist, dist)) { add_los(cn, x, yc - dist, dist + 1); found = 1; }
-      if (is_close_los_up(cn, x, yc + dist, dist)) { add_los(cn, x, yc + dist, dist + 1); found = 1; }
+      if (is_close_los_down(cn, x, yc - dist, dist)) {
+        add_los(cn, x, yc - dist, dist + 1);
+        found = 1;
+      }
+      if (is_close_los_up(cn, x, yc + dist, dist)) {
+        add_los(cn, x, yc + dist, dist + 1);
+        found = 1;
+      }
     }
     for (y = yc - dist; y <= yc + dist; y++) {
-      if (is_close_los_left(cn, xc - dist, y, dist)) { add_los(cn, xc - dist, y, dist + 1); found = 1; }
-      if (is_close_los_right(cn, xc + dist, y, dist)) { add_los(cn, xc + dist, y, dist + 1); found = 1; }
+      if (is_close_los_left(cn, xc - dist, y, dist)) {
+        add_los(cn, xc - dist, y, dist + 1);
+        found = 1;
+      }
+      if (is_close_los_right(cn, xc + dist, y, dist)) {
+        add_los(cn, xc + dist, y, dist + 1);
+        found = 1;
+      }
     }
     if (!found) break;
   }
   prof_stop(15, prof);
 }
 
-void reset_los(int xc, int yc)
-{
+void reset_los(int xc, int yc) {
   int x, y, cn;
   unsigned long long prof;
 
@@ -183,8 +189,7 @@ void reset_los(int xc, int yc)
 
 // updates the LOS cache for character cn
 // returns true if los had to be rebuild, false otherwise
-int update_los(int cn, int xc, int yc, int maxdist)
-{
+int update_los(int cn, int xc, int yc, int maxdist) {
   if (maxdist > MAXDIST) maxdist = MAXDIST;
 
   if (xc != los[cn].x || yc != los[cn].y || maxdist > los[cn].maxdist) {
@@ -196,14 +201,16 @@ int update_los(int cn, int xc, int yc, int maxdist)
   return 0;
 }
 
-int los_can_see(int cn, int xc, int yc, int tx, int ty, int maxdist)
-{
+int los_can_see(int cn, int xc, int yc, int tx, int ty, int maxdist) {
   int tmp;
   unsigned long long prof;
 
   prof = prof_start(13);
 
-  if (abs(xc - tx) >= maxdist || abs(yc - ty) >= maxdist) { prof_stop(13, prof); return 0; }
+  if (abs(xc - tx) >= maxdist || abs(yc - ty) >= maxdist) {
+    prof_stop(13, prof);
+    return 0;
+  }
 
   if (maxdist > MAXDIST) maxdist = MAXDIST;
 
@@ -221,8 +228,8 @@ int los_can_see(int cn, int xc, int yc, int tx, int ty, int maxdist)
   return tmp;
 }
 
-int door_los(int cn, int xc, int yc, int tx, int ty, int maxdist, int dx, int dy)
-{
+int door_los(int cn, int xc, int yc, int tx, int ty, int maxdist, int dx,
+             int dy) {
   int tmp;
 
   dodoors = 1;

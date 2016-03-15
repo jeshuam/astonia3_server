@@ -48,7 +48,6 @@
  *
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -90,8 +89,8 @@
 #include "container.h"
 #include "chat.h"
 
-#define QLF_REPEATABLE	(1u<<0)
-#define QLF_XREPEAT	(1u<<1)
+#define QLF_REPEATABLE (1u << 0)
+#define QLF_XREPEAT (1u << 1)
 
 struct questlog {
   const char *name;
@@ -103,94 +102,129 @@ struct questlog {
 };
 
 struct questlog questlog[] = {
-  {"Lydia's Potion", 1, 2, "James", "Cameron", 15, QLF_REPEATABLE},			//0,
-  {"Find the Magic Item", 2, 3, "Gwendylon", "Cameron", 75, QLF_REPEATABLE},		//1,
-  {"The Second Skull", 3, 5, "Gwendylon", "Cameron", 150, QLF_REPEATABLE},		//2,
-  {"The Third Skull", 5, 7, "Gwendylon", "Cameron", 300, QLF_REPEATABLE},		//3,
-  {"Kill the Foul Magician", 6, 8, "Gwendylon", "Cameron", 800, QLF_REPEATABLE},	//4,
-  {"Bear Hunt", 6, 8, "Yoakin", "Cameron", 600, QLF_REPEATABLE},			//5,
-  {"A Fool's Request", 6, 8, "Nook", "Cameron", 400, 0},				//6,
-  {"Mages Gone Berserk", 6, 9, "Guiwynn", "Cameron", 800, QLF_REPEATABLE},		//7,
-  {"The Recipe for Happiness", 7, 10, "Guiwynn", "Cameron", 900, QLF_REPEATABLE},	//8,
-  {"Knightly Troubles", 7, 10, "Logain", "Cameron", 1200, QLF_REPEATABLE},		//9,
-  {"Loisan's House", 9, 12, "Seymour", "Aston", 850, 0},				//10,
-  {"The Silver Skull", 10, 13, "Seymour", "Aston", 1000, 0},				//11,
-  {"Find Loisan", 11, 15, "Seymour", "Aston", 1500, QLF_REPEATABLE},			//12,
-  {"Jeepers Creepers", 12, 18, "Kelly", "Aston", 1850, QLF_REPEATABLE},			//13,
-  {"Underground Park Shrines", 15, 20, "Kelly", "Aston", 0, 0},				//14, special case: exp awarded in driver, 4500 exp total
-  {"In Search of Clara", 20, 27, "Kelly", "Aston", 2500, 0},				//15,
-  {"The Astronomer's Notes", 15, 20, "Gerassimo", "Aston", 5000, QLF_REPEATABLE},	//16,
-  {"The Unwanted Tenants", 9, 12, "Reskin", "Cameron", 1250, 0},			//17,
-  {"The Toughest Monster", 20, 25, "Sir Jones", "Aston", 7500, 0},			//18,
-  {"The Toughestest Monster", 20, 26, "Sir Jones", "Aston", 12000, 0},			//19,
-  {"Wanted: Occult Staff", 30, 36, "Carlos", "Aston", 40000, QLF_REPEATABLE},		//20,
-  {"Slay the Swampbeast", 23, 30, "Clara", "Swamp", 22500, 0},				//21,
-  {"Impish Bear Hunt", 20, 27, "William/Imp", "Forest", 12500, 0},			//22,
-  {"Praying Mantis Stew", 20, 27, "William", "Forest", 15000, 0},			//23,
-  {"The Spider Queen", 25, 30, "Hermit", "Forest", 25000, 0},				//24,
-  {"Earning the Lockpick", 25, 30, "Guildmaster", "Exkordon", 0, QLF_XREPEAT},		//25, exp awarded in driver, amount depends on robbers killed. range: 5000 to 20000
-  {"Extortion", 25, 30, "Guildmaster", "Exkordon", 0, QLF_XREPEAT},			//26, exp awarded in driver, 5000 or 10000
-  {"Price Fix Exposed", 25, 30, "Guildmaster", "Exkordon", 15000, QLF_XREPEAT},		//27,
-  {"The Golden Lockpick", 26, 33, "Guildmaster", "Exkordon", 15000, QLF_XREPEAT},	//28,
-  {"Dirty Hands", 26, 33, "Sanwyn", "Exkordon", 0, 0},					//29, exp awarded in driver, 45000 total
-  {"The Old Governor's Cross", 33, 40, "Skeleton", "Exkordon", 30000, QLF_REPEATABLE},	//30,
-  {"Spider Poison", 30, 40, "Cervik", "Exkordon", 30000, QLF_REPEATABLE},		//31,
-  {"Join the Tribe", 63, 80, "Kalanur", "Nomad Plains", 10000, 0},			//32,
-  {"Searching Sarkilar", 63, 80, "Kir Laas", "Nomad Plains", 450000, 0},		//33,
-  {"A Golden Statue", 72, 90, "Kir Garan", "Nomad Plains", 280000, 0},			//34,
-  {"Smuggler Book", 10, 15, "Imp. Commander", "Below Aston 2", 1000, QLF_REPEATABLE},	//35,
-  {"Contraband", 10, 15, "Imp. Commander", "Below Aston 2", 0, 0},			//36, exp awarded in driver, 5000 total
-  {"Smuggler Leader", 10, 15, "Imp. Commander", "Below Aston 2", 2000, QLF_REPEATABLE},	//37,
-  {"The Family Heirloom", 32, 40, "Aristocrat", "Bran. Forest", 40000, QLF_REPEATABLE},	//38,
-  {"Bear Hunt - Again", 32, 36, "Yoatin", "Bran. Forest", 40000, QLF_REPEATABLE},	//39,
-  {"The Jewels of Brannington ", 34, 40, "Count B.", "Brannington", 0, QLF_REPEATABLE},	//40, exp awarded in driver, 120k total
-  {"A Grolm's Spoils", 33, 42, "Brenneth", "Brannington", 15000, QLF_REPEATABLE},	//41,
-  {"A Thief's Loot ", 33, 42, "Brenneth", "Brannington", 15000, QLF_REPEATABLE},	//42,
-  {"A Necromancer's Notes", 33, 42, "Brenneth", "Brannington", 15000, QLF_REPEATABLE},	//43,
-  {"A Rest Disturbed", 36, 43, "Spirit", "Brannington", 60000, QLF_REPEATABLE},		//44,
-  {"Searching a Miner's Tool", 42, 48, "Broklin", "Brannington", 60000, QLF_REPEATABLE}, //45,
-  {"A Miner's Vengeance", 44, 50, "Broklin", "Brannington", 60000, 0},			//46,
-  {"A Miner's Misery", 85, 95, "Dwarven Chief", "Grimroot", 285000, 0},			//47,
-  {"A Miner's Bane", 95, 105, "Dwarven Chief", "Grimroot", 395000, 0},			//48,
-  {"A Miner's Anguish", 105, 115, "Dwarven Chief", "Grimroot", 525000, 0},		//49,
-  {"A Miner Lost", 115, 125, "Dwarven Chief", "Grimroot", 680000, 0},			//50,
-  {"Lizard's Teeth", 95, 105, "Dwarven Shaman", "Grimroot", 395000, 0},			//51,
-  {"Collecting Berries", 100, 110, "Dwarven Shaman", "Grimroot", 455000, 0},		//52,
-  {"Elitist Head", 105, 115, "Dwarven Shaman", "Grimroot", 525000, 0},			//53,
+    {"Lydia's Potion", 1, 2, "James", "Cameron", 15, QLF_REPEATABLE},  // 0,
+    {"Find the Magic Item", 2, 3, "Gwendylon", "Cameron", 75,
+     QLF_REPEATABLE},  // 1,
+    {"The Second Skull", 3, 5, "Gwendylon", "Cameron", 150,
+     QLF_REPEATABLE},  // 2,
+    {"The Third Skull", 5, 7, "Gwendylon", "Cameron", 300,
+     QLF_REPEATABLE},  // 3,
+    {"Kill the Foul Magician", 6, 8, "Gwendylon", "Cameron", 800,
+     QLF_REPEATABLE},  // 4,
+    {"Bear Hunt", 6, 8, "Yoakin", "Cameron", 600, QLF_REPEATABLE},  // 5,
+    {"A Fool's Request", 6, 8, "Nook", "Cameron", 400, 0},  // 6,
+    {"Mages Gone Berserk", 6, 9, "Guiwynn", "Cameron", 800,
+     QLF_REPEATABLE},  // 7,
+    {"The Recipe for Happiness", 7, 10, "Guiwynn", "Cameron", 900,
+     QLF_REPEATABLE},  // 8,
+    {"Knightly Troubles", 7, 10, "Logain", "Cameron", 1200,
+     QLF_REPEATABLE},  // 9,
+    {"Loisan's House", 9, 12, "Seymour", "Aston", 850, 0},  // 10,
+    {"The Silver Skull", 10, 13, "Seymour", "Aston", 1000, 0},  // 11,
+    {"Find Loisan", 11, 15, "Seymour", "Aston", 1500, QLF_REPEATABLE},  // 12,
+    {"Jeepers Creepers", 12, 18, "Kelly", "Aston", 1850,
+     QLF_REPEATABLE},  // 13,
+    {"Underground Park Shrines", 15, 20, "Kelly", "Aston", 0,
+     0},  // 14, special case: exp awarded in driver, 4500 exp total
+    {"In Search of Clara", 20, 27, "Kelly", "Aston", 2500, 0},  // 15,
+    {"The Astronomer's Notes", 15, 20, "Gerassimo", "Aston", 5000,
+     QLF_REPEATABLE},  // 16,
+    {"The Unwanted Tenants", 9, 12, "Reskin", "Cameron", 1250, 0},  // 17,
+    {"The Toughest Monster", 20, 25, "Sir Jones", "Aston", 7500, 0},  // 18,
+    {"The Toughestest Monster", 20, 26, "Sir Jones", "Aston", 12000, 0},  // 19,
+    {"Wanted: Occult Staff", 30, 36, "Carlos", "Aston", 40000,
+     QLF_REPEATABLE},  // 20,
+    {"Slay the Swampbeast", 23, 30, "Clara", "Swamp", 22500, 0},  // 21,
+    {"Impish Bear Hunt", 20, 27, "William/Imp", "Forest", 12500, 0},  // 22,
+    {"Praying Mantis Stew", 20, 27, "William", "Forest", 15000, 0},  // 23,
+    {"The Spider Queen", 25, 30, "Hermit", "Forest", 25000, 0},  // 24,
+    {"Earning the Lockpick", 25, 30, "Guildmaster", "Exkordon", 0,
+     QLF_XREPEAT},  // 25, exp awarded in driver, amount depends on robbers
+                    // killed. range: 5000 to 20000
+    {"Extortion", 25, 30, "Guildmaster", "Exkordon", 0,
+     QLF_XREPEAT},  // 26, exp awarded in driver, 5000 or 10000
+    {"Price Fix Exposed", 25, 30, "Guildmaster", "Exkordon", 15000,
+     QLF_XREPEAT},  // 27,
+    {"The Golden Lockpick", 26, 33, "Guildmaster", "Exkordon", 15000,
+     QLF_XREPEAT},  // 28,
+    {"Dirty Hands", 26, 33, "Sanwyn", "Exkordon", 0,
+     0},  // 29, exp awarded in driver, 45000 total
+    {"The Old Governor's Cross", 33, 40, "Skeleton", "Exkordon", 30000,
+     QLF_REPEATABLE},  // 30,
+    {"Spider Poison", 30, 40, "Cervik", "Exkordon", 30000,
+     QLF_REPEATABLE},  // 31,
+    {"Join the Tribe", 63, 80, "Kalanur", "Nomad Plains", 10000, 0},  // 32,
+    {"Searching Sarkilar", 63, 80, "Kir Laas", "Nomad Plains", 450000,
+     0},  // 33,
+    {"A Golden Statue", 72, 90, "Kir Garan", "Nomad Plains", 280000, 0},  // 34,
+    {"Smuggler Book", 10, 15, "Imp. Commander", "Below Aston 2", 1000,
+     QLF_REPEATABLE},  // 35,
+    {"Contraband", 10, 15, "Imp. Commander", "Below Aston 2", 0,
+     0},  // 36, exp awarded in driver, 5000 total
+    {"Smuggler Leader", 10, 15, "Imp. Commander", "Below Aston 2", 2000,
+     QLF_REPEATABLE},  // 37,
+    {"The Family Heirloom", 32, 40, "Aristocrat", "Bran. Forest", 40000,
+     QLF_REPEATABLE},  // 38,
+    {"Bear Hunt - Again", 32, 36, "Yoatin", "Bran. Forest", 40000,
+     QLF_REPEATABLE},  // 39,
+    {"The Jewels of Brannington ", 34, 40, "Count B.", "Brannington", 0,
+     QLF_REPEATABLE},  // 40, exp awarded in driver, 120k total
+    {"A Grolm's Spoils", 33, 42, "Brenneth", "Brannington", 15000,
+     QLF_REPEATABLE},  // 41,
+    {"A Thief's Loot ", 33, 42, "Brenneth", "Brannington", 15000,
+     QLF_REPEATABLE},  // 42,
+    {"A Necromancer's Notes", 33, 42, "Brenneth", "Brannington", 15000,
+     QLF_REPEATABLE},  // 43,
+    {"A Rest Disturbed", 36, 43, "Spirit", "Brannington", 60000,
+     QLF_REPEATABLE},  // 44,
+    {"Searching a Miner's Tool", 42, 48, "Broklin", "Brannington", 60000,
+     QLF_REPEATABLE},  // 45,
+    {"A Miner's Vengeance", 44, 50, "Broklin", "Brannington", 60000, 0},  // 46,
+    {"A Miner's Misery", 85, 95, "Dwarven Chief", "Grimroot", 285000,
+     0},  // 47,
+    {"A Miner's Bane", 95, 105, "Dwarven Chief", "Grimroot", 395000, 0},  // 48,
+    {"A Miner's Anguish", 105, 115, "Dwarven Chief", "Grimroot", 525000,
+     0},  // 49,
+    {"A Miner Lost", 115, 125, "Dwarven Chief", "Grimroot", 680000, 0},  // 50,
+    {"Lizard's Teeth", 95, 105, "Dwarven Shaman", "Grimroot", 395000,
+     0},  // 51,
+    {"Collecting Berries", 100, 110, "Dwarven Shaman", "Grimroot", 455000,
+     0},  // 52,
+    {"Elitist Head", 105, 115, "Dwarven Shaman", "Grimroot", 525000, 0},  // 53,
 
-  {"Looking for Caligar", 55, 65, "Kelly", "Aston", 80000, 0},				//54,
-  {"Fighting Styles", 55, 65, "Glori", "Caligar", 80000, 0},				//55,
-  {"Obelisk Hunt", 55, 65, "Glori", "Caligar", 80000, 0},				//56,
-  {"Find the Keyparts", 55, 65, "Glori", "Caligar", 80000, 0},				//57,
-  {"Assemble the Key", 55, 65, "Glori", "Caligar", 80000, 0},				//58,
-  {"Amazon Invaders", 55, 65, "Homdem", "Caligar", 80000, 0},				//59,
-  {"The Emperor's Plaque", 55, 65, "Kelly", "Aston", 160000, 0},			//60,
+    {"Looking for Caligar", 55, 65, "Kelly", "Aston", 80000, 0},  // 54,
+    {"Fighting Styles", 55, 65, "Glori", "Caligar", 80000, 0},  // 55,
+    {"Obelisk Hunt", 55, 65, "Glori", "Caligar", 80000, 0},  // 56,
+    {"Find the Keyparts", 55, 65, "Glori", "Caligar", 80000, 0},  // 57,
+    {"Assemble the Key", 55, 65, "Glori", "Caligar", 80000, 0},  // 58,
+    {"Amazon Invaders", 55, 65, "Homdem", "Caligar", 80000, 0},  // 59,
+    {"The Emperor's Plaque", 55, 65, "Kelly", "Aston", 160000, 0},  // 60,
 
-  {"The Imperial Vault", 26, 28, "Carlos", "Aston", 20000, 0},				//61,
-  {"Tunnel Magics", 26, 28, "Rouven", "Imperial Vault", 10000, 0},			//62,
-  {"Chronicles of Seyan", 26, 28, "Rouven", "Imperial Vault", 10000, 0},		//63,
+    {"The Imperial Vault", 26, 28, "Carlos", "Aston", 20000, 0},  // 61,
+    {"Tunnel Magics", 26, 28, "Rouven", "Imperial Vault", 10000, 0},  // 62,
+    {"Chronicles of Seyan", 26, 28, "Rouven", "Imperial Vault", 10000,
+     0},  // 63,
 
-  {"Finding Arkhata", 47, 55, "Guard", "Brannington", 60000, 0},			//64,
-  {"Rammy's Crown", 48, 58, "Rammy", "Arkhata", 60000, 0},				//65,
-  {"Ishtar's Bracelet", 49, 59, "Jaz", "Arkhata", 60000, 0},				//66,
-  {"Queen Fiona's Ring", 50, 60, "Queen Fiona", "Arkhata", 60000, 0},			//67,
-  {"A Shopkeeper's Fright", 51, 61, "Ramin", "Arkhata", 60000, 0},			//68,
-  {"The Monks' Request", 52, 62, "Johnatan", "Arkhata", 60000, 0},			//69,
-  {"The Book Eater", 53, 63, "Tracy", "Arkhata", 60000, 0},				//70,
-  {"Entrance Passes", 54, 64, "Rammy", "Arkhata", 90000, 0},				//71,
-  {"The Source", 60, 70, "Jada", "Arkhata", 120000, 0},					//72,
-  {"Ceremonial Pot", 48, 58, "Pot Maker", "Arkhata", 60000, 0},				//73,
-  {"The Lost Secrets", 49, 59, "Thai Pan", "Arkhata", 60000, 0},			//74,
-  {"A Kidnapped Student", 53, 63, "Trainer", "Arkhata", 60000, 0},			//75,
-  {"The Traitors", 53, 63, "Clerk", "Arkhata", 60000, 0},				//76,
-  {"The Blue Harpy", 58, 68, "Hunter", "Arkhata", 60000, 0},				//77,
-  {"The Mysterious Language", 60, 65, "Johnatan", "Arkhata", 60000, 0},			//78,
-
+    {"Finding Arkhata", 47, 55, "Guard", "Brannington", 60000, 0},  // 64,
+    {"Rammy's Crown", 48, 58, "Rammy", "Arkhata", 60000, 0},  // 65,
+    {"Ishtar's Bracelet", 49, 59, "Jaz", "Arkhata", 60000, 0},  // 66,
+    {"Queen Fiona's Ring", 50, 60, "Queen Fiona", "Arkhata", 60000, 0},  // 67,
+    {"A Shopkeeper's Fright", 51, 61, "Ramin", "Arkhata", 60000, 0},  // 68,
+    {"The Monks' Request", 52, 62, "Johnatan", "Arkhata", 60000, 0},  // 69,
+    {"The Book Eater", 53, 63, "Tracy", "Arkhata", 60000, 0},  // 70,
+    {"Entrance Passes", 54, 64, "Rammy", "Arkhata", 90000, 0},  // 71,
+    {"The Source", 60, 70, "Jada", "Arkhata", 120000, 0},  // 72,
+    {"Ceremonial Pot", 48, 58, "Pot Maker", "Arkhata", 60000, 0},  // 73,
+    {"The Lost Secrets", 49, 59, "Thai Pan", "Arkhata", 60000, 0},  // 74,
+    {"A Kidnapped Student", 53, 63, "Trainer", "Arkhata", 60000, 0},  // 75,
+    {"The Traitors", 53, 63, "Clerk", "Arkhata", 60000, 0},  // 76,
+    {"The Blue Harpy", 58, 68, "Hunter", "Arkhata", 60000, 0},  // 77,
+    {"The Mysterious Language", 60, 65, "Johnatan", "Arkhata", 60000,
+     0},  // 78,
 
 };
 
-void questlog_open(int cn, int qnr)
-{
+void questlog_open(int cn, int qnr) {
   struct quest *quest;
 
   if (qnr < 0 || qnr >= MAXQUEST) {
@@ -199,14 +233,15 @@ void questlog_open(int cn, int qnr)
     return;
   }
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return;
 
   quest[qnr].flags = QF_OPEN;
   sendquestlog(cn, ch[cn].player);
 }
 
-void questlog_close(int cn, int qnr)
-{
+void questlog_close(int cn, int qnr) {
   struct quest *quest;
 
   if (qnr < 0 || qnr >= MAXQUEST) {
@@ -215,31 +250,42 @@ void questlog_close(int cn, int qnr)
     return;
   }
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return;
 
   if (quest[qnr].flags == QF_OPEN) quest[qnr].flags = QF_DONE;
   sendquestlog(cn, ch[cn].player);
 }
 
-int questlog_scale(int cnt, int ex)
-{
+int questlog_scale(int cnt, int ex) {
   switch (cnt) {
-  case 0:		return ex;
-  case 1:		return ex * 82 / 100;
-  case 2:		return ex * 68 / 100;
-  case 3:		return ex * 56 / 100;
-  case 4:		return ex * 46 / 100;
-  case 5:		return ex * 38 / 100;
-  case 6:		return ex * 32 / 100;
-  case 7:		return ex * 26 / 100;
-  case 8:		return ex * 21 / 100;
-  case 9:		return ex * 18 / 100;
-  default:	return ex * 15 / 100;
+    case 0:
+      return ex;
+    case 1:
+      return ex * 82 / 100;
+    case 2:
+      return ex * 68 / 100;
+    case 3:
+      return ex * 56 / 100;
+    case 4:
+      return ex * 46 / 100;
+    case 5:
+      return ex * 38 / 100;
+    case 6:
+      return ex * 32 / 100;
+    case 7:
+      return ex * 26 / 100;
+    case 8:
+      return ex * 21 / 100;
+    case 9:
+      return ex * 18 / 100;
+    default:
+      return ex * 15 / 100;
   }
 }
 
-int questlog_done(int cn, int qnr)
-{
+int questlog_done(int cn, int qnr) {
   struct quest *quest;
   int cnt, val;
 
@@ -249,7 +295,9 @@ int questlog_done(int cn, int qnr)
     return 0;
   }
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return 0;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return 0;
 
   cnt = quest[qnr].done++;
   quest[qnr].flags = QF_DONE;
@@ -257,20 +305,27 @@ int questlog_done(int cn, int qnr)
   val = questlog_scale(cnt, questlog[qnr].exp);
 
   // scale down by level for those rushing ahead
-  if (ch[cn].level > 44) val = min(level_value(ch[cn].level) / 6, val);
-  else if (ch[cn].level > 19) val = min(level_value(ch[cn].level) / 4, val);
-  else if (ch[cn].level > 4) val = min(level_value(ch[cn].level) / 2, val);
-  else val = min(level_value(ch[cn].level), val);
+  if (ch[cn].level > 44)
+    val = min(level_value(ch[cn].level) / 6, val);
+  else if (ch[cn].level > 19)
+    val = min(level_value(ch[cn].level) / 4, val);
+  else if (ch[cn].level > 4)
+    val = min(level_value(ch[cn].level) / 2, val);
+  else
+    val = min(level_value(ch[cn].level), val);
 
   give_exp(cn, val);
-  if (questlog[qnr].exp > 0) dlog(cn, 0, "Received %d exp for doing quest %s for the %d. time (nominal value %d exp)", val, questlog[qnr].name, (cnt + 1), questlog[qnr].exp);
+  if (questlog[qnr].exp > 0)
+    dlog(cn, 0,
+         "Received %d exp for doing quest %s for the %d. time (nominal value "
+         "%d exp)",
+         val, questlog[qnr].name, (cnt + 1), questlog[qnr].exp);
   sendquestlog(cn, ch[cn].player);
 
   return quest[qnr].done;
 }
 
-int questlog_count(int cn, int qnr)
-{
+int questlog_count(int cn, int qnr) {
   struct quest *quest;
   if (qnr < 0 || qnr >= MAXQUEST) {
     elog("trying to get count for quest %d", qnr);
@@ -278,13 +333,14 @@ int questlog_count(int cn, int qnr)
     return 0;
   }
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return 0;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return 0;
 
   return quest[qnr].done;
 }
 
-int questlog_isdone(int cn, int qnr)
-{
+int questlog_isdone(int cn, int qnr) {
   struct quest *quest;
 
   if (qnr < 0 || qnr >= MAXQUEST) {
@@ -293,29 +349,37 @@ int questlog_isdone(int cn, int qnr)
     return 0;
   }
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return 0;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return 0;
 
-  if (quest[qnr].flags == QF_DONE) return 1;
-  else return 0;
+  if (quest[qnr].flags == QF_DONE)
+    return 1;
+  else
+    return 0;
 }
 
-void questlog_reopen_q0(int cn)
-{
+void questlog_reopen_q0(int cn) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return;
 
   ppd->james_state = 0;
   ppd->lydia_state = 0;
 }
 
-int questlog_reopen_q1(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q1(int cn, int state, struct quest *quest) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return 0;
-  if ((quest[1].flags & QF_OPEN) || (quest[2].flags & QF_OPEN) || (quest[3].flags & QF_OPEN) || (quest[4].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return 0;
+  if ((quest[1].flags & QF_OPEN) || (quest[2].flags & QF_OPEN) ||
+      (quest[3].flags & QF_OPEN) || (quest[4].flags & QF_OPEN)) {
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
 
@@ -323,31 +387,35 @@ int questlog_reopen_q1(int cn, int state, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q5(int cn)
-{
+void questlog_reopen_q5(int cn) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return;
 
   ppd->yoakin_state = 0;
 }
 
-void questlog_reopen_q6(int cn)
-{
+void questlog_reopen_q6(int cn) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return;
 
   ppd->nook_state = 0;
 }
 
-int questlog_reopen_q7(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q7(int cn, int state, struct quest *quest) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return 0;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return 0;
   if ((quest[7].flags & QF_OPEN) || (quest[8].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
 
@@ -355,22 +423,25 @@ int questlog_reopen_q7(int cn, int state, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q9(int cn)
-{
+void questlog_reopen_q9(int cn) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return;
 
   ppd->logain_state = 0;
 }
 
-int questlog_reopen_q10(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q10(int cn, int state, struct quest *quest) {
   struct area3_ppd *ppd;
 
-  ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
-  if ((quest[10].flags & QF_OPEN) || (quest[11].flags & QF_OPEN) || (quest[12].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+  ppd =
+      (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+  if ((quest[10].flags & QF_OPEN) || (quest[11].flags & QF_OPEN) ||
+      (quest[12].flags & QF_OPEN)) {
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
 
@@ -378,31 +449,32 @@ int questlog_reopen_q10(int cn, int state, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q13(int cn)
-{
+void questlog_reopen_q13(int cn) {
   struct area3_ppd *ppd;
 
-  ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+  ppd =
+      (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
 
   ppd->kelly_state = 0;
 }
 
-void questlog_reopen_q16(int cn)
-{
+void questlog_reopen_q16(int cn) {
   struct area3_ppd *ppd;
 
-  ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+  ppd =
+      (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
 
   ppd->astro2_state = 0;
 }
 
-int questlog_reopen_q18(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q18(int cn, int state, struct quest *quest) {
   struct area3_ppd *ppd;
 
-  ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+  ppd =
+      (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
   if ((quest[18].flags & QF_OPEN) || (quest[19].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
 
@@ -410,22 +482,23 @@ int questlog_reopen_q18(int cn, int state, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q20(int cn)
-{
+void questlog_reopen_q20(int cn) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   ppd->carlos_state = 0;
 }
 
-int questlog_reopen_q22(int cn, struct quest *quest)
-{
+int questlog_reopen_q22(int cn, struct quest *quest) {
   struct area3_ppd *ppd;
 
-  ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
+  ppd =
+      (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd));
   if ((quest[22].flags & QF_OPEN) || (quest[23].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
 
@@ -435,31 +508,33 @@ int questlog_reopen_q22(int cn, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q30(int cn)
-{
+void questlog_reopen_q30(int cn) {
   struct twocity_ppd *ppd;
 
-  ppd = (struct twocity_ppd*)set_data(cn, DRD_TWOCITY_PPD, sizeof(struct twocity_ppd));
+  ppd = (struct twocity_ppd *)set_data(cn, DRD_TWOCITY_PPD,
+                                       sizeof(struct twocity_ppd));
 
   ppd->skelly_state = 0;
 }
 
-void questlog_reopen_q31(int cn)
-{
+void questlog_reopen_q31(int cn) {
   struct twocity_ppd *ppd;
 
-  ppd = (struct twocity_ppd*)set_data(cn, DRD_TWOCITY_PPD, sizeof(struct twocity_ppd));
+  ppd = (struct twocity_ppd *)set_data(cn, DRD_TWOCITY_PPD,
+                                       sizeof(struct twocity_ppd));
 
   ppd->alchemist_state = 0;
 }
 
-int questlog_reopen_q35(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q35(int cn, int state, struct quest *quest) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
-  if ((quest[35].flags & QF_OPEN) || (quest[36].flags & QF_OPEN) || (quest[37].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
+  if ((quest[35].flags & QF_OPEN) || (quest[36].flags & QF_OPEN) ||
+      (quest[37].flags & QF_OPEN)) {
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
   if (state == 5) ppd->smugglecom_bits = 0;
@@ -468,79 +543,81 @@ int questlog_reopen_q35(int cn, int state, struct quest *quest)
   return 1;
 }
 
-void questlog_reopen_q38(int cn)
-{
+void questlog_reopen_q38(int cn) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   ppd->aristocrat_state = 0;
 }
 
-void questlog_reopen_q39(int cn)
-{
+void questlog_reopen_q39(int cn) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   ppd->yoatin_state = 0;
 }
 
-void questlog_reopen_q40(int cn)
-{
+void questlog_reopen_q40(int cn) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   ppd->countbran_state = 0;
   ppd->countbran_bits &= ~(1 | 2 | 4);
 }
 
-int questlog_reopen_q41(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q41(int cn, int state, struct quest *quest) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
-  if ((quest[41].flags & QF_OPEN) || (quest[42].flags & QF_OPEN) || (quest[43].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
+  if ((quest[41].flags & QF_OPEN) || (quest[42].flags & QF_OPEN) ||
+      (quest[43].flags & QF_OPEN)) {
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
   ppd->brennethbran_state = state;
   return 1;
 }
 
-void questlog_reopen_q44(int cn)
-{
+void questlog_reopen_q44(int cn) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   ppd->spiritbran_state = 0;
 }
 
-int questlog_reopen_q45(int cn, int state, struct quest *quest)
-{
+int questlog_reopen_q45(int cn, int state, struct quest *quest) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
   if ((quest[45].flags & QF_OPEN) || (quest[46].flags & QF_OPEN)) {
-    log_char(cn, LOG_SYSTEM, 0, "Cannot re-open more than one quest from a series.");
+    log_char(cn, LOG_SYSTEM, 0,
+             "Cannot re-open more than one quest from a series.");
     return 0;
   }
   ppd->broklin_state = state;
   return 1;
 }
 
-
-
-void questlog_reopen(int cn, int qnr)
-{
+void questlog_reopen(int cn, int qnr) {
   struct quest *quest;
   int ret = 1;
 
   if (qnr < 0 || qnr >= MAXQUEST) return;
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return;
   if (quest[qnr].done > 9) {
     log_char(cn, LOG_SYSTEM, 0, "You cannot open this quest again.");
     return;
@@ -555,71 +632,178 @@ void questlog_reopen(int cn, int qnr)
   }
 
   switch (qnr) {
-  case 0:		questlog_reopen_q0(cn); break;
-  case 1:		ret = questlog_reopen_q1(cn, 0, quest); break;
-  case 2:		ret = questlog_reopen_q1(cn, 6, quest); break;
-  case 3:		ret = questlog_reopen_q1(cn, 10, quest); break;
-  case 4:		ret = questlog_reopen_q1(cn, 13, quest); break;
-  case 5:		questlog_reopen_q5(cn); break;
-  case 6:		ret = 0; break; //questlog_reopen_q6(cn); break;
-  case 7:		ret = questlog_reopen_q7(cn, 0, quest); break;
-  case 8:		ret = questlog_reopen_q7(cn, 6, quest); break;
-  case 9:		questlog_reopen_q9(cn); break;
-  case 10:	ret = 0; break;
-  case 11:	ret = 0; break;
-  case 12:	ret = questlog_reopen_q10(cn, 12, quest); break;
-  case 13:	questlog_reopen_q13(cn); break;
-  case 14:	ret = 0; break;
-  case 15:	ret = 0; break;
-  case 16:	questlog_reopen_q16(cn); break;
-  case 17:	ret = 0; break;
-  case 18:	ret = 0; break; //ret=questlog_reopen_q18(cn,0,quest); break;
-  case 19:	ret = 0; break; //ret=questlog_reopen_q18(cn,12,quest); break;
-  case 20:	questlog_reopen_q20(cn); break;
-  case 21:	ret = 0; break;
-  case 22:	ret = questlog_reopen_q22(cn, quest); break;
-  case 23:	ret = 0; break;
-  case 24:	ret = 0; break;
-  case 25:	ret = 0; break;
-  case 26:	ret = 0; break;
-  case 27:	ret = 0; break;
-  case 28:	ret = 0; break;
-  case 29:	ret = 0; break;
-  case 30:	questlog_reopen_q30(cn); break;
-  case 31:	questlog_reopen_q31(cn); break;
-  case 32:	ret = 0; break;
-  case 33:	ret = 0; break;
-  case 34:	ret = 0; break;
-  case 35:	ret = questlog_reopen_q35(cn, 0, quest); break;
-  case 36:	ret = 0; //questlog_reopen_q35(cn,5,quest); break;
-  case 37:	ret = questlog_reopen_q35(cn, 7, quest); break;
-  case 38:	questlog_reopen_q38(cn); break;
-  case 39:	questlog_reopen_q39(cn); break;
-  case 40:	questlog_reopen_q40(cn); break;
-  case 41:	ret = questlog_reopen_q41(cn, 0, quest); break;
-  case 42:	ret = questlog_reopen_q41(cn, 5, quest); break;
-  case 43:	ret = questlog_reopen_q41(cn, 9, quest); break;
-  case 44:	questlog_reopen_q44(cn); break;
-  case 45:	ret = questlog_reopen_q45(cn, 0, quest); break;
-  case 46:	ret = 0; break;
-  case 47:	ret = 0; break;
-  case 48:	ret = 0; break;
-  case 49:	ret = 0; break;
-  case 50:	ret = 0; break;
-  case 51:	ret = 0; break;
-  case 52:	ret = 0; break;
-  case 53:	ret = 0; break;
-
+    case 0:
+      questlog_reopen_q0(cn);
+      break;
+    case 1:
+      ret = questlog_reopen_q1(cn, 0, quest);
+      break;
+    case 2:
+      ret = questlog_reopen_q1(cn, 6, quest);
+      break;
+    case 3:
+      ret = questlog_reopen_q1(cn, 10, quest);
+      break;
+    case 4:
+      ret = questlog_reopen_q1(cn, 13, quest);
+      break;
+    case 5:
+      questlog_reopen_q5(cn);
+      break;
+    case 6:
+      ret = 0;
+      break;  // questlog_reopen_q6(cn); break;
+    case 7:
+      ret = questlog_reopen_q7(cn, 0, quest);
+      break;
+    case 8:
+      ret = questlog_reopen_q7(cn, 6, quest);
+      break;
+    case 9:
+      questlog_reopen_q9(cn);
+      break;
+    case 10:
+      ret = 0;
+      break;
+    case 11:
+      ret = 0;
+      break;
+    case 12:
+      ret = questlog_reopen_q10(cn, 12, quest);
+      break;
+    case 13:
+      questlog_reopen_q13(cn);
+      break;
+    case 14:
+      ret = 0;
+      break;
+    case 15:
+      ret = 0;
+      break;
+    case 16:
+      questlog_reopen_q16(cn);
+      break;
+    case 17:
+      ret = 0;
+      break;
+    case 18:
+      ret = 0;
+      break;  // ret=questlog_reopen_q18(cn,0,quest); break;
+    case 19:
+      ret = 0;
+      break;  // ret=questlog_reopen_q18(cn,12,quest); break;
+    case 20:
+      questlog_reopen_q20(cn);
+      break;
+    case 21:
+      ret = 0;
+      break;
+    case 22:
+      ret = questlog_reopen_q22(cn, quest);
+      break;
+    case 23:
+      ret = 0;
+      break;
+    case 24:
+      ret = 0;
+      break;
+    case 25:
+      ret = 0;
+      break;
+    case 26:
+      ret = 0;
+      break;
+    case 27:
+      ret = 0;
+      break;
+    case 28:
+      ret = 0;
+      break;
+    case 29:
+      ret = 0;
+      break;
+    case 30:
+      questlog_reopen_q30(cn);
+      break;
+    case 31:
+      questlog_reopen_q31(cn);
+      break;
+    case 32:
+      ret = 0;
+      break;
+    case 33:
+      ret = 0;
+      break;
+    case 34:
+      ret = 0;
+      break;
+    case 35:
+      ret = questlog_reopen_q35(cn, 0, quest);
+      break;
+    case 36:
+      ret = 0;  // questlog_reopen_q35(cn,5,quest); break;
+    case 37:
+      ret = questlog_reopen_q35(cn, 7, quest);
+      break;
+    case 38:
+      questlog_reopen_q38(cn);
+      break;
+    case 39:
+      questlog_reopen_q39(cn);
+      break;
+    case 40:
+      questlog_reopen_q40(cn);
+      break;
+    case 41:
+      ret = questlog_reopen_q41(cn, 0, quest);
+      break;
+    case 42:
+      ret = questlog_reopen_q41(cn, 5, quest);
+      break;
+    case 43:
+      ret = questlog_reopen_q41(cn, 9, quest);
+      break;
+    case 44:
+      questlog_reopen_q44(cn);
+      break;
+    case 45:
+      ret = questlog_reopen_q45(cn, 0, quest);
+      break;
+    case 46:
+      ret = 0;
+      break;
+    case 47:
+      ret = 0;
+      break;
+    case 48:
+      ret = 0;
+      break;
+    case 49:
+      ret = 0;
+      break;
+    case 50:
+      ret = 0;
+      break;
+    case 51:
+      ret = 0;
+      break;
+    case 52:
+      ret = 0;
+      break;
+    case 53:
+      ret = 0;
+      break;
   }
   if (ret) quest[qnr].flags = QF_OPEN;
   sendquestlog(cn, ch[cn].player);
 }
 
-static void questlog_init_area1(int cn, struct quest *quest)
-{
+static void questlog_init_area1(int cn, struct quest *quest) {
   struct area1_ppd *ppd;
 
-  if (!(ppd = (struct area1_ppd*)set_data(cn, DRD_AREA1_PPD, sizeof(struct area1_ppd)))) return;
+  if (!(ppd = (struct area1_ppd *)set_data(cn, DRD_AREA1_PPD,
+                                           sizeof(struct area1_ppd))))
+    return;
 
   if (ppd->lydia_state >= 6) {
     if (!quest[0].done) quest[0].done = 1;
@@ -654,13 +838,13 @@ static void questlog_init_area1(int cn, struct quest *quest)
     quest[2].flags = QF_DONE;
     quest[3].flags = QF_OPEN;
     quest[4].flags = 0;
-  }  else if (ppd->gwendy_state >= 6) {
+  } else if (ppd->gwendy_state >= 6) {
     if (!quest[1].done) quest[1].done = 1;
     quest[1].flags = QF_DONE;
     quest[2].flags = QF_OPEN;
     quest[3].flags = 0;
     quest[4].flags = 0;
-  }  else if (ppd->gwendy_state > 0) {
+  } else if (ppd->gwendy_state > 0) {
     quest[1].flags = QF_OPEN;
     quest[2].flags = 0;
     quest[3].flags = 0;
@@ -726,11 +910,12 @@ static void questlog_init_area1(int cn, struct quest *quest)
   }
 }
 
-static void questlog_init_area3(int cn, struct quest *quest)
-{
+static void questlog_init_area3(int cn, struct quest *quest) {
   struct area3_ppd *ppd;
 
-  if (!(ppd = (struct area3_ppd*)set_data(cn, DRD_AREA3_PPD, sizeof(struct area3_ppd)))) return;
+  if (!(ppd = (struct area3_ppd *)set_data(cn, DRD_AREA3_PPD,
+                                           sizeof(struct area3_ppd))))
+    return;
 
   if (ppd->seymour_state >= 16) {
     if (!quest[10].done) quest[10].done = 1;
@@ -847,11 +1032,11 @@ static void questlog_init_area3(int cn, struct quest *quest)
   }
 }
 
-static void questlog_init_staff(int cn, struct quest *quest)
-{
+static void questlog_init_staff(int cn, struct quest *quest) {
   struct staffer_ppd *ppd;
 
-  ppd = (struct staffer_ppd*)set_data(cn, DRD_STAFFER_PPD, sizeof(struct staffer_ppd));
+  ppd = (struct staffer_ppd *)set_data(cn, DRD_STAFFER_PPD,
+                                       sizeof(struct staffer_ppd));
 
   if (ppd->carlos_state >= 6) {
     if (!quest[20].done) quest[20].done = 1;
@@ -895,21 +1080,24 @@ static void questlog_init_staff(int cn, struct quest *quest)
     quest[38].flags = QF_DONE;
   } else if (ppd->aristocrat_state > 0) {
     quest[38].flags = QF_OPEN;
-  } else quest[38].flags = 0;
+  } else
+    quest[38].flags = 0;
 
   if (ppd->yoatin_state >= 9) {
     if (!quest[39].done) quest[39].done = 1;
     quest[39].flags = QF_DONE;
   } else if (ppd->aristocrat_state > 0) {
     quest[39].flags = QF_OPEN;
-  } else quest[39].flags = 0;
+  } else
+    quest[39].flags = 0;
 
   if ((ppd->countbran_bits & (1 | 2 | 4)) == (1 | 2 | 4)) {
     if (!quest[40].done) quest[40].done = 1;
     quest[40].flags = QF_DONE;
   } else if (ppd->countbran_state > 0) {
     quest[40].flags = QF_OPEN;
-  } else quest[40].flags = 0;
+  } else
+    quest[40].flags = 0;
 
   if (ppd->brennethbran_state >= 12) {
     if (!quest[41].done) quest[41].done = 1;
@@ -944,7 +1132,8 @@ static void questlog_init_staff(int cn, struct quest *quest)
     quest[44].flags = QF_DONE;
   } else if (ppd->spiritbran_state > 0) {
     quest[44].flags = QF_OPEN;
-  } else quest[44].flags = 0;
+  } else
+    quest[44].flags = 0;
 
   if (ppd->broklin_state >= 11) {
     if (!quest[45].done) quest[45].done = 1;
@@ -1034,11 +1223,11 @@ static void questlog_init_staff(int cn, struct quest *quest)
   }
 }
 
-static void questlog_init_twocity(int cn, struct quest *quest)
-{
+static void questlog_init_twocity(int cn, struct quest *quest) {
   struct twocity_ppd *ppd;
 
-  ppd = (struct twocity_ppd*)set_data(cn, DRD_TWOCITY_PPD, sizeof(struct twocity_ppd));
+  ppd = (struct twocity_ppd *)set_data(cn, DRD_TWOCITY_PPD,
+                                       sizeof(struct twocity_ppd));
 
   if (ppd->thief_state >= 20) {
     if (!quest[25].done) quest[25].done = 1;
@@ -1087,28 +1276,31 @@ static void questlog_init_twocity(int cn, struct quest *quest)
     quest[29].flags = QF_DONE;
   } else if (ppd->sanwyn_state > 0) {
     quest[29].flags = QF_OPEN;
-  } else quest[29].flags = 0;
+  } else
+    quest[29].flags = 0;
 
   if (ppd->skelly_state >= 3) {
     if (!quest[30].done) quest[30].done = 1;
     quest[30].flags = QF_DONE;
   } else if (ppd->skelly_state > 0) {
     quest[30].flags = QF_OPEN;
-  } else quest[30].flags = 0;
+  } else
+    quest[30].flags = 0;
 
   if (ppd->alchemist_state >= 5) {
     if (!quest[31].done) quest[31].done = 1;
     quest[31].flags = QF_DONE;
   } else if (ppd->alchemist_state > 0) {
     quest[31].flags = QF_OPEN;
-  } else quest[31].flags = 0;
+  } else
+    quest[31].flags = 0;
 }
 
-static void questlog_init_nomad(int cn, struct quest *quest)
-{
+static void questlog_init_nomad(int cn, struct quest *quest) {
   struct nomad_ppd *ppd;
 
-  ppd = (struct nomad_ppd*)set_data(cn, DRD_NOMAD_PPD, sizeof(struct nomad_ppd));
+  ppd =
+      (struct nomad_ppd *)set_data(cn, DRD_NOMAD_PPD, sizeof(struct nomad_ppd));
 
   if (ppd->nomad_state[1] >= 9) {
     if (!quest[32].done) quest[32].done = 1;
@@ -1138,12 +1330,12 @@ static void questlog_init_nomad(int cn, struct quest *quest)
   }
 }
 
-
-void questlog_init(int cn)
-{
+void questlog_init(int cn) {
   struct quest *quest;
 
-  if (!(quest = (struct quest*)set_data(cn, DRD_QUESTLOG_PPD, sizeof(struct quest) * MAXQUEST))) return;
+  if (!(quest = (struct quest *)set_data(cn, DRD_QUESTLOG_PPD,
+                                         sizeof(struct quest) * MAXQUEST)))
+    return;
 
   if (quest[MAXQUEST - 1].done == 55) return;
 
@@ -1156,8 +1348,7 @@ void questlog_init(int cn)
   quest[MAXQUEST - 1].done = 55;
 }
 
-int destroy_item_from_body(int cn, int IID)
-{
+int destroy_item_from_body(int cn, int IID) {
   char buf[80];
 
   sprintf(buf, "%10dX%10d", ch[cn].ID, IID);
@@ -1166,36 +1357,35 @@ int destroy_item_from_body(int cn, int IID)
   return 1;
 }
 
-int remove_item_from_body_bg(int cnID, int IID)
-{
+int remove_item_from_body_bg(int cnID, int IID) {
   int n, cnt = 0, m, in;
 
   for (n = 1; n < MAXCONTAINER; n++) {
-    if (!con[n].in) continue;			// empty or not item container (grave)
-    if (con[n].owner != charID_ID(cnID)) continue;	// not owned by cn
+    if (!con[n].in) continue;  // empty or not item container (grave)
+    if (con[n].owner != charID_ID(cnID)) continue;  // not owned by cn
 
     for (m = 0; m < CONTAINERSIZE; m++) {
       if ((in = con[n].item[m]) && it[in].ID == IID) {
-        dlog(0, in, "destroying quest item in grave (questlog, ID=%d, IID=%X)", cnID, IID);
+        dlog(0, in, "destroying quest item in grave (questlog, ID=%d, IID=%X)",
+             cnID, IID);
         destroy_item(in);
         con[n].item[m] = 0;
         cnt++;
       }
     }
-
-
   }
-  //if (cnt) tell_chat(0,cnID,1,"Area %d: Removed %d items from corpses you cheat.",areaID,cnt);
+  // if (cnt) tell_chat(0,cnID,1,"Area %d: Removed %d items from corpses you
+  // cheat.",areaID,cnt);
 
   return cnt;
 }
 
-void destroy_item_byID(int cn, int ID)
-{
+void destroy_item_byID(int cn, int ID) {
   struct depot_ppd *ppd;
   int n, in;
 
-  ppd = (struct depot_ppd*)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
+  ppd =
+      (struct depot_ppd *)set_data(cn, DRD_DEPOT_PPD, sizeof(struct depot_ppd));
 
   for (n = 0; n < INVENTORYSIZE; n++) {
     if (n >= 12 && n < 30) continue;
@@ -1229,14 +1419,3 @@ void destroy_item_byID(int cn, int ID)
 
   destroy_item_from_body(cn, ID);
 }
-
-
-
-
-
-
-
-
-
-
-

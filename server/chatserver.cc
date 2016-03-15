@@ -31,12 +31,11 @@ Added RCS tags
 
 volatile int quit = 0;
 
-#define MAXCHAT   56
+#define MAXCHAT 56
 #define INBUFSIZE 1024
-#define OUTBUFSIZE  65536
+#define OUTBUFSIZE 65536
 
-struct chat
-{
+struct chat {
   int sock;
   char inbuf[INBUFSIZE];
   char obuf[OUTBUFSIZE];
@@ -45,21 +44,16 @@ struct chat
 
 struct chat *chat;
 
-void sig_leave(int dummy)
-{
-  quit = 1;
-}
+void sig_leave(int dummy) { quit = 1; }
 
-void kick_chat(int nr)
-{
+void kick_chat(int nr) {
   close(chat[nr].sock);
   chat[nr].sock = 0;
 
   printf("kicked client %d\n", nr);
 }
 
-void new_chat(int sock)
-{
+void new_chat(int sock) {
   int n, nsock, one = 1;
   struct sockaddr_in addr;
   socklen_t len = sizeof(struct sockaddr_in);
@@ -67,10 +61,14 @@ void new_chat(int sock)
   nsock = accept(sock, (struct sockaddr *)&addr, &len);
   if (nsock == -1) return;
 
-  ioctl(nsock, FIONBIO, (u_long*)&one);   // non-blocking mode
+  ioctl(nsock, FIONBIO, (u_long *)&one);  // non-blocking mode
 
-  for (n = 1; n < MAXCHAT; n++) if (!chat[n].sock) break;
-  if (n == MAXCHAT) { close(nsock); return; }
+  for (n = 1; n < MAXCHAT; n++)
+    if (!chat[n].sock) break;
+  if (n == MAXCHAT) {
+    close(nsock);
+    return;
+  }
 
   bzero(chat + n, sizeof(struct chat));
 
@@ -82,8 +80,7 @@ void new_chat(int sock)
   printf("accepted new client %d\n", n);
 }
 
-void send_chat(int nr)
-{
+void send_chat(int nr) {
   int ret, len;
   char *ptr;
 
@@ -96,7 +93,7 @@ void send_chat(int nr)
   }
 
   ret = send(chat[nr].sock, ptr, len, 0);
-  if (ret == -1) { // send failure
+  if (ret == -1) {  // send failure
     kick_chat(nr);
     return;
   }
@@ -108,13 +105,11 @@ void send_chat(int nr)
   if (chat[nr].optr == OUTBUFSIZE) chat[nr].optr = 0;
 }
 
-int internal_chat(char *buf, int len)
-{
-  return 0; // ... !!!!!!!!!
+int internal_chat(char *buf, int len) {
+  return 0;  // ... !!!!!!!!!
 }
 
-int csend(int nr, char *buf, int len)
-{
+int csend(int nr, char *buf, int len) {
   int tmp;
 
   if (chat[nr].sock == 0) return -1;
@@ -135,15 +130,15 @@ int csend(int nr, char *buf, int len)
   return 0;
 }
 
-void rec_chat(int nr)
-{
+void rec_chat(int nr) {
   int len, n, channel;
 
-  len = recv(chat[nr].sock, (char*)chat[nr].inbuf + chat[nr].in_len, INBUFSIZE - chat[nr].in_len, 0);
+  len = recv(chat[nr].sock, (char *)chat[nr].inbuf + chat[nr].in_len,
+             INBUFSIZE - chat[nr].in_len, 0);
   printf("received %d bytes from client %d\n", len, nr);
 
   if (len < 1) {  // receive failure
-    //if (errno!=EWOULDBLOCK) {
+    // if (errno!=EWOULDBLOCK) {
     kick_chat(nr);
     //}
     return;
@@ -151,7 +146,7 @@ void rec_chat(int nr)
   chat[nr].in_len += len;
 
   while (chat[nr].in_len > 1) {
-    len = *(unsigned short*)(chat[nr].inbuf) + 2;
+    len = *(unsigned short *)(chat[nr].inbuf) + 2;
 
     if (len > 1000) {
       kick_chat(nr);
@@ -159,22 +154,22 @@ void rec_chat(int nr)
     }
 
     if (chat[nr].in_len >= len) {
-      channel = *(unsigned short*)(chat[nr].inbuf + 2);
+      channel = *(unsigned short *)(chat[nr].inbuf + 2);
       if (channel == 1025) {
         internal_chat(chat[nr].inbuf + 4, len - 4);
       } else {
-        for (n = 0; n < MAXCHAT; n++)
-          csend(n, chat[nr].inbuf, len);
+        for (n = 0; n < MAXCHAT; n++) csend(n, chat[nr].inbuf, len);
       }
 
       chat[nr].in_len -= len;
-      if (chat[nr].in_len) memmove(chat[nr].inbuf, chat[nr].inbuf + len, chat[nr].in_len);
-    } else break;
+      if (chat[nr].in_len)
+        memmove(chat[nr].inbuf, chat[nr].inbuf + len, chat[nr].in_len);
+    } else
+      break;
   }
 }
 
-int main(void)
-{
+int main(void) {
   int sock, one = 1, fmax, cnt, n;
   fd_set in_fd, out_fd;
   struct sockaddr_in addr;
@@ -188,12 +183,12 @@ int main(void)
   signal(SIGINT, sig_leave);
   signal(SIGTERM, sig_leave);
 
-  chat = (struct chat*)calloc(MAXCHAT, sizeof(struct chat));
+  chat = (struct chat *)calloc(MAXCHAT, sizeof(struct chat));
 
   sock = socket(PF_INET, SOCK_STREAM, 0);
   if (sock == -1) return 0;
 
-  ioctl(sock, FIONBIO, (u_long*)&one);    // non-blocking mode
+  ioctl(sock, FIONBIO, (u_long *)&one);  // non-blocking mode
   setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(int));
 
   addr.sin_family = AF_INET;
@@ -205,7 +200,9 @@ int main(void)
   if (listen(sock, 50)) return 0;
 
   while (!quit) {
-    FD_ZERO(&in_fd); FD_ZERO(&out_fd); fmax = 0;
+    FD_ZERO(&in_fd);
+    FD_ZERO(&out_fd);
+    fmax = 0;
 
     FD_SET(sock, &in_fd);
     if (sock > fmax) fmax = sock;

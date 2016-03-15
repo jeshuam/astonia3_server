@@ -28,14 +28,14 @@
 #include <mysql/mysqld_error.h>
 #include "badip.h"
 
-static int get_count(MYSQL *mysql, unsigned int ip, int timeout)
-{
+static int get_count(MYSQL *mysql, unsigned int ip, int timeout) {
   MYSQL_RES *result;
   MYSQL_ROW row;
   char buf[256];
   int cnt;
 
-  sprintf(buf, "select count(*) from badip where IP=%u and t>=%d", ip, (int)(time(NULL) - timeout));
+  sprintf(buf, "select count(*) from badip where IP=%u and t>=%d", ip,
+          (int)(time(NULL) - timeout));
 
   if (mysql_query(mysql, buf)) {
     printf("select: Error: %s (%d)", mysql_error(mysql), mysql_errno(mysql));
@@ -54,8 +54,7 @@ static int get_count(MYSQL *mysql, unsigned int ip, int timeout)
   return cnt;
 }
 
-int is_badpass_ip(MYSQL *mysql, unsigned int ip)
-{
+int is_badpass_ip(MYSQL *mysql, unsigned int ip) {
   int cnt;
 
   cnt = get_count(mysql, ip, 60);
@@ -70,8 +69,7 @@ int is_badpass_ip(MYSQL *mysql, unsigned int ip)
   return 0;
 }
 
-void add_badpass_ip(MYSQL *mysql, unsigned int ip)
-{
+void add_badpass_ip(MYSQL *mysql, unsigned int ip) {
   char buf[256];
 
   sprintf(buf, "insert badip values(%u,%d)", ip, (int)time(NULL));
@@ -81,11 +79,11 @@ void add_badpass_ip(MYSQL *mysql, unsigned int ip)
   }
 }
 
-void clean_badpass_ips(MYSQL *mysql)
-{
+void clean_badpass_ips(MYSQL *mysql) {
   char buf[256];
 
-  sprintf(buf, "delete from badip where t<%d", (int)(time(NULL) - 60 * 60 * 24 * 7));
+  sprintf(buf, "delete from badip where t<%d",
+          (int)(time(NULL) - 60 * 60 * 24 * 7));
   if (mysql_query(mysql, buf)) {
     printf("select: Error: %s (%d)", mysql_error(mysql), mysql_errno(mysql));
     return;
@@ -94,6 +92,7 @@ void clean_badpass_ips(MYSQL *mysql)
 
 /*
 
-create table badip (IP int unsigned not null, t int not null, key lookup(IP,t), key(t));
+create table badip (IP int unsigned not null, t int not null, key lookup(IP,t),
+key(t));
 
 */

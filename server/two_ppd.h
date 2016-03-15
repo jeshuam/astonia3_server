@@ -1,8 +1,6 @@
 #pragma once
 
-
-struct twocity_ppd
-{
+struct twocity_ppd {
   int legal_status;
   int legal_fine;
 
@@ -35,4 +33,3 @@ struct twocity_ppd
 
   int alchemist_state;
 };
-

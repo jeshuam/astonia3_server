@@ -20,4 +20,3 @@ void show_motd(int nr);
 int check_staff_start(void);
 void check_staff_stop(void);
 #endif
-

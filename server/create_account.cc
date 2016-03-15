@@ -32,8 +32,7 @@
 static MYSQL mysql;
 static char mysqlpass[80];
 
-static void makemysqlpass(void)
-{
+static void makemysqlpass(void) {
   static char key1[] = {117, 127, 98, 38, 118, 115, 100, 104, 0};
   static char key2[] = {"qpc74a7v"};
   static char key3[] = {"bcoxsa1k"};
@@ -41,45 +40,40 @@ static void makemysqlpass(void)
 
   for (n = 0; key1[n]; n++) {
     mysqlpass[n] = key1[n] ^ key2[n] ^ key3[n];
-    //printf("%d, ",mysqlpass[n]);
+    // printf("%d, ",mysqlpass[n]);
   }
   mysqlpass[n] = 0;
 }
 
-static void destroymysqlpass(void)
-{
-  bzero(mysqlpass, sizeof(mysqlpass));
-}
+static void destroymysqlpass(void) { bzero(mysqlpass, sizeof(mysqlpass)); }
 
-int init_database(void)
-{
+int init_database(void) {
   // init database client
   if (!mysql_init(&mysql)) return 0;
 
   // try to login as root with our password
   makemysqlpass();
-  if (!mysql_real_connect(&mysql, "localhost", "root", mysqlpass, "mysql", 0, NULL, 0)) {
+  if (!mysql_real_connect(&mysql, "localhost", "root", mysqlpass, "mysql", 0,
+                          NULL, 0)) {
     destroymysqlpass();
-    fprintf(stderr, "MySQL error: %s (%d)\n", mysql_error(&mysql), mysql_errno(&mysql));
+    fprintf(stderr, "MySQL error: %s (%d)\n", mysql_error(&mysql),
+            mysql_errno(&mysql));
     return 0;
   }
   destroymysqlpass();
 
   if (mysql_query(&mysql, "use merc")) {
-    fprintf(stderr, "MySQL error: %s (%d)\n", mysql_error(&mysql), mysql_errno(&mysql));
+    fprintf(stderr, "MySQL error: %s (%d)\n", mysql_error(&mysql),
+            mysql_errno(&mysql));
     return 0;
   }
 
   return 1;
 }
 
-void exit_database(void)
-{
-  mysql_close(&mysql);
-}
+void exit_database(void) { mysql_close(&mysql); }
 
-int main(int argc, char **args)
-{
+int main(int argc, char **args) {
   char buf[256];
 
   if (argc != 3) {
@@ -92,17 +86,21 @@ int main(int argc, char **args)
     return 3;
   }
 
-  sprintf(buf, "insert subscriber (email,password,creation_time,locked,banned,vendor) values ("
-          "'%s',"         // email
-          "'%s',"         // password
-          "%d,"           // creation time
-          "'N',"          // locked
-          "'I',"          // banned
-          "%d)",          // vendor
-          args[1], args[2], (int)time(NULL), 0);
+  sprintf(buf,
+          "insert subscriber "
+          "(email,password,creation_time,locked,banned,vendor) values ("
+          "'%s',"  // email
+          "'%s',"  // password
+          "%d,"    // creation time
+          "'N',"   // locked
+          "'I',"   // banned
+          "%d)",   // vendor
+          args[1],
+          args[2], (int)time(NULL), 0);
 
   if (mysql_query(&mysql, buf)) {
-    fprintf(stderr, "Failed to create subscriber: Error: %s (%d)", mysql_error(&mysql), mysql_errno(&mysql));
+    fprintf(stderr, "Failed to create subscriber: Error: %s (%d)",
+            mysql_error(&mysql), mysql_errno(&mysql));
     return 2;
   }
 
@@ -112,4 +110,3 @@ int main(int argc, char **args)
 
   return 0;
 }
-

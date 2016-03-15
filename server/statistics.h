@@ -15,17 +15,15 @@ Added RCS tags
 */
 
 #define MAXSTAT 365
-#define RESOLUTION (60*60*24)
+#define RESOLUTION (60 * 60 * 24)
 
-struct stats
-{
+struct stats {
   int exp;
   int gold;
   int online;
 };
 
-struct stats_ppd
-{
+struct stats_ppd {
   int last_update;
   struct stats stats[MAXSTAT];
 };
