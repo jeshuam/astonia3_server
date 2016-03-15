@@ -12,7 +12,7 @@ Added RCS tags
 
 */
 
-int lookup_name(char *name,char *realname);
-int lookup_ID(char *name,int ID);
-void lookup_add_cache(unsigned int ID,char *name);
+int lookup_name(char *name, char *realname);
+int lookup_ID(char *name, int ID);
+void lookup_add_cache(unsigned int ID, char *name);
 int init_lookup(void);
